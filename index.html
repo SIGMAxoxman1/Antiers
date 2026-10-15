@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body>
+<title>AnTiers</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500;700&family=Rubik:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: sticky mode tabs under a hero that pairs the title with a top-3 podium; below it a ranked list (Overall) or five tier columns (single mode). */
+:root{
+  --bg:#06070d; --bg2:#0b0d18; --surface:#10131f; --surface2:#171b2b; --line:#242946;
+  --fg:#eceffb; --muted:#8c93b6; --accent:#3ee6c4; --accent-ink:#04130f;
+  --t1:#ffc233; --t2:#ff8a3d; --t3:#b57bff; --t4:#58a6ff; --t5:#5fe08a;
+  --silver:#c9d1ea; --bronze:#d58d57;
+  --glow:rgba(62,230,196,.14); --glow2:rgba(181,123,255,.12);
+  --px:'Pixelify Sans','Courier New',monospace;
+  --ui:'Rubik','Segoe UI',system-ui,-apple-system,sans-serif;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){
+  --bg:#f2f4fb; --bg2:#e8ebf6; --surface:#ffffff; --surface2:#eff1fa; --line:#d5dbee;
+  --fg:#12152a; --muted:#576082; --accent:#0a9a82; --accent-ink:#ffffff;
+  --t1:#a96d00; --t2:#bd4f08; --t3:#7436cf; --t4:#1b67cc; --t5:#17823f;
+  --silver:#6a7490; --bronze:#a8612a;
+  --glow:rgba(10,154,130,.12); --glow2:rgba(116,54,207,.09); color-scheme:light}}
+:root[data-theme="light"]{
+  --bg:#f2f4fb; --bg2:#e8ebf6; --surface:#ffffff; --surface2:#eff1fa; --line:#d5dbee;
+  --fg:#12152a; --muted:#576082; --accent:#0a9a82; --accent-ink:#ffffff;
+  --t1:#a96d00; --t2:#bd4f08; --t3:#7436cf; --t4:#1b67cc; --t5:#17823f;
+  --silver:#6a7490; --bronze:#a8612a;
+  --glow:rgba(10,154,130,.12); --glow2:rgba(116,54,207,.09); color-scheme:light}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.55 var(--ui);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 40px;
+  background-image:radial-gradient(900px 420px at 15% -80px,var(--glow),transparent 70%),radial-gradient(800px 380px at 95% 40px,var(--glow2),transparent 70%);
+  background-repeat:no-repeat}
+.wrap{max-width:1180px;margin:0 auto}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.t1{--c:var(--t1)}.t2{--c:var(--t2)}.t3{--c:var(--t3)}.t4{--c:var(--t4)}.t5{--c:var(--t5)}
+
+/* top bar */
+.top{display:flex;align-items:center;gap:16px;padding:16px 0;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;font:700 22px/1 var(--px);letter-spacing:.06em;text-decoration:none;color:var(--fg)}
+.brand b{color:var(--accent)}
+.gem{width:26px;height:26px;image-rendering:pixelated}
+.top nav{display:flex;gap:4px;margin-inline-start:auto;align-items:center;flex-wrap:wrap}
+.top nav a{color:var(--muted);text-decoration:none;padding:6px 12px;border-radius:4px;font-weight:500;font-size:14px}
+.top nav a:hover{color:var(--fg);background:var(--surface)}
+.lang{border:1px solid var(--line);background:var(--surface);padding:6px 12px;border-radius:4px;font-size:13px;font-weight:500}
+.lang:hover{border-color:var(--accent)}
+
+/* hero */
+.hero{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:6px;background:linear-gradient(180deg,var(--surface),var(--bg2));
+  display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:28px;padding:36px}
+.hero canvas.fx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.hero>*:not(canvas){position:relative}
+.eyebrow{font:500 12px var(--ui);letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:0 0 10px}
+h1{font:700 clamp(44px,9vw,84px)/.95 var(--px);margin:0 0 14px;letter-spacing:.03em;text-wrap:balance}
+h1 span{color:var(--accent);text-shadow:0 0 28px var(--glow)}
+.hero p.lead{max-width:46ch;color:var(--muted);margin:0 0 22px}
+.search{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:0 14px;max-width:420px}
+.search:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--glow)}
+.search input{flex:1;min-width:0;background:none;border:0;color:var(--fg);font:inherit;padding:12px 0;outline:none}
+.search svg{width:16px;height:16px;flex:none;color:var(--muted)}
+.stats{display:flex;gap:26px;margin-top:22px;flex-wrap:wrap}
+.stats div{display:flex;flex-direction:column}
+.stats b{font:700 26px/1 var(--px);font-variant-numeric:tabular-nums}
+.stats span{font-size:12px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-top:4px}
+
+/* podium */
+.podium{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-items:end}
+.pod{border:1px solid var(--line);background:var(--bg);border-radius:6px;padding:16px 10px 14px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;min-width:0;transition:transform .2s,border-color .2s}
+.pod:hover{transform:translateY(-3px);border-color:var(--rc)}
+.pod .av{width:56px;height:56px}
+.pod.p1{--rc:var(--t1);padding-block:26px 20px;border-color:color-mix(in srgb,var(--t1) 60%,var(--line));box-shadow:0 0 40px color-mix(in srgb,var(--t1) 18%,transparent);animation:pulse 3.6s ease-in-out infinite}
+.pod.p1 .av{width:76px;height:76px}
+.pod.p2{--rc:var(--silver)}.pod.p3{--rc:var(--bronze)}
+.pod .place{font:700 13px var(--px);color:var(--rc);letter-spacing:.1em}
+.pod .nm{font-weight:600;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pod .pp{font:700 20px/1 var(--px);font-variant-numeric:tabular-nums}
+.pod .pp small{font:500 11px var(--ui);color:var(--muted);letter-spacing:.08em;margin-inline-start:4px}
+@keyframes pulse{50%{box-shadow:0 0 56px color-mix(in srgb,var(--t1) 30%,transparent)}}
+
+/* avatars, chips */
+.av{display:block;image-rendering:pixelated;border-radius:3px;background:var(--surface2)}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:3px 9px 3px 3px;border-radius:4px;color:var(--c);font:600 12px/1.4 var(--ui);
+  background:color-mix(in srgb,var(--c) 13%,transparent)}
+.chip.ht{background:color-mix(in srgb,var(--c) 24%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--c) 55%,transparent)}
+.chip .m{background:var(--surface2);color:var(--fg);padding:2px 5px;border-radius:3px;font:500 10px/1.2 var(--px);letter-spacing:.04em}
+.reg{font:600 10px var(--ui);letter-spacing:.1em;padding:1px 6px;border-radius:3px;color:var(--c);background:color-mix(in srgb,var(--c) 14%,transparent)}
+.rNA{--c:var(--t4)}.rEU{--c:var(--t5)}.rAS{--c:var(--t3)}.rME{--c:var(--t2)}
+
+/* mode tabs */
+.modes{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;margin-top:22px;padding:10px 0;background:linear-gradient(var(--bg) 70%,transparent)}
+.modes .scroll{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
+.mode{flex:none;display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);padding:9px 14px;border-radius:4px;font-weight:500;font-size:14px;color:var(--muted)}
+.mode i{font:500 10px/1 var(--px);font-style:normal;background:var(--surface2);color:var(--fg);padding:3px 5px;border-radius:3px}
+.mode:hover{color:var(--fg);border-color:var(--muted)}
+.mode[aria-selected="true"]{color:var(--accent-ink);background:var(--accent);border-color:var(--accent)}
+.mode[aria-selected="true"] i{background:color-mix(in srgb,var(--accent-ink) 18%,transparent);color:var(--accent-ink)}
+
+.demo{margin:14px 0 0;font-size:12.5px;color:var(--muted);display:flex;gap:8px;align-items:center}
+.demo::before{content:"";width:8px;height:8px;background:var(--t1);flex:none}
+
+/* overall list */
+.list{display:flex;flex-direction:column;gap:6px;margin-top:14px}
+.listhead{display:grid;grid-template-columns:48px minmax(0,1fr) minmax(0,1.4fr) 96px;gap:14px;padding:0 14px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.row{display:grid;grid-template-columns:48px minmax(0,1fr) minmax(0,1.4fr) 96px;gap:14px;align-items:center;text-align:start;
+  border:1px solid var(--line);background:var(--surface);padding:10px 14px;border-radius:5px;width:100%;transition:border-color .15s,transform .15s;animation:in .35s ease backwards}
+.row:hover{border-color:var(--accent);transform:translateX(3px)}
+[dir="rtl"] .row:hover{transform:translateX(-3px)}
+.row .rk{font:700 22px/1 var(--px);color:var(--muted);font-variant-numeric:tabular-nums}
+.row.r1 .rk{color:var(--t1)}.row.r2 .rk{color:var(--silver)}.row.r3 .rk{color:var(--bronze)}
+.row.r1{border-color:color-mix(in srgb,var(--t1) 50%,var(--line));background:linear-gradient(90deg,color-mix(in srgb,var(--t1) 9%,var(--surface)),var(--surface) 55%)}
+.row.r2{border-color:color-mix(in srgb,var(--silver) 40%,var(--line))}
+.row.r3{border-color:color-mix(in srgb,var(--bronze) 40%,var(--line))}
+.who{display:flex;align-items:center;gap:12px;min-width:0}
+.who .av{width:40px;height:40px;flex:none}
+.who .nm{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.who .meta{display:flex;flex-direction:column;gap:3px;min-width:0;align-items:flex-start}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.pts{text-align:end;font:700 20px/1 var(--px);font-variant-numeric:tabular-nums}
+.pts small{display:block;font:500 10px var(--ui);color:var(--muted);letter-spacing:.12em;margin-top:4px;text-transform:uppercase}
+@keyframes in{from{transform:translateY(8px)}}
+
+/* mode columns */
+.cols{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-top:14px;align-items:start}
+.col{border:1px solid var(--line);background:var(--surface);border-radius:6px;overflow:hidden;min-width:0}
+.col h3{margin:0;padding:12px 14px;font:700 16px/1 var(--px);letter-spacing:.08em;color:var(--c);display:flex;justify-content:space-between;align-items:center;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--c) 18%,var(--surface)),var(--surface));border-bottom:1px solid color-mix(in srgb,var(--c) 40%,var(--line))}
+.col h3 small{font:500 11px var(--ui);color:var(--muted);letter-spacing:.06em}
+.col ul{list-style:none;margin:0;padding:6px;display:flex;flex-direction:column;gap:3px}
+.col li button{display:flex;align-items:center;gap:10px;width:100%;border:0;background:none;padding:7px 8px;border-radius:4px;text-align:start;min-width:0}
+.col li button:hover{background:var(--surface2)}
+.col li .av{width:30px;height:30px;flex:none}
+.col li .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500;font-size:14px}
+.col li .lh{font:700 11px var(--px);color:var(--c);padding:2px 6px;border-radius:3px;background:color-mix(in srgb,var(--c) 16%,transparent)}
+.col li .lh.h{background:color-mix(in srgb,var(--c) 28%,transparent)}
+.col .none{padding:18px 14px;color:var(--muted);font-size:13px}
+.empty{padding:40px 0;text-align:center;color:var(--muted)}
+
+/* how it works */
+section.how{margin-top:56px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px}
+section.how h2{font:700 28px/1.1 var(--px);margin:0 0 12px;letter-spacing:.03em;text-wrap:balance}
+section.how p{color:var(--muted);margin:0 0 12px;max-width:56ch}
+.steps{display:flex;flex-direction:column;gap:10px;margin-top:18px}
+.step{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:5px;padding:12px 14px}
+.step b{font:700 12px var(--px);background:var(--accent);color:var(--accent-ink);padding:4px 7px;border-radius:3px;flex:none;margin-top:2px}
+.step span{color:var(--muted);font-size:14px}
+.ptable{border:1px solid var(--line);border-radius:6px;background:var(--surface);overflow-x:auto}
+.ptable table{border-collapse:collapse;width:100%;min-width:300px}
+.ptable th,.ptable td{padding:9px 14px;text-align:start;font-size:14px;border-bottom:1px solid var(--line)}
+.ptable th{font:500 11px var(--ui);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.ptable tr:last-child td{border-bottom:0}
+.ptable td:last-child{font:700 15px var(--px);font-variant-numeric:tabular-nums;text-align:end}
+.ptable th:last-child{text-align:end}
+footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:13px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+/* modal */
+.modal{position:fixed;inset:0;z-index:20;background:color-mix(in srgb,var(--bg) 78%,transparent);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:16px}
+.sheet{width:min(560px,100%);max-height:90vh;overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:24px;position:relative;box-shadow:0 30px 80px rgba(0,0,0,.45)}
+.sheet .x{position:absolute;inset-block-start:12px;inset-inline-end:12px;border:1px solid var(--line);background:var(--surface2);width:34px;height:34px;border-radius:4px;font-size:18px;line-height:1}
+.sheet .x:hover{border-color:var(--accent)}
+.phead{display:flex;gap:18px;align-items:center;margin-bottom:20px;padding-inline-end:40px}
+.phead .av{width:84px;height:84px;flex:none}
+.phead h2{margin:0 0 6px;font:700 28px/1 var(--px);overflow-wrap:anywhere}
+.phead .sub{display:flex;gap:10px;align-items:center;flex-wrap:wrap;color:var(--muted);font-size:13px}
+.pstat{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+.pstat div{background:var(--bg);border:1px solid var(--line);border-radius:5px;padding:12px 14px}
+.pstat b{display:block;font:700 26px/1 var(--px);font-variant-numeric:tabular-nums}
+.pstat span{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.mrows{display:flex;flex-direction:column;gap:6px}
+.mrow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 12px;border:1px solid var(--line);border-radius:4px;background:var(--bg)}
+.mrow .l{display:flex;align-items:center;gap:10px;font-weight:500}
+.mrow .l i{font:500 10px/1 var(--px);font-style:normal;background:var(--surface2);padding:4px 6px;border-radius:3px}
+.mrow .r{display:flex;align-items:center;gap:12px;font-variant-numeric:tabular-nums}
+.mrow .r small{color:var(--muted);font-size:12px}
+
+@media (max-width:980px){
+  .hero{grid-template-columns:minmax(0,1fr);padding:24px}
+  section.how{grid-template-columns:minmax(0,1fr)}
+  .cols{grid-template-columns:minmax(0,1fr)}
+  .listhead{display:none}
+}
+@media (max-width:720px){
+  .row{grid-template-columns:36px minmax(0,1fr) auto;grid-template-areas:"rk who pts" "ch ch ch";row-gap:10px;column-gap:10px}
+  .row .rk{grid-area:rk;font-size:18px}.row .who{grid-area:who}.row .pts{grid-area:pts}.row .chips{grid-area:ch}
+  .top nav{margin-inline-start:0;width:100%}
+  .podium{gap:6px}.pod{padding-inline:6px}.pod .av{width:44px;height:44px}.pod.p1 .av{width:58px;height:58px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="#top" id="top"><canvas class="gem" id="gem" width="13" height="13"></canvas>An<b>Tiers</b></a>
+    <nav>
+      <a href="#rankings" data-i="nav_rank">Rankings</a>
+      <a href="#how" data-i="nav_how">How tiers work</a>
+      <a href="#test" data-i="nav_test">Get tested</a>
+      <button class="lang" id="lang" type="button">العربية</button>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <canvas class="fx" id="fx" aria-hidden="true"></canvas>
+    <div>
+      <p class="eyebrow" data-i="eyebrow">Minecraft PvP tier list</p>
+      <h1>An<span>Tiers</span></h1>
+      <p class="lead" data-i="lead">Every fighter, ranked by testers across eight game modes. Find your name, see your tier, climb the board.</p>
+      <label class="search" for="q">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="7" cy="7" r="5"/><path d="M11 11l4 4"/></svg>
+        <input id="q" type="search" autocomplete="off" placeholder="Search a player" data-iph="search">
+      </label>
+      <div class="stats" id="stats"></div>
+    </div>
+    <div class="podium" id="podium"></div>
+  </section>
+
+  <div class="modes" id="rankings"><div class="scroll" id="tabs" role="tablist"></div></div>
+  <p class="demo" data-i="demo">Example players. Replace the list in the page code with your own testers' results.</p>
+  <main id="view" aria-live="polite"></main>
+
+  <section class="how" id="how">
+    <div>
+      <h2 data-i="how_h">How tiers work</h2>
+      <p data-i="how_p">Each mode has five tiers. Tier 1 is the top. Inside every tier a player is either High (HT) or Low (LT). Your overall score is the sum of the points from all your modes.</p>
+      <div class="steps" id="test">
+        <div class="step"><b>1</b><span data-i="s1">Join the Discord and pick the mode you want to be tested in.</span></div>
+        <div class="step"><b>2</b><span data-i="s2">Wait for a tester in the queue and fight them in a set of matches.</span></div>
+        <div class="step"><b>3</b><span data-i="s3">Your result is posted and your tier appears on this board.</span></div>
+      </div>
+    </div>
+    <div class="ptable">
+      <table>
+        <thead><tr><th data-i="th_tier">Tier</th><th data-i="th_level">Level</th><th data-i="th_pts">Points</th></tr></thead>
+        <tbody id="ptb"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    <span>AnTiers · <span data-i="foot">Not affiliated with Mojang or Microsoft.</span></span>
+    <span data-i="foot2">Made by the AnTiers team</span>
+  </footer>
+</div>
+
+<div class="modal" id="modal" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="mName">
+    <button class="x" id="mx" type="button" aria-label="Close">×</button>
+    <div id="mbody"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+/* ---------- DATA: edit this list to publish your own rankings ---------- */
+var PTS={HT1:60,LT1:48,HT2:32,LT2:24,HT3:16,LT3:10,HT4:5,LT4:3,HT5:2,LT5:1};
+var MODES=[
+  {k:'sword',n:'Sword',a:'SW'},{k:'crystal',n:'Crystal',a:'CR'},{k:'pot',n:'Pot',a:'PT'},{k:'npot',n:'NetherPot',a:'NP'},
+  {k:'uhc',n:'UHC',a:'UH'},{k:'axe',n:'Axe',a:'AX'},{k:'mace',n:'Mace',a:'MC'},{k:'smp',n:'SMP',a:'SM'}
+];
+var PLAYERS=[
+  {n:'Zephyrion',r:'EU',t:{sword:'HT1',crystal:'LT1',pot:'HT2',uhc:'HT2',axe:'LT2'}},
+  {n:'NoxBlade',r:'NA',t:{crystal:'HT1',sword:'HT2',npot:'LT1',mace:'LT2'}},
+  {n:'AquaVex',r:'ME',t:{sword:'LT1',pot:'HT1',npot:'HT2',smp:'HT3',uhc:'LT2'}},
+  {n:'Kryptonite_X',r:'AS',t:{mace:'HT1',crystal:'LT1',axe:'HT2'}},
+  {n:'Frostbyte',r:'EU',t:{uhc:'HT1',sword:'HT2',smp:'LT2'}},
+  {n:'VoidWalker7',r:'NA',t:{npot:'HT1',pot:'LT1',crystal:'HT3'}},
+  {n:'PixelPhantom',r:'ME',t:{axe:'LT1',crystal:'HT2',sword:'LT2',mace:'LT2'}},
+  {n:'Shadowmire',r:'EU',t:{mace:'HT2',sword:'HT3',uhc:'LT2'}},
+  {n:'EmberFox',r:'AS',t:{pot:'HT2',npot:'HT3',sword:'LT3'}},
+  {n:'Cobalt_K',r:'NA',t:{axe:'HT1',smp:'HT2',sword:'LT3'}},
+  {n:'Ghoulash',r:'ME',t:{smp:'HT1',uhc:'HT3',pot:'LT3'}},
+  {n:'LunarOwl',r:'EU',t:{crystal:'LT2',npot:'LT2',mace:'LT3'}},
+  {n:'Mythra',r:'AS',t:{sword:'HT3',axe:'HT3',uhc:'LT3'}},
+  {n:'TNT_Tamer',r:'ME',t:{crystal:'HT3',smp:'LT3',mace:'LT3'}},
+  {n:'Ironclad',r:'NA',t:{pot:'LT2',sword:'LT3',axe:'LT3'}},
+  {n:'Slimejoe',r:'EU',t:{npot:'HT4',sword:'HT4',crystal:'LT3'}},
+  {n:'Cipher',r:'NA',t:{uhc:'HT4',smp:'HT4'}},
+  {n:'Wraithe',r:'AS',t:{mace:'HT3',sword:'LT4'}},
+  {n:'Dusk_',r:'ME',t:{axe:'HT4',pot:'HT4',sword:'LT4'}},
+  {n:'Biscuit',r:'EU',t:{crystal:'HT4',smp:'LT4'}},
+  {n:'Nimbus',r:'NA',t:{sword:'HT5',pot:'LT4',uhc:'LT4'}},
+  {n:'RedstoneRay',r:'ME',t:{npot:'LT4',crystal:'LT4',axe:'LT5'}},
+  {n:'Orbit',r:'AS',t:{sword:'LT5',mace:'HT5'}},
+  {n:'Halcyon',r:'EU',t:{smp:'HT5',uhc:'LT5'}}
+];
+
+/* ---------- i18n ---------- */
+var I18={
+ en:{nav_rank:'Rankings',nav_how:'How tiers work',nav_test:'Get tested',eyebrow:'Minecraft PvP tier list',
+  lead:'Every fighter, ranked by testers across eight game modes. Find your name, see your tier, climb the board.',
+  search:'Search a player',demo:'Example players. Replace the list in the page code with your own testers\' results.',
+  how_h:'How tiers work',how_p:'Each mode has five tiers. Tier 1 is the top. Inside every tier a player is either High (HT) or Low (LT). Your overall score is the sum of the points from all your modes.',
+  s1:'Join the Discord and pick the mode you want to be tested in.',s2:'Wait for a tester in the queue and fight them in a set of matches.',s3:'Your result is posted and your tier appears on this board.',
+  th_tier:'Tier',th_level:'Level',th_pts:'Points',foot:'Not affiliated with Mojang or Microsoft.',foot2:'Made by the AnTiers team',
+  overall:'Overall',players:'Players',points:'Points',rank:'Rank',region:'Region',pts:'pts',tier:'Tier',
+  c_players:'Players',c_modes:'Modes',c_t1:'Tier 1',none:'No players here',noresult:'No player matches your search.',
+  high:'High',low:'Low',th_player:'Player',th_tiers:'Tiers',th_points:'Points',close:'Close',modes_played:'Modes tested',best:'Best tier'},
+ ar:{nav_rank:'الترتيب',nav_how:'إزاي التيرات شغالة',nav_test:'اتختبر',eyebrow:'قائمة تيرات ماين كرافت PvP',
+  lead:'كل لاعب متصنف من التسترز في ٨ أوضاع لعب. دوّر على اسمك، شوف تيرك، واطلع في الترتيب.',
+  search:'ابحث عن لاعب',demo:'لاعبين تجريبيين. بدّل القائمة في كود الصفحة بنتائج لاعبينك الحقيقية.',
+  how_h:'إزاي التيرات شغالة',how_p:'كل وضع فيه خمس تيرات. التير ١ هو الأعلى. جوه كل تير اللاعب يا High (HT) يا Low (LT). مجموع نقاطك هو مجموع نقاط كل الأوضاع.',
+  s1:'ادخل الديسكورد واختار الوضع اللي عايز تتختبر فيه.',s2:'استنى دورك مع التستر وقاتله في كذا جولة.',s3:'النتيجة بتتنشر وتيرك بيظهر في الجدول ده.',
+  th_tier:'التير',th_level:'المستوى',th_pts:'النقاط',foot:'مش تابع لموجانج ولا مايكروسوفت.',foot2:'من تصميم فريق AnTiers',
+  overall:'الإجمالي',players:'لاعب',points:'نقطة',rank:'الترتيب',region:'المنطقة',pts:'نقطة',tier:'تير',
+  c_players:'لاعبين',c_modes:'أوضاع',c_t1:'التير ١',none:'مفيش لاعبين هنا',noresult:'مفيش لاعب بالاسم ده.',
+  high:'عالي',low:'منخفض',th_player:'اللاعب',th_tiers:'التيرات',th_points:'النقاط',close:'إغلاق',modes_played:'أوضاع مختبرة',best:'أفضل تير'}
+};
+var lang='en',mode='overall',query='';
+try{var sv=localStorage.getItem('antiers_lang');if(sv==='ar'||sv==='en')lang=sv}catch(e){}
+function T(k){return (I18[lang]&&I18[lang][k])||I18.en[k]||k}
+
+/* ---------- helpers ---------- */
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function hash(s){var h=2166136261;for(var i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
+function rng(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+var avCache={};
+function avatar(name){
+  if(avCache[name])return avCache[name];
+  var r=rng(hash(name)),pick=function(a){return a[Math.floor(r()*a.length)]};
+  var skin=pick(['#f2cba7','#dba37b','#b98059','#8c5c3c','#6d4631']),hair=pick(['#2b1d12','#5a3a1c','#c9a227','#1b1b1f','#8b2e1a','#e6dfd0','#3b2a6b','#1f6b5a']),eye=pick(['#2a4fd6','#2d7a3a','#5a3a1c','#111111','#6a2fd0']);
+  var c=document.createElement('canvas');c.width=c.height=8;var x=c.getContext('2d');
+  function px(col,a,b,w,h){x.fillStyle=col;x.fillRect(a,b,w||1,h||1)}
+  px(skin,0,0,8,8);px(hair,0,0,8,2);
+  var fr=r();
+  if(fr<.5){px(hair,0,2,1);px(hair,7,2,1)}
+  if(fr<.25){px(hair,1,2,2);px(hair,5,2,2)}
+  if(fr>.75){px(hair,0,2,8)}
+  px('#ffffff',1,4,2);px('#ffffff',5,4,2);px(eye,2,4);px(eye,5,4);
+  var dk='rgba(0,0,0,.22)';px(dk,3,5,2);px('rgba(120,40,30,.55)',3,6,2);
+  if(r()<.3){px(hair,1,6,1,2);px(hair,6,6,1,2);px(hair,2,7,4)}
+  return avCache[name]=c.toDataURL();
+}
+function tierNum(t){return t.charAt(2)}
+function isHT(t){return t.charAt(0)==='H'}
+function mname(k){return MODES.filter(function(m){return m.k===k})[0]}
+function pts(p){var s=0;for(var k in p.t)s+=PTS[p.t[k]]||0;return s}
+function best(p){var b=null;for(var k in p.t){if(b===null||PTS[p.t[k]]>PTS[b])b=p.t[k]}return b}
+function chip(k,t){var m=mname(k);return '<span class="chip t'+tierNum(t)+(isHT(t)?' ht':'')+'" title="'+esc(m.n)+' '+t+'"><span class="m">'+m.a+'</span>'+t+'</span>'}
+function reg(r){return '<span class="reg r'+r+'">'+r+'</span>'}
+PLAYERS.forEach(function(p){p.p=pts(p)});
+var RANKED=PLAYERS.slice().sort(function(a,b){return b.p-a.p||a.n.localeCompare(b.n)});
+RANKED.forEach(function(p,i){p.rank=i+1});
+
+/* ---------- renderers ---------- */
+function renderPodium(){
+  var o=[1,0,2],cls=['p1','p2','p3'],pl=['#1','#2','#3'],h='';
+  o.forEach(function(i){var p=RANKED[i];
+    h+='<button class="pod '+cls[i]+'" data-p="'+esc(p.n)+'" type="button"><span class="place">'+pl[i]+'</span><img class="av" alt="" src="'+avatar(p.n)+'"><span class="nm">'+esc(p.n)+'</span><span class="pp">'+p.p+'<small>'+T('pts')+'</small></span><span class="chip t'+tierNum(best(p))+(isHT(best(p))?' ht':'')+'">'+best(p)+'</span></button>'});
+  document.getElementById('podium').innerHTML=h;
+}
+function renderStats(){
+  var t1=PLAYERS.filter(function(p){return Object.keys(p.t).some(function(k){return tierNum(p.t[k])==='1'})}).length;
+  document.getElementById('stats').innerHTML='<div><b>'+PLAYERS.length+'</b><span>'+T('c_players')+'</span></div><div><b>'+MODES.length+'</b><span>'+T('c_modes')+'</span></div><div><b>'+t1+'</b><span>'+T('c_t1')+'</span></div>';
+}
+function renderTabs(){
+  var h='<button class="mode" role="tab" data-m="overall" aria-selected="'+(mode==='overall')+'"><i>ALL</i>'+T('overall')+'</button>';
+  MODES.forEach(function(m){h+='<button class="mode" role="tab" data-m="'+m.k+'" aria-selected="'+(mode===m.k)+'"><i>'+m.a+'</i>'+m.n+'</button>'});
+  document.getElementById('tabs').innerHTML=h;
+}
+function match(p){return !query||p.n.toLowerCase().indexOf(query)>-1}
+function renderView(){
+  var v=document.getElementById('view'),h='';
+  if(mode==='overall'){
+    var L=RANKED.filter(match);
+    if(!L.length){v.innerHTML='<div class="empty">'+T('noresult')+'</div>';return}
+    h='<div class="listhead"><span>#</span><span>'+T('th_player')+'</span><span>'+T('th_tiers')+'</span><span style="text-align:end">'+T('th_points')+'</span></div><div class="list">';
+    L.forEach(function(p,i){
+      var ks=Object.keys(p.t).sort(function(a,b){return PTS[p.t[b]]-PTS[p.t[a]]});
+      h+='<button class="row'+(p.rank<=3?' r'+p.rank:'')+'" data-p="'+esc(p.n)+'" type="button" style="animation-delay:'+Math.min(i,12)*25+'ms"><span class="rk">'+p.rank+'</span>'
+        +'<span class="who"><img class="av" alt="" src="'+avatar(p.n)+'"><span class="meta"><span class="nm">'+esc(p.n)+'</span>'+reg(p.r)+'</span></span>'
+        +'<span class="chips">'+ks.map(function(k){return chip(k,p.t[k])}).join('')+'</span>'
+        +'<span class="pts">'+p.p+'<small>'+T('pts')+'</small></span></button>';
+    });
+    v.innerHTML=h+'</div>';
+  }else{
+    h='<div class="cols">';
+    for(var n=1;n<=5;n++){
+      var L2=PLAYERS.filter(function(p){return p.t[mode]&&tierNum(p.t[mode])==String(n)&&match(p)}).sort(function(a,b){
+        return PTS[b.t[mode]]-PTS[a.t[mode]]||a.rank-b.rank});
+      h+='<div class="col t'+n+'"><h3>'+T('tier')+' '+n+'<small>'+L2.length+'</small></h3>';
+      if(!L2.length)h+='<div class="none">'+T('none')+'</div>';
+      else{h+='<ul>';L2.forEach(function(p){var t=p.t[mode];
+        h+='<li><button type="button" data-p="'+esc(p.n)+'"><img class="av" alt="" src="'+avatar(p.n)+'"><span class="nm">'+esc(p.n)+'</span>'+reg(p.r)+'<span class="lh'+(isHT(t)?' h':'')+'">'+t+'</span></button></li>'});h+='</ul>'}
+      h+='</div>';
+    }
+    v.innerHTML=h+'</div>';
+  }
+}
+function renderPoints(){
+  var h='';
+  Object.keys(PTS).forEach(function(t){h+='<tr><td><span class="chip t'+tierNum(t)+(isHT(t)?' ht':'')+'" style="padding-inline:8px">'+t+'</span></td><td>'+T(isHT(t)?'high':'low')+' '+T('tier')+' '+tierNum(t)+'</td><td>'+PTS[t]+'</td></tr>'});
+  document.getElementById('ptb').innerHTML=h;
+}
+function openPlayer(name){
+  var p=PLAYERS.filter(function(x){return x.n===name})[0];if(!p)return;
+  var rows='';
+  MODES.forEach(function(m){var t=p.t[m.k];
+    rows+='<div class="mrow"><span class="l"><i>'+m.a+'</i>'+m.n+'</span><span class="r">'+(t?'<small>'+PTS[t]+' '+T('pts')+'</small><span class="chip t'+tierNum(t)+(isHT(t)?' ht':'')+'" style="padding-inline:8px">'+t+'</span>':'<small>—</small>')+'</span></div>'});
+  document.getElementById('mbody').innerHTML='<div class="phead"><img class="av" alt="" src="'+avatar(p.n)+'"><div><h2 id="mName">'+esc(p.n)+'</h2><div class="sub">'+reg(p.r)+'<span>#'+p.rank+' · '+T('overall')+'</span></div></div></div>'
+    +'<div class="pstat"><div><b>'+p.p+'</b><span>'+T('th_points')+'</span></div><div><b>'+Object.keys(p.t).length+'/'+MODES.length+'</b><span>'+T('modes_played')+'</span></div></div><div class="mrows">'+rows+'</div>';
+  var m=document.getElementById('modal');m.hidden=false;document.getElementById('mx').focus();
+}
+function closeModal(){document.getElementById('modal').hidden=true}
+function applyLang(){
+  document.documentElement.lang=lang;document.documentElement.dir=lang==='ar'?'rtl':'ltr';
+  document.querySelectorAll('[data-i]').forEach(function(e){e.textContent=T(e.getAttribute('data-i'))});
+  document.querySelectorAll('[data-iph]').forEach(function(e){e.placeholder=T(e.getAttribute('data-iph'))});
+  document.getElementById('lang').textContent=lang==='ar'?'English':'العربية';
+  document.getElementById('mx').setAttribute('aria-label',T('close'));
+  renderStats();renderPodium();renderTabs();renderView();renderPoints();
+}
+
+/* ---------- events ---------- */
+document.getElementById('tabs').addEventListener('click',function(e){var b=e.target.closest('[data-m]');if(!b)return;mode=b.getAttribute('data-m');renderTabs();renderView()});
+document.addEventListener('click',function(e){var b=e.target.closest('[data-p]');if(b)openPlayer(b.getAttribute('data-p'))});
+document.getElementById('q').addEventListener('input',function(e){query=e.target.value.trim().toLowerCase();renderView()});
+document.getElementById('lang').addEventListener('click',function(){lang=lang==='ar'?'en':'ar';try{localStorage.setItem('antiers_lang',lang)}catch(e){}applyLang()});
+document.getElementById('mx').addEventListener('click',closeModal);
+document.getElementById('modal').addEventListener('click',function(e){if(e.target.id==='modal')closeModal()});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModal()});
+
+/* ---------- logo gem (pixel diamond) ---------- */
+(function(){var c=document.getElementById('gem'),x=c.getContext('2d');
+  var map=['......#......','.....###.....','....#####....','...#######...','..#########..','.###########.','#############','.###########.','..#########..','...#######...','....#####....','.....###.....','......#......'];
+  var cs=getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||'#3ee6c4';
+  map.forEach(function(row,y){for(var i=0;i<13;i++){if(row[i]==='#'){x.fillStyle=(i+y<9||y<4&&i<8)?cs:(y>7?'rgba(0,0,0,.35)':cs);x.globalAlpha=(y>5&&i>6)?.7:1;x.fillRect(i,y,1,1)}}});
+  x.globalAlpha=1;x.fillStyle='rgba(255,255,255,.75)';x.fillRect(4,4,2,1);x.fillRect(3,5,1,1);
+})();
+
+/* ---------- hero ambient: drifting ender-pixels ---------- */
+(function(){
+  var cv=document.getElementById('fx'),ctx=cv.getContext('2d'),P=[],W=0,H=0,still=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function cols(){var s=getComputedStyle(document.documentElement);return ['--accent','--t1','--t3','--t4'].map(function(k){return s.getPropertyValue(k).trim()||'#3ee6c4'})}
+  var C=cols();
+  function size(){var r=cv.getBoundingClientRect(),d=Math.min(window.devicePixelRatio||1,2);W=r.width;H=r.height;cv.width=W*d;cv.height=H*d;ctx.setTransform(d,0,0,d,0,0);C=cols();
+    P=[];var n=Math.round(W*H/9000);for(var i=0;i<n;i++)P.push({x:Math.random()*W,y:Math.random()*H,s:2+Math.floor(Math.random()*3)*2,v:.12+Math.random()*.35,c:C[i%C.length],a:.15+Math.random()*.5,ph:Math.random()*6.28})}
+  function draw(t){ctx.clearRect(0,0,W,H);P.forEach(function(p){
+    if(!still){p.y-=p.v;p.x+=Math.sin(t/1800+p.ph)*.15;if(p.y<-8){p.y=H+8;p.x=Math.random()*W}}
+    ctx.globalAlpha=p.a*(still?1:.6+.4*Math.sin(t/900+p.ph));ctx.fillStyle=p.c;ctx.fillRect(Math.round(p.x),Math.round(p.y),p.s,p.s)});
+    ctx.globalAlpha=1;if(!still)requestAnimationFrame(draw)}
+  size();requestAnimationFrame(draw);
+  var rt;window.addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(function(){size();if(still)draw(0)},150)});
+})();
+
+applyLang();
+})();
+</script>
+
+</body></html>
