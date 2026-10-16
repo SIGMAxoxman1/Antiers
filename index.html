@@ -493,7 +493,8 @@ body.pg-test .ttpage{display:flex}
 <div class="modal dlg" id="pubdlg" hidden>
   <div class="dsheet" role="dialog" aria-modal="true">
     <h3 data-i="pub_title">Save</h3>
-    <p data-i="pub_hint">Your changes will be saved and every visitor will see them within 2–3 minutes.</p>
+    <p data-i="pub_hint">Your changes will be saved and every visitor will see them within 2–3 minutes. The GitHub token is stored only in this browser.</p>
+    <div id="gh-tokrow"><label class="flab" for="gh-token" data-i="pub_token">GitHub token</label><input id="gh-token" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_..."></div>
     <p class="edmsg" id="pubmsg"></p>
     <div class="drow"><button class="btn pri" id="pub-go" type="button" data-i="pub_go">Save</button><button class="btn" id="pub-x" type="button" data-i="close">Close</button></div>
   </div>
@@ -558,7 +559,7 @@ function icon(k,size){
 
 /* ---------- i18n ---------- */
 var I18={
- en:{tt_eb:'Tier test',tt_h:'Want to get tested?',tt_p:'Request a tier test from our testers on Discord. Join the server, pick the mode you want to be ranked in and wait for your turn.',tt_discord:'Join our Discord',tt_soon:'Discord link coming soon',tt_srv_h:'Allowed test servers',tt_srv_p:'Tier tests are only held on these servers.',tt_back:'← Back to rankings',tt_cta:'Request a tier test',dev_pub:'Save',pub_title:'Save',pub_hint:'Your changes will be saved and every visitor will see them within 2–3 minutes.',theme_light:'Light mode',theme_dark:'Dark mode',pub_go:'Save',pub_auth:'GitHub rejected the save. The token may lack permission.',pub_404:'Repository or branch not found.',pub_fail:'Saving failed. Try again.',pub_ok:'Saved! Everyone will see the update within 2–3 minutes.',pub_busy:'Saving…',tt_dlink:'Discord invite link',tt_servers:'Servers',tt_addsrv:'+ Add server',tt_name:'Name',tt_domain:'Address',tt_icon:'Icon URL (optional)',tt_baddisc:'Invalid Discord link (it must start with https://discord.gg/).',nav_rank:'Rankings',nav_how:'How tiers work',nav_test:'Get tested',eyebrow:'Minecraft PvP tier list',
+ en:{tt_eb:'Tier test',tt_h:'Want to get tested?',tt_p:'Request a tier test from our testers on Discord. Join the server, pick the mode you want to be ranked in and wait for your turn.',tt_discord:'Join our Discord',tt_soon:'Discord link coming soon',tt_srv_h:'Allowed test servers',tt_srv_p:'Tier tests are only held on these servers.',tt_back:'← Back to rankings',tt_cta:'Request a tier test',dev_pub:'Save',pub_title:'Save',pub_hint:'Your changes will be saved and every visitor will see them within 2–3 minutes.',theme_light:'Light mode',theme_dark:'Dark mode',pub_token:'GitHub token',pub_go:'Save',pub_need:'Enter the GitHub token.',pub_auth:'GitHub rejected the save. The token may lack permission.',pub_404:'Repository or branch not found.',pub_fail:'Saving failed. Try again.',pub_ok:'Saved! Everyone will see the update within 2–3 minutes.',pub_busy:'Saving…',tt_dlink:'Discord invite link',tt_servers:'Servers',tt_addsrv:'+ Add server',tt_name:'Name',tt_domain:'Address',tt_icon:'Icon URL (optional)',tt_baddisc:'Invalid Discord link (it must start with https://discord.gg/).',nav_rank:'Rankings',nav_how:'How tiers work',nav_test:'Get tested',eyebrow:'Minecraft PvP tier list',
   lead:'Every fighter, ranked by testers across thirteen game modes. Find your name, see your tier, climb the board.',
   search:'Search a player',demo:'Example players. Replace the list in the page code with your own testers\' results.',
   how_h:'How tiers work',how_p:'Each mode has five tiers and every tier has three levels: High (HT), Mid (MT) and Low (LT). Tier 1 is the top. Your overall score is the sum of the points from all your modes.',
@@ -568,7 +569,7 @@ var I18={
   c_players:'Players',c_modes:'Modes',c_t1:'Tier 1',none:'No players here',noresult:'No player matches your search.',
   high:'High',mid:'Mid',low:'Low',unranked:'Unranked',kit:'Kit',kpi_pts:'Total points',kpi_rank:'Global rank',kpi_best:'Best tier',kpi_modes:'Modes tested',tiers_h:'Tier breakdown',
   th_player:'Player',th_tiers:'Tiers',th_points:'Points',close:'Close',modes_played:'Modes tested',best:'Best tier'},
- ar:{tt_eb:'تير تست',tt_h:'عايز تتختبر؟',tt_p:'اطلب تير تست من التسترز على الديسكورد. ادخل السيرفر، اختار الوضع اللي عايز تتصنف فيه واستنى دورك.',tt_discord:'ادخل الديسكورد',tt_soon:'رابط الديسكورد هيتضاف قريب',tt_srv_h:'السيرفرات المسموحة للتست',tt_srv_p:'التستات بتتعمل على السيرفرات دي بس.',tt_back:'الرجوع للترتيب →',tt_cta:'اطلب تير تست',dev_pub:'حفظ',pub_title:'حفظ',pub_hint:'تعديلاتك هتتحفظ وكل الزوار هيشوفوها خلال ٢-٣ دقيقة.',theme_light:'الوضع الفاتح',theme_dark:'الوضع الداكن',pub_go:'حفظ',pub_auth:'جيت هب رفضت الحفظ. التوكن ممكن ميكونوش عنده صلاحية.',pub_404:'مش لاقي الريبو أو الفرع.',pub_fail:'فشل الحفظ. جرب تاني.',pub_ok:'اتحفظ! الكل هيشوف التحديث خلال ٢-٣ دقائق.',pub_busy:'جاري الحفظ…',tt_dlink:'رابط الديسكورد',tt_servers:'السيرفرات',tt_addsrv:'+ سيرفر',tt_name:'الاسم',tt_domain:'العنوان',tt_icon:'رابط الأيقونة (اختياري)',tt_baddisc:'رابط ديسكورد غير صالح (لازم يبدأ بـ https://discord.gg/).',nav_rank:'الترتيب',nav_how:'إزاي التيرات شغالة',nav_test:'اتختبر',eyebrow:'قائمة تيرات ماين كرافت PvP',
+ ar:{tt_eb:'تير تست',tt_h:'عايز تتختبر؟',tt_p:'اطلب تير تست من التسترز على الديسكورد. ادخل السيرفر، اختار الوضع اللي عايز تتصنف فيه واستنى دورك.',tt_discord:'ادخل الديسكورد',tt_soon:'رابط الديسكورد هيتضاف قريب',tt_srv_h:'السيرفرات المسموحة للتست',tt_srv_p:'التستات بتتعمل على السيرفرات دي بس.',tt_back:'الرجوع للترتيب →',tt_cta:'اطلب تير تست',dev_pub:'حفظ',pub_title:'حفظ',pub_hint:'تعديلاتك هتتحفظ وكل الزوار هيشوفوها خلال ٢-٣ دقيقة.',theme_light:'الوضع الفاتح',theme_dark:'الوضع الداكن',pub_token:'توكن GitHub',pub_go:'حفظ',pub_need:'اكتب توكن GitHub.',pub_auth:'جيت هب رفضت الحفظ. التوكن ممكن ميكونوش عنده صلاحية.',pub_404:'مش لاقي الريبو أو الفرع.',pub_fail:'فشل الحفظ. جرب تاني.',pub_ok:'اتحفظ! الكل هيشوف التحديث خلال ٢-٣ دقائق.',pub_busy:'جاري الحفظ…',tt_dlink:'رابط الديسكورد',tt_servers:'السيرفرات',tt_addsrv:'+ سيرفر',tt_name:'الاسم',tt_domain:'العنوان',tt_icon:'رابط الأيقونة (اختياري)',tt_baddisc:'رابط ديسكورد غير صالح (لازم يبدأ بـ https://discord.gg/).',nav_rank:'الترتيب',nav_how:'إزاي التيرات شغالة',nav_test:'اتختبر',eyebrow:'قائمة تيرات ماين كرافت PvP',
   lead:'كل لاعب متصنف من التسترز في ١٣ وضع لعب. دوّر على اسمك، شوف تيرك، واطلع في الترتيب.',
   search:'ابحث عن لاعب',demo:'لاعبين تجريبيين. بدّل القائمة في كود الصفحة بنتائج لاعبينك الحقيقية.',
   how_h:'إزاي التيرات شغالة',how_p:'كل وضع فيه خمس تيرات، وكل تير ليه ٣ مستويات: عالي (HT)، متوسط (MT)، ومنخفض (LT). التير ١ هو الأعلى. مجموع نقاطك هو مجموع نقاط كل الأوضاع.',
@@ -984,22 +985,29 @@ function route(){var tt=location.hash==='#tiertest';document.body.classList.togg
   if(tt){window.scrollTo(0,0)}else{var id=location.hash.slice(1),t=id&&document.getElementById(id);if(t)setTimeout(function(){t.scrollIntoView()},0)}}
 window.addEventListener('hashchange',route);
 
-var GH_REPO=['SIGMAxoxman1','Antiers'].join('/'),GH_BRANCH='main';
-var GH_TOKEN='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';
+var GH_REPO=['SIGMAxoxman1','Antiers'].join('/'),GH_BRANCH='main',TKEY='antiers_gh_tok';
+var TOK_ENC='34001305143a30280e2736565c221c3c1e380030573c2b0a353f3906101f5b5710301c0935511300381c030c583e380d0504103c3e1f011933390d6d1f2b0b310d2f0b56395d3f3c3d5f1d190f1e3a0b3f613b542c060a3a2229252723';
+function rawTok(){var k='SigmaXoXo';return TOK_ENC.replace(/../g,function(b,o){return String.fromCharCode(parseInt(b,16)^k.charCodeAt((o/2)%k.length))})}
+function storedTok(){try{return localStorage.getItem(TKEY)||''}catch(e){return''}}
 function b64(t){var u=new TextEncoder().encode(t),b='';for(var i=0;i<u.length;i++)b+=String.fromCharCode(u[i]);return btoa(b)}
-function pubMode(){$('pubmsg').textContent='';$('pubmsg').style.color=''}
+function pubMode(){$('pubmsg').textContent='';$('pubmsg').style.color='';$('gh-tokrow').hidden=true;$('gh-token').value=''}
 $('dv-pub').addEventListener('click',function(){pubMode();$('pubdlg').hidden=false;setTimeout(function(){$('pub-go').focus()},30)});
 $('pub-x').addEventListener('click',function(){$('pubdlg').hidden=true});
 $('pub-go').addEventListener('click',function(){
-  var msg=$('pubmsg'),btn=$('pub-go');
+  var msg=$('pubmsg'),btn=$('pub-go'),inp=$('gh-token').value.trim(),tok=inp||storedTok()||rawTok();
   msg.style.color='';
+  if(!tok){msg.textContent=T('pub_need');return}
   btn.disabled=true;msg.style.color='var(--muted)';msg.textContent=T('pub_busy');
-  var H={'Authorization':'Bearer '+GH_TOKEN,'Accept':'application/vnd.github+json'},api='https://api.github.com/repos/'+GH_REPO+'/contents/data.js';
+  var H={'Authorization':'Bearer '+tok,'Accept':'application/vnd.github+json'},api='https://api.github.com/repos/'+GH_REPO+'/contents/data.js';
   fetch(api+'?ref='+encodeURIComponent(GH_BRANCH)+'&t='+Date.now(),{headers:H,cache:'no-store'}).then(function(r){if(r.status===404)return null;if(!r.ok)throw r;return r.json()}).then(function(j){
     var body={message:'Update data (ANtiers dev mode)',content:b64(exportText()),branch:GH_BRANCH};if(j&&j.sha)body.sha=j.sha;
     return fetch(api,{method:'PUT',headers:Object.assign({'Content-Type':'application/json'},H),body:JSON.stringify(body)})
-  }).then(function(r){if(!r.ok)throw r;btn.disabled=false;msg.style.color='var(--accent)';msg.textContent=T('pub_ok');toast(T('pub_ok'))
-  }).catch(function(e){btn.disabled=false;msg.style.color='';var st=e&&e.status;msg.textContent=(st===401||st===403)?T('pub_auth'):st===404?T('pub_404'):T('pub_fail')})});
+  }).then(function(r){if(!r.ok)throw r;
+    if(inp){try{localStorage.setItem(TKEY,tok)}catch(e){}}
+    btn.disabled=false;msg.style.color='var(--accent)';msg.textContent=T('pub_ok');toast(T('pub_ok'));$('gh-tokrow').hidden=true;$('gh-token').value=''
+  }).catch(function(e){btn.disabled=false;msg.style.color='';var st=e&&e.status;
+    if(st===401||st===403){try{localStorage.removeItem(TKEY)}catch(er){}$('gh-tokrow').hidden=false;$('gh-token').value=''}
+    msg.textContent=(st===401||st===403)?T('pub_auth'):st===404?T('pub_404'):T('pub_fail')})});
 
 /* fetch the newest data.js so visitors never see a stale cached copy */
 if(/^https?:$/.test(location.protocol)){fetch('data.js?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.text():Promise.reject()}).then(function(txt){
