@@ -93,10 +93,10 @@ h1 span{background:linear-gradient(100deg,var(--accent),#7b9cff 65%,var(--t3));-
 @keyframes pulse{50%{box-shadow:0 0 56px color-mix(in srgb,var(--t1) 30%,transparent)}}
 
 /* avatars, chips */
-.av{display:block;object-fit:contain;border-radius:3px;background:none;transform-origin:50% 85%;filter:drop-shadow(0 4px 7px rgba(0,0,0,.45));
+.av{display:block;object-fit:contain;border-radius:3px;background:none;transform-origin:50% 85%;
   transition:transform .28s cubic-bezier(.2,.9,.25,1.25),filter .28s;will-change:transform}
 .av.px{image-rendering:pixelated;background:var(--surface2)}
-.row:hover .av,.col li button:hover .av,.pod:hover .av,.phead .av:hover{transform:scale(1.22) translateY(-3px) rotate(-2deg);filter:drop-shadow(0 10px 12px rgba(0,0,0,.6))}
+.row:hover .av,.col li button:hover .av,.pod:hover .av,.phead .av:hover{transform:scale(1.22) translateY(-3px) rotate(-2deg)}
 .pod:hover{transform:none}
 .chip{display:inline-flex;align-items:center;gap:6px;color:var(--c);font:700 14px/1.4 var(--px);letter-spacing:.03em}
 .chip.ht,.tb.ht span{text-shadow:0 0 14px color-mix(in srgb,var(--c) 60%,transparent)}
@@ -746,10 +746,24 @@ function renderPoints(){
   document.getElementById('ptb').innerHTML=h;
 }
 /* ---------- 3D player (skinview3d) ---------- */
-var SV={loading:null,viewer:null,cleanup:null};
-function loadSV(){if(window.skinview3d)return Promise.resolve();if(SV.loading)return SV.loading;
-  SV.loading=new Promise(function(res,rej){var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/skinview3d@3.4.1/bundles/skinview3d.bundle.js';s.onload=res;s.onerror=function(){SV.loading=null;rej(new Error('load'))};document.head.appendChild(s)});
+var SV={loading:null,viewer:null,canvas:null,broken:false,active:false,cleanup:null,
+  REST:{y:.22,x:.06},tgt:{y:.22,x:.06},cur:{y:.22,x:.06}};
+function loadSV(){if(window.skinview3d)return Promise.resolve();if(SV.broken)return Promise.reject(new Error('load'));if(SV.loading)return SV.loading;
+  SV.loading=new Promise(function(res,rej){var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/skinview3d@3.4.1/bundles/skinview3d.bundle.js';s.onload=res;s.onerror=function(){SV.loading=null;SV.broken=true;s.remove();rej(new Error('load'))};document.head.appendChild(s)});
   return SV.loading}
+function ensureViewer(){
+  if(SV.viewer)return SV.viewer;
+  var cv=document.createElement('canvas');cv.className='sv';SV.canvas=cv;
+  var v=new skinview3d.SkinViewer({canvas:cv,width:320,height:320,fov:38});
+  v.camera.position.set(-3,14,40);v.controls.target.set(0,5.2,0);v.controls.update();
+  v.controls.enableRotate=false;v.controls.enableZoom=false;v.controls.enablePan=false;
+  v.animation=new skinview3d.IdleAnimation();
+  v.animation.addAnimation(function(player){
+    var R=SV.REST,t=SV.tgt,c=SV.cur;
+    c.y+=(t.y-c.y)*.12;c.x+=(t.x-c.x)*.12;
+    var by=.42+(c.y-R.y)*.2;player.rotation.y=by;player.skin.head.rotation.y=c.y-by;player.skin.head.rotation.x=c.x});
+  v.renderPaused=true;
+  SV.viewer=v;return v}
 function proceduralSkin(name){
   var r=rng(hash(name)),pick=function(a){return a[Math.floor(r()*a.length)]};
   var skin=pick(['#f2cba7','#dba37b','#b98059','#8c5c3c','#6d4631']),hair=pick(['#2b1d12','#5a3a1c','#c9a227','#1b1b1f','#8b2e1a','#e6dfd0','#3b2a6b','#1f6b5a']),
@@ -763,44 +777,44 @@ function proceduralSkin(name){
   R(pants,16,48,16,16);R('#222222',16,62,16,2);R(shirt,32,48,16,16);R(skin,32,60,16,4);
   return c}
 function mount3D(stage,name,flatFallback){
-  var cv=document.createElement('canvas');cv.className='sv';stage.appendChild(cv);
   var load=document.createElement('span');load.className='sv-load';load.textContent='3D…';stage.appendChild(load);
-  var REST={y:.22,x:.06},gone=false,viewer=null,tgt={y:REST.y,x:REST.x},cur={y:REST.y,x:REST.x};
-  function fail(){if(gone)return;cv.remove();load.remove();flatFallback()}
+  var gone=false;
+  function fail(){if(gone)return;gone=true;if(SV.canvas&&SV.canvas.parentNode)SV.canvas.parentNode.removeChild(SV.canvas);if(load.parentNode)load.remove();flatFallback()}
   loadSV().then(function(){
     if(gone)return;
+    var viewer;try{viewer=ensureViewer()}catch(er){fail();return}
+    stage.insertBefore(SV.canvas,load);
     try{
-      var w=cv.clientWidth||320,h=cv.clientHeight||320;
-      viewer=new skinview3d.SkinViewer({canvas:cv,width:w,height:h,fov:38});
-      viewer.camera.position.set(-3,14,40);viewer.controls.target.set(0,5.2,0);viewer.controls.update();
-      viewer.controls.enableRotate=false;viewer.controls.enableZoom=false;viewer.controls.enablePan=false;
-      viewer.animation=new skinview3d.IdleAnimation();
-      viewer.animation.addAnimation(function(player){
-        cur.y+=(tgt.y-cur.y)*.12;cur.x+=(tgt.x-cur.x)*.12;
-        var by=.42+(cur.y-REST.y)*.2;player.rotation.y=by;player.skin.head.rotation.y=cur.y-by;player.skin.head.rotation.x=cur.x});
-      SV.viewer=viewer;
+      viewer.setSize(SV.canvas.clientWidth||320,SV.canvas.clientHeight||320);
+      viewer.renderPaused=false;SV.active=true;
+      try{viewer.playerObject.skin.visible=false}catch(er){}
       var e=encodeURIComponent(name),srcs=[];
       if(skinUrlCache[name])srcs.push(skinUrlCache[name]);
       srcs.push('https://mc-heads.net/skin/'+e,'https://minotar.net/skin/'+e,'https://crafatar.com/skins/'+e);
       (function next(i){
         if(gone)return;
-        if(i>=srcs.length){try{viewer.loadSkin(proceduralSkin(name))}catch(er){fail();return}load.remove();return}
+        if(i>=srcs.length){try{viewer.loadSkin(proceduralSkin(name));load.remove()}catch(er){fail()}return}
         var pr;try{pr=Promise.resolve(viewer.loadSkin(srcs[i]))}catch(er){pr=Promise.reject(er)}
-        pr.then(function(){load.remove()},function(){next(i+1)})
+        pr.then(function(){if(!gone)load.remove()},function(){next(i+1)})
       })(0);
     }catch(er){fail()}
   },fail);
-  function aim(cx,cy){var r=cv.getBoundingClientRect();if(!r.width)return;
+  function aim(cx,cy){if(!SV.canvas)return;var r=SV.canvas.getBoundingClientRect();if(!r.width)return;
     var dx=(cx-(r.left+r.width/2))/(window.innerWidth*.5),dy=(cy-(r.top+r.height*.3))/(window.innerHeight*.5);
-    tgt.y=Math.max(-1,Math.min(1,dx))*.95;tgt.x=Math.max(-1,Math.min(1,dy))*.55}
+    SV.tgt.y=Math.max(-1,Math.min(1,dx))*.95;SV.tgt.x=Math.max(-1,Math.min(1,dy))*.55}
   function mm(e){aim(e.clientX,e.clientY)}
   function tm(e){if(e.touches&&e.touches[0])aim(e.touches[0].clientX,e.touches[0].clientY)}
-  function rest(){tgt.y=REST.y;tgt.x=REST.x}
-  function rs(){if(viewer&&cv.clientWidth)viewer.setSize(cv.clientWidth,cv.clientHeight)}
+  function rest(){SV.tgt.y=SV.REST.y;SV.tgt.x=SV.REST.x}
+  function rs(){if(SV.active&&SV.viewer&&SV.canvas&&SV.canvas.clientWidth)SV.viewer.setSize(SV.canvas.clientWidth,SV.canvas.clientHeight)}
   window.addEventListener('mousemove',mm);window.addEventListener('touchmove',tm,{passive:true});window.addEventListener('touchend',rest);
   document.addEventListener('mouseleave',rest);window.addEventListener('resize',rs);
-  SV.cleanup=function(){gone=true;window.removeEventListener('mousemove',mm);window.removeEventListener('touchmove',tm);window.removeEventListener('touchend',rest);
-    document.removeEventListener('mouseleave',rest);window.removeEventListener('resize',rs);try{if(viewer)viewer.dispose()}catch(e){}viewer=null;SV.viewer=null;SV.cleanup=null};
+  SV.cleanup=function(){gone=true;SV.active=false;rest();
+    window.removeEventListener('mousemove',mm);window.removeEventListener('touchmove',tm);window.removeEventListener('touchend',rest);
+    document.removeEventListener('mouseleave',rest);window.removeEventListener('resize',rs);
+    if(SV.canvas&&SV.canvas.parentNode)SV.canvas.parentNode.removeChild(SV.canvas);
+    if(load.parentNode)load.remove();
+    if(SV.viewer)SV.viewer.renderPaused=true;
+    SV.cleanup=null};
 }
 function countUp(el,to){var t0=null,d=900;if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){el.textContent=to;return}
   function st(ts){if(t0===null)t0=ts;var k=Math.min(1,(ts-t0)/d),e=1-Math.pow(1-k,3);el.textContent=Math.round(to*e);if(k<1)requestAnimationFrame(st)}requestAnimationFrame(st)}
