@@ -6,13 +6,14 @@
 <title>404 – ANtiers</title>
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#0b0d18">
+<script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("antiers_theme")==="light"?"light":"dark")}catch(e){document.documentElement.setAttribute("data-theme","dark")}</script>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500;700&family=Rubik:wght@400;500;700;800&display=swap">
 <style>
 :root{--bg:#0b0d18;--fg:#eef1ff;--muted:#8d95b8;--accent:#3ee6c4;--accent-ink:#04120e;--line:#232845;--ui:Rubik,system-ui,Segoe UI,sans-serif;--px:'Pixelify Sans',Rubik,monospace}
-@media (prefers-color-scheme:light){:root{--bg:#f4f6ff;--fg:#141a33;--muted:#5b6485;--accent:#0fb89a;--accent-ink:#fff;--line:#d5daf0}}
+:root[data-theme="light"]{--bg:#f4f6ff;--fg:#141a33;--muted:#5b6485;--accent:#0fb89a;--accent-ink:#fff;--line:#d5daf0}
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%}
 body{min-height:100vh;background:radial-gradient(900px 500px at 50% 0,rgba(62,230,196,.12),transparent 60%),var(--bg);color:var(--fg);font-family:var(--ui);display:grid;place-items:center;padding:24px;overflow-x:hidden}
