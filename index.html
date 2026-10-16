@@ -6,6 +6,7 @@
 <title>ANtiers</title>
 <meta name="description" content="ANtiers – Minecraft PvP tier list. Player rankings across 13 game modes.">
 <meta name="theme-color" content="#0b0d18">
+<script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("antiers_theme")==="light"?"light":"dark")}catch(e){document.documentElement.setAttribute("data-theme","dark")}</script>
 <meta property="og:title" content="ANtiers"><meta property="og:description" content="Minecraft PvP tier list. Player rankings across 13 game modes."><meta property="og:type" content="website">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="icon" href="favicon.ico" sizes="any">
@@ -25,12 +26,6 @@
   --ui:'Rubik','Segoe UI',system-ui,-apple-system,sans-serif;
   color-scheme:dark;
 }
-@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){
-  --bg:#f2f4fb; --bg2:#e8ebf6; --surface:#ffffff; --surface2:#eff1fa; --line:#d5dbee;
-  --fg:#12152a; --muted:#576082; --accent:#0a9a82; --accent-ink:#ffffff;
-  --t1:#a96d00; --t2:#bd4f08; --t3:#7436cf; --t4:#1b67cc; --t5:#17823f;
-  --silver:#6a7490; --bronze:#a8612a;
-  --glow:rgba(10,154,130,.12); --glow2:rgba(116,54,207,.09); color-scheme:light}}
 :root[data-theme="light"]{
   --bg:#f2f4fb; --bg2:#e8ebf6; --surface:#ffffff; --surface2:#eff1fa; --line:#d5dbee;
   --fg:#12152a; --muted:#576082; --accent:#0a9a82; --accent-ink:#ffffff;
@@ -59,6 +54,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .top nav{display:flex;gap:4px;margin-inline-start:auto;align-items:center;flex-wrap:wrap}
 .top nav a{color:var(--muted);text-decoration:none;padding:6px 12px;border-radius:4px;font-weight:500;font-size:14px}
 .top nav a:hover{color:var(--fg);background:var(--surface)}
+.lang.ico{display:inline-grid;place-items:center;width:34px;height:32px;padding:0}.lang.ico svg{width:16px;height:16px}
 .lang{border:1px solid var(--line);background:var(--surface);padding:6px 12px;border-radius:4px;font-size:13px;font-weight:500}
 .lang:hover{border-color:var(--accent)}
 
@@ -408,6 +404,7 @@ body.pg-test .ttpage{display:flex}
       <a href="#rankings" data-i="nav_rank">Rankings</a>
       <a href="#how" data-i="nav_how">How tiers work</a>
       <a class="cta" href="#tiertest" data-i="nav_test">Get tested</a>
+      <button class="lang ico" id="theme" type="button" aria-label="Light mode"></button>
       <button class="lang" id="lang" type="button">العربية</button>
     </nav>
   </header>
@@ -495,14 +492,10 @@ body.pg-test .ttpage{display:flex}
 <div class="modal dlg" id="editor" hidden><div class="dsheet wide" role="dialog" aria-modal="true"><div id="edbody"></div></div></div>
 <div class="modal dlg" id="pubdlg" hidden>
   <div class="dsheet" role="dialog" aria-modal="true">
-    <h3 data-i="pub_title">Publish for everyone</h3>
-    <p data-i="pub_hint">Saves your changes to data.js on GitHub so every visitor sees them in 1–2 minutes. You need a GitHub token with Contents: Read and write on this repository. It is stored only in this browser.</p>
-    <label class="flab" for="gh-repo" data-i="pub_repo">Repository (owner/name)</label><input id="gh-repo" autocomplete="off" spellcheck="false" placeholder="username/repo">
-    <label class="flab" for="gh-branch" data-i="pub_branch">Branch</label><input id="gh-branch" autocomplete="off" spellcheck="false" placeholder="main">
-    <label class="flab" for="gh-token" data-i="pub_token">GitHub token</label><input id="gh-token" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_...">
-    <label class="chk"><input type="checkbox" id="gh-rem" checked><span data-i="pub_rem">Remember on this device</span></label>
+    <h3 data-i="pub_title">Save</h3>
+    <p data-i="pub_hint">Your changes will be saved and every visitor will see them within 2–3 minutes.</p>
     <p class="edmsg" id="pubmsg"></p>
-    <div class="drow"><button class="btn pri" id="pub-go" type="button" data-i="pub_go">Publish</button><button class="btn" id="pub-x" type="button" data-i="close">Close</button></div>
+    <div class="drow"><button class="btn pri" id="pub-go" type="button" data-i="pub_go">Save</button><button class="btn" id="pub-x" type="button" data-i="close">Close</button></div>
   </div>
 </div>
 <div class="modal dlg" id="datadlg" hidden>
@@ -565,7 +558,7 @@ function icon(k,size){
 
 /* ---------- i18n ---------- */
 var I18={
- en:{tt_eb:'Tier test',tt_h:'Want to get tested?',tt_p:'Request a tier test from our testers on Discord. Join the server, pick the mode you want to be ranked in and wait for your turn.',tt_discord:'Join our Discord',tt_soon:'Discord link coming soon',tt_srv_h:'Allowed test servers',tt_srv_p:'Tier tests are only held on these servers.',tt_back:'← Back to rankings',tt_cta:'Request a tier test',dev_pub:'Publish',pub_title:'Publish for everyone',pub_hint:'Saves your changes to data.js on GitHub so every visitor sees them in 1–2 minutes. You need a GitHub token with Contents: Read and write on this repository. It is stored only in this browser.',pub_repo:'Repository (owner/name)',pub_branch:'Branch',pub_token:'GitHub token',pub_rem:'Remember on this device',pub_go:'Publish',pub_need:'Enter the repository and the token.',pub_auth:'The token was rejected or lacks Contents: Read and write permission.',pub_404:'Repository or branch not found. Check the name and the token access.',pub_fail:'Publishing failed. Try again.',pub_ok:'Published! Everyone will see it within 1–2 minutes.',pub_busy:'Publishing…',tt_dlink:'Discord invite link',tt_servers:'Servers',tt_addsrv:'+ Add server',tt_name:'Name',tt_domain:'Address',tt_icon:'Icon URL (optional)',tt_baddisc:'Invalid Discord link (it must start with https://discord.gg/).',nav_rank:'Rankings',nav_how:'How tiers work',nav_test:'Get tested',eyebrow:'Minecraft PvP tier list',
+ en:{tt_eb:'Tier test',tt_h:'Want to get tested?',tt_p:'Request a tier test from our testers on Discord. Join the server, pick the mode you want to be ranked in and wait for your turn.',tt_discord:'Join our Discord',tt_soon:'Discord link coming soon',tt_srv_h:'Allowed test servers',tt_srv_p:'Tier tests are only held on these servers.',tt_back:'← Back to rankings',tt_cta:'Request a tier test',dev_pub:'Save',pub_title:'Save',pub_hint:'Your changes will be saved and every visitor will see them within 2–3 minutes.',theme_light:'Light mode',theme_dark:'Dark mode',pub_go:'Save',pub_auth:'GitHub rejected the save. The token may lack permission.',pub_404:'Repository or branch not found.',pub_fail:'Saving failed. Try again.',pub_ok:'Saved! Everyone will see the update within 2–3 minutes.',pub_busy:'Saving…',tt_dlink:'Discord invite link',tt_servers:'Servers',tt_addsrv:'+ Add server',tt_name:'Name',tt_domain:'Address',tt_icon:'Icon URL (optional)',tt_baddisc:'Invalid Discord link (it must start with https://discord.gg/).',nav_rank:'Rankings',nav_how:'How tiers work',nav_test:'Get tested',eyebrow:'Minecraft PvP tier list',
   lead:'Every fighter, ranked by testers across thirteen game modes. Find your name, see your tier, climb the board.',
   search:'Search a player',demo:'Example players. Replace the list in the page code with your own testers\' results.',
   how_h:'How tiers work',how_p:'Each mode has five tiers and every tier has three levels: High (HT), Mid (MT) and Low (LT). Tier 1 is the top. Your overall score is the sum of the points from all your modes.',
@@ -575,7 +568,7 @@ var I18={
   c_players:'Players',c_modes:'Modes',c_t1:'Tier 1',none:'No players here',noresult:'No player matches your search.',
   high:'High',mid:'Mid',low:'Low',unranked:'Unranked',kit:'Kit',kpi_pts:'Total points',kpi_rank:'Global rank',kpi_best:'Best tier',kpi_modes:'Modes tested',tiers_h:'Tier breakdown',
   th_player:'Player',th_tiers:'Tiers',th_points:'Points',close:'Close',modes_played:'Modes tested',best:'Best tier'},
- ar:{tt_eb:'تير تست',tt_h:'عايز تتختبر؟',tt_p:'اطلب تير تست من التسترز على الديسكورد. ادخل السيرفر، اختار الوضع اللي عايز تتصنف فيه واستنى دورك.',tt_discord:'ادخل الديسكورد',tt_soon:'رابط الديسكورد هيتضاف قريب',tt_srv_h:'السيرفرات المسموحة للتست',tt_srv_p:'التستات بتتعمل على السيرفرات دي بس.',tt_back:'الرجوع للترتيب →',tt_cta:'اطلب تير تست',dev_pub:'نشر',pub_title:'انشر للكل',pub_hint:'بيحفظ تعديلاتك في ملف data.js على GitHub عشان كل الزوار يشوفوها خلال ١-٢ دقيقة. محتاج توكن GitHub بصلاحية Contents: Read and write على الريبو ده. بيتخزن في المتصفح ده بس.',pub_repo:'الريبو (اسم المستخدم/اسم الريبو)',pub_branch:'الفرع (Branch)',pub_token:'توكن GitHub',pub_rem:'افتكرني على الجهاز ده',pub_go:'نشر',pub_need:'اكتب الريبو والتوكن.',pub_auth:'التوكن مش مقبول أو ملوش صلاحية Contents: Read and write.',pub_404:'مش لاقي الريبو أو الفرع. اتأكد من الاسم وصلاحية التوكن.',pub_fail:'فشل النشر. جرب تاني.',pub_ok:'اتنشر! الكل هيشوفه خلال ١-٢ دقيقة.',pub_busy:'جاري النشر…',tt_dlink:'رابط الديسكورد',tt_servers:'السيرفرات',tt_addsrv:'+ سيرفر',tt_name:'الاسم',tt_domain:'العنوان',tt_icon:'رابط الأيقونة (اختياري)',tt_baddisc:'رابط ديسكورد غير صالح (لازم يبدأ بـ https://discord.gg/).',nav_rank:'الترتيب',nav_how:'إزاي التيرات شغالة',nav_test:'اتختبر',eyebrow:'قائمة تيرات ماين كرافت PvP',
+ ar:{tt_eb:'تير تست',tt_h:'عايز تتختبر؟',tt_p:'اطلب تير تست من التسترز على الديسكورد. ادخل السيرفر، اختار الوضع اللي عايز تتصنف فيه واستنى دورك.',tt_discord:'ادخل الديسكورد',tt_soon:'رابط الديسكورد هيتضاف قريب',tt_srv_h:'السيرفرات المسموحة للتست',tt_srv_p:'التستات بتتعمل على السيرفرات دي بس.',tt_back:'الرجوع للترتيب →',tt_cta:'اطلب تير تست',dev_pub:'حفظ',pub_title:'حفظ',pub_hint:'تعديلاتك هتتحفظ وكل الزوار هيشوفوها خلال ٢-٣ دقيقة.',theme_light:'الوضع الفاتح',theme_dark:'الوضع الداكن',pub_go:'حفظ',pub_auth:'جيت هب رفضت الحفظ. التوكن ممكن ميكونوش عنده صلاحية.',pub_404:'مش لاقي الريبو أو الفرع.',pub_fail:'فشل الحفظ. جرب تاني.',pub_ok:'اتحفظ! الكل هيشوف التحديث خلال ٢-٣ دقائق.',pub_busy:'جاري الحفظ…',tt_dlink:'رابط الديسكورد',tt_servers:'السيرفرات',tt_addsrv:'+ سيرفر',tt_name:'الاسم',tt_domain:'العنوان',tt_icon:'رابط الأيقونة (اختياري)',tt_baddisc:'رابط ديسكورد غير صالح (لازم يبدأ بـ https://discord.gg/).',nav_rank:'الترتيب',nav_how:'إزاي التيرات شغالة',nav_test:'اتختبر',eyebrow:'قائمة تيرات ماين كرافت PvP',
   lead:'كل لاعب متصنف من التسترز في ١٣ وضع لعب. دوّر على اسمك، شوف تيرك، واطلع في الترتيب.',
   search:'ابحث عن لاعب',demo:'لاعبين تجريبيين. بدّل القائمة في كود الصفحة بنتائج لاعبينك الحقيقية.',
   how_h:'إزاي التيرات شغالة',how_p:'كل وضع فيه خمس تيرات، وكل تير ليه ٣ مستويات: عالي (HT)، متوسط (MT)، ومنخفض (LT). التير ١ هو الأعلى. مجموع نقاطك هو مجموع نقاط كل الأوضاع.',
@@ -844,7 +837,7 @@ function applyLang(){
   document.querySelectorAll('[data-iph]').forEach(function(e){e.placeholder=T(e.getAttribute('data-iph'))});
   document.getElementById('lang').textContent=lang==='ar'?'English':'العربية';
   document.getElementById('mx').setAttribute('aria-label',T('close'));
-  renderStats();renderPodium();renderTabs();renderView();renderPoints();renderTest();
+  renderStats();renderPodium();renderTabs();renderView();renderPoints();renderTest();updateThemeBtn();
 }
 
 /* ---------- events ---------- */
@@ -991,22 +984,21 @@ function route(){var tt=location.hash==='#tiertest';document.body.classList.togg
   if(tt){window.scrollTo(0,0)}else{var id=location.hash.slice(1),t=id&&document.getElementById(id);if(t)setTimeout(function(){t.scrollIntoView()},0)}}
 window.addEventListener('hashchange',route);
 
-function ghCfg(){var c={repo:'',branch:'main',token:''};try{var o=JSON.parse(localStorage.getItem('antiers_gh'));if(o)c=Object.assign(c,o)}catch(e){}
-  if(!c.repo){var m=location.hostname.match(/^([^.]+)\.github\.io$/);if(m){var seg=location.pathname.split('/')[1];c.repo=m[1]+'/'+(seg||m[1]+'.github.io')}}return c}
+var GH_REPO=['SIGMAxoxman1','Antiers'].join('/'),GH_BRANCH='main';
+var GH_TOKEN='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';
 function b64(t){var u=new TextEncoder().encode(t),b='';for(var i=0;i<u.length;i++)b+=String.fromCharCode(u[i]);return btoa(b)}
-$('dv-pub').addEventListener('click',function(){var c=ghCfg();$('gh-repo').value=c.repo;$('gh-branch').value=c.branch;$('gh-token').value=c.token;$('pubmsg').textContent='';$('pubmsg').style.color='';$('pubdlg').hidden=false});
+function pubMode(){$('pubmsg').textContent='';$('pubmsg').style.color=''}
+$('dv-pub').addEventListener('click',function(){pubMode();$('pubdlg').hidden=false;setTimeout(function(){$('pub-go').focus()},30)});
 $('pub-x').addEventListener('click',function(){$('pubdlg').hidden=true});
 $('pub-go').addEventListener('click',function(){
-  var repo=$('gh-repo').value.trim(),br=$('gh-branch').value.trim()||'main',tok=$('gh-token').value.trim(),msg=$('pubmsg'),btn=$('pub-go');
-  msg.style.color='';if(!/^[\w.-]+\/[\w.-]+$/.test(repo)||!tok){msg.textContent=T('pub_need');return}
-  var api='https://api.github.com/repos/'+repo+'/contents/data.js',H={'Authorization':'Bearer '+tok,'Accept':'application/vnd.github+json'};
+  var msg=$('pubmsg'),btn=$('pub-go');
+  msg.style.color='';
   btn.disabled=true;msg.style.color='var(--muted)';msg.textContent=T('pub_busy');
-  fetch(api+'?ref='+encodeURIComponent(br)+'&t='+Date.now(),{headers:H,cache:'no-store'}).then(function(r){if(r.status===404)return null;if(!r.ok)throw r;return r.json()}).then(function(j){
-    var body={message:'Update data (ANtiers dev mode)',content:b64(exportText()),branch:br};if(j&&j.sha)body.sha=j.sha;
+  var H={'Authorization':'Bearer '+GH_TOKEN,'Accept':'application/vnd.github+json'},api='https://api.github.com/repos/'+GH_REPO+'/contents/data.js';
+  fetch(api+'?ref='+encodeURIComponent(GH_BRANCH)+'&t='+Date.now(),{headers:H,cache:'no-store'}).then(function(r){if(r.status===404)return null;if(!r.ok)throw r;return r.json()}).then(function(j){
+    var body={message:'Update data (ANtiers dev mode)',content:b64(exportText()),branch:GH_BRANCH};if(j&&j.sha)body.sha=j.sha;
     return fetch(api,{method:'PUT',headers:Object.assign({'Content-Type':'application/json'},H),body:JSON.stringify(body)})
-  }).then(function(r){if(!r.ok)throw r;
-    try{if($('gh-rem').checked)localStorage.setItem('antiers_gh',JSON.stringify({repo:repo,branch:br,token:tok}));else localStorage.setItem('antiers_gh',JSON.stringify({repo:repo,branch:br,token:''}))}catch(e){}
-    btn.disabled=false;msg.style.color='var(--accent)';msg.textContent=T('pub_ok');toast(T('pub_ok'))
+  }).then(function(r){if(!r.ok)throw r;btn.disabled=false;msg.style.color='var(--accent)';msg.textContent=T('pub_ok');toast(T('pub_ok'))
   }).catch(function(e){btn.disabled=false;msg.style.color='';var st=e&&e.status;msg.textContent=(st===401||st===403)?T('pub_auth'):st===404?T('pub_404'):T('pub_fail')})});
 
 /* fetch the newest data.js so visitors never see a stale cached copy */
@@ -1014,6 +1006,15 @@ if(/^https?:$/.test(location.protocol)){fetch('data.js?t='+Date.now(),{cache:'no
   var o=parseData(txt);if(!o)return;var c=sanitizeCfg(o),sig=sigOf(o.players,c);if(sig===BASE_SIG)return;
   BASE=JSON.parse(JSON.stringify(o.players));BASEC=JSON.parse(JSON.stringify(c));BASE_SIG=sig;
   PLAYERS=sanitize(JSON.parse(JSON.stringify(BASE)))||[];CFG=c;loadSaved();refresh()}).catch(function(){})}
+
+/* ---------- theme toggle (dark by default) ---------- */
+var SUN='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>',
+    MOON='<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z"/></svg>';
+function curTheme(){return document.documentElement.getAttribute('data-theme')==='light'?'light':'dark'}
+function updateThemeBtn(){var l=curTheme()==='light',b=$('theme');b.innerHTML=l?MOON:SUN;b.setAttribute('aria-label',T(l?'theme_dark':'theme_light'));b.title=T(l?'theme_dark':'theme_light')}
+function setTheme(t){document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('antiers_theme',t)}catch(e){}
+  var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',t==='light'?'#f2f4fb':'#0b0d18');updateThemeBtn();window.dispatchEvent(new Event('resize'))}
+$('theme').addEventListener('click',function(){setTheme(curTheme()==='light'?'dark':'light')});
 
 /* ---------- hero ambient: drifting ender-pixels ---------- */
 (function(){
