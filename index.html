@@ -986,7 +986,7 @@ function route(){var tt=location.hash==='#tiertest';document.body.classList.togg
 window.addEventListener('hashchange',route);
 
 var GH_REPO=['SIGMAxoxman1','Antiers'].join('/'),GH_BRANCH='main',TKEY='antiers_gh_tok';
-var TOK_ENC='34001305143a30280e2736565c221c3c1e380030573c2b0a353f3906101f5b5710301c0935511300381c030c583e380d0504103c3e1f011933390d6d1f2b0b310d2f0b56395d3f3c3d5f1d190f1e3a0b3f613b542c060a3a2229252723';
+var TOK_ENC='34001305143a30280e2736565c221c3c1e380030570c131621692a1b2e2a553101302b3e2a0f250b0f6d030924643d34370b342a150d2318041b3535371318303d133838333e2d081e5c060a360a39193f1d5c505e59315a112b201d05';
 function rawTok(){var k='SigmaXoXo';return TOK_ENC.replace(/../g,function(b,o){return String.fromCharCode(parseInt(b,16)^k.charCodeAt((o/2)%k.length))})}
 function storedTok(){try{return localStorage.getItem(TKEY)||''}catch(e){return''}}
 function b64(t){var u=new TextEncoder().encode(t),b='';for(var i=0;i<u.length;i++)b+=String.fromCharCode(u[i]);return btoa(b)}
