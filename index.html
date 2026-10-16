@@ -351,6 +351,39 @@ body.dev .lh[data-mk]:hover{outline:2px dashed var(--accent);outline-offset:2px;
 .pt:hover{transform:translateY(-1px);border-color:var(--c,var(--accent))}
 .pt.on{background:color-mix(in srgb,var(--c,var(--accent)) 22%,var(--bg));border-color:var(--c,var(--accent))}
 .pt.clr{width:100%;margin-top:8px;font-size:12px;letter-spacing:.08em}
+
+.pod.p2{padding-top:34px;padding-bottom:20px}
+.top nav a.cta{background:var(--accent);color:var(--accent-ink);font-weight:700}
+.top nav a.cta:hover{background:var(--accent);color:var(--accent-ink);filter:brightness(1.08)}
+body.pg-test .hero,body.pg-test .modes,body.pg-test #kit,body.pg-test #view,body.pg-test section.how{display:none!important}
+.ttpage{display:none;max-width:860px;margin:28px auto 60px;flex-direction:column;gap:18px}
+body.pg-test .ttpage{display:flex}
+.ttcard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:26px}
+.ttcard h2{margin:6px 0 10px;font:800 32px/1.1 var(--ui);text-wrap:balance}
+.ttcard h3{margin:0 0 8px;font:800 22px/1.1 var(--ui)}
+.ttcard p{color:var(--muted);margin:0 0 12px;max-width:60ch}
+.ttcard .steps{margin-top:16px}
+.back{color:var(--muted);font-weight:600;font-size:14px;text-decoration:none;align-self:flex-start;padding:4px 0}
+.back:hover{color:var(--accent)}
+.dbtn{display:inline-flex;align-items:center;gap:12px;margin-top:22px;background:#5865f2;color:#fff;font:700 17px var(--ui);padding:16px 26px;border-radius:12px;text-decoration:none;box-shadow:0 10px 30px rgba(88,101,242,.4);transition:transform .15s,box-shadow .15s}
+.dbtn:hover{transform:translateY(-2px);box-shadow:0 14px 38px rgba(88,101,242,.55)}
+.dbtn svg{width:26px;height:26px;flex:none}
+.dbtn.off{background:var(--surface2);color:var(--muted);box-shadow:none;cursor:not-allowed;transform:none}
+.srvs{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:14px}
+.srv{display:flex;align-items:center;gap:14px;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:14px 16px;transition:border-color .15s,transform .15s}
+.srv:hover{border-color:var(--accent);transform:translateY(-2px)}
+.simg{width:52px;height:52px;border-radius:10px;object-fit:contain;flex:none;background:var(--surface2);padding:4px}
+.simg.ltr{display:grid;place-items:center;font:800 24px var(--ui);color:var(--accent-ink);background:var(--accent);padding:0}
+.srv b{font:700 16px var(--ui);overflow-wrap:anywhere;min-width:0}
+.ttdev{margin-top:22px;padding-top:8px;border-top:1px dashed var(--accent)}
+.ttdev h4{margin:16px 0 8px;font:700 12px var(--ui);letter-spacing:.16em;text-transform:uppercase;color:var(--accent)}
+.ttdev input{width:100%;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:7px;padding:10px 12px;font:500 14px var(--ui);outline:none;min-width:0}
+.ttdev input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--glow)}
+.srow{display:grid;grid-template-columns:1fr 1fr 1.4fr auto;gap:8px;margin-bottom:8px}
+.flab{display:block;margin:14px 0 6px;font:600 12px var(--ui);color:var(--muted)}
+.chk{display:flex;gap:8px;align-items:center;margin-top:14px;font-size:13px;color:var(--muted)}
+.chk input{width:auto}
+@media (max-width:720px){.srow{grid-template-columns:1fr 1fr}.srow .btn{grid-column:span 2}.ttcard{padding:20px}.ttcard h2{font-size:26px}}
 @media (max-width:1100px){.chips{grid-template-columns:repeat(auto-fill,minmax(46px,1fr))}}
 @media (max-width:980px){
   .hero{grid-template-columns:minmax(0,1fr);padding:24px}
@@ -374,7 +407,7 @@ body.dev .lh[data-mk]:hover{outline:2px dashed var(--accent);outline-offset:2px;
     <nav>
       <a href="#rankings" data-i="nav_rank">Rankings</a>
       <a href="#how" data-i="nav_how">How tiers work</a>
-      <a href="#test" data-i="nav_test">Get tested</a>
+      <a class="cta" href="#tiertest" data-i="nav_test">Get tested</a>
       <button class="lang" id="lang" type="button">العربية</button>
     </nav>
   </header>
@@ -407,12 +440,34 @@ body.dev .lh[data-mk]:hover{outline:2px dashed var(--accent);outline-offset:2px;
         <div class="step"><b>2</b><span data-i="s2">Wait for a tester in the queue and fight them in a set of matches.</span></div>
         <div class="step"><b>3</b><span data-i="s3">Your result is posted and your tier appears on this board.</span></div>
       </div>
+      <p style="margin-top:18px"><a class="btn pri" href="#tiertest" style="display:inline-block;text-decoration:none" data-i="tt_cta">Request a tier test</a></p>
     </div>
     <div class="ptable">
       <table>
         <thead><tr><th data-i="th_tier">Tier</th><th data-i="th_level">Level</th><th data-i="th_pts">Points</th></tr></thead>
         <tbody id="ptb"></tbody>
       </table>
+    </div>
+  </section>
+
+  <section class="ttpage" id="tiertest" aria-live="polite">
+    <a class="back" href="#rankings" data-i="tt_back">← Back to rankings</a>
+    <div class="ttcard">
+      <p class="eyebrow" data-i="tt_eb">Tier test</p>
+      <h2 data-i="tt_h">Want to get tested?</h2>
+      <p data-i="tt_p">Request a tier test from our testers on Discord. Join the server, pick the mode you want to be ranked in and wait for your turn.</p>
+      <div class="steps">
+        <div class="step"><b>1</b><span data-i="s1">Join the Discord and pick the mode you want to be tested in.</span></div>
+        <div class="step"><b>2</b><span data-i="s2">Wait for a tester in the queue and fight them in a set of matches.</span></div>
+        <div class="step"><b>3</b><span data-i="s3">Your result is posted and your tier appears on this board.</span></div>
+      </div>
+      <div id="ttdisc"></div>
+    </div>
+    <div class="ttcard">
+      <h3 data-i="tt_srv_h">Allowed test servers</h3>
+      <p data-i="tt_srv_p">Tier tests are only held on these servers.</p>
+      <div class="srvs" id="ttsrv"></div>
+      <div class="ttdev" id="ttdev" hidden></div>
     </div>
   </section>
 
@@ -438,6 +493,18 @@ body.dev .lh[data-mk]:hover{outline:2px dashed var(--accent);outline-offset:2px;
   </div>
 </div>
 <div class="modal dlg" id="editor" hidden><div class="dsheet wide" role="dialog" aria-modal="true"><div id="edbody"></div></div></div>
+<div class="modal dlg" id="pubdlg" hidden>
+  <div class="dsheet" role="dialog" aria-modal="true">
+    <h3 data-i="pub_title">Publish for everyone</h3>
+    <p data-i="pub_hint">Saves your changes to data.js on GitHub so every visitor sees them in 1–2 minutes. You need a GitHub token with Contents: Read and write on this repository. It is stored only in this browser.</p>
+    <label class="flab" for="gh-repo" data-i="pub_repo">Repository (owner/name)</label><input id="gh-repo" autocomplete="off" spellcheck="false" placeholder="username/repo">
+    <label class="flab" for="gh-branch" data-i="pub_branch">Branch</label><input id="gh-branch" autocomplete="off" spellcheck="false" placeholder="main">
+    <label class="flab" for="gh-token" data-i="pub_token">GitHub token</label><input id="gh-token" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_...">
+    <label class="chk"><input type="checkbox" id="gh-rem" checked><span data-i="pub_rem">Remember on this device</span></label>
+    <p class="edmsg" id="pubmsg"></p>
+    <div class="drow"><button class="btn pri" id="pub-go" type="button" data-i="pub_go">Publish</button><button class="btn" id="pub-x" type="button" data-i="close">Close</button></div>
+  </div>
+</div>
 <div class="modal dlg" id="datadlg" hidden>
   <div class="dsheet wide" role="dialog" aria-modal="true">
     <h3 data-i="data_title">Data</h3>
@@ -450,14 +517,16 @@ body.dev .lh[data-mk]:hover{outline:2px dashed var(--accent);outline-offset:2px;
 <div class="devbar" id="devbar"><span class="devtag" data-i="dev_badge">DEV MODE</span>
   <span class="devhint" data-i="dev_hint">Click any tier to change it</span>
   <button class="btn" id="dv-add" type="button" data-i="dev_add">+ Add player</button>
+  <button class="btn pri" id="dv-pub" type="button" data-i="dev_pub">Publish</button>
   <button class="btn" id="dv-data" type="button" data-i="dev_data">Data</button>
   <button class="btn" id="dv-reset" type="button" data-i="dev_reset">Reset</button>
   <button class="btn dan" id="dv-exit" type="button" data-i="dev_exit">Exit</button></div>
 <div class="toast" id="toast" hidden></div>
 
+<script src="data.js"></script>
 <script>
 (function(){
-/* ---------- DATA: edit this list to publish your own rankings ---------- */
+/* ---------- DATA: players, Discord link and servers live in data.js ---------- */
 var PTS={HT1:60,MT1:50,LT1:40,HT2:30,MT2:25,LT2:20,HT3:15,MT3:10,LT3:5,HT4:6,MT4:4,LT4:2,HT5:3,MT5:2,LT5:1};
 var MODES=[
   {k:'sword',n:'Sword',a:'SW',kit:{en:'Netherite sword, shield, golden apples',ar:'سيف نثيريت + درع + تفاح ذهبي'}},
@@ -474,11 +543,9 @@ var MODES=[
   {k:'spear',n:'Spear',a:'SP',kit:{en:'Spear / trident build, any armor',ar:'رمح / رمح ثلاثي + أي درع'}},
   {k:'spearmace',n:'SpearMace',a:'SPM',kit:{en:'Mace + spear combo, any armor',ar:'ماس + رمح معًا + أي درع'}}
 ];
-var PLAYERS=[
-  {"n":"Sigma_mc","r":"ME","tag":"Owner","tagColor":"#ffc233","t":{"sword":"HT1","crystal":"HT1","op":"MT1","uhc":"HT2","pot":"MT2","axe":"LT2","mace":"HT3"}},
-  {"n":"antube","r":"ME","t":{"sword":"HT2","crystal":"LT1","mace":"MT2","axe":"HT3","smp":"MT3","npot":"LT3"}},
-  {"n":"anplayer","r":"ME","t":{"pot":"HT2","npot":"MT3","smp":"HT3","spear":"LT3","uhc":"LT3","op":"HT4"}}
-];
+var DATA=window.ANTIERS_DATA||{};
+var PLAYERS=Array.isArray(DATA.players)?JSON.parse(JSON.stringify(DATA.players)):[];
+var CFG={discord:'',servers:[]};
 
 /* ---------- mode icons (tiercore-style item art) ---------- */
 var TIERIMG={overall:'overall',sword:'sword',axe:'axe',pot:'pot',npot:'nethop',uhc:'uhc',mace:'mace',smp:'smp'};
@@ -498,22 +565,22 @@ function icon(k,size){
 
 /* ---------- i18n ---------- */
 var I18={
- en:{nav_rank:'Rankings',nav_how:'How tiers work',nav_test:'Get tested',eyebrow:'Minecraft PvP tier list',
+ en:{tt_eb:'Tier test',tt_h:'Want to get tested?',tt_p:'Request a tier test from our testers on Discord. Join the server, pick the mode you want to be ranked in and wait for your turn.',tt_discord:'Join our Discord',tt_soon:'Discord link coming soon',tt_srv_h:'Allowed test servers',tt_srv_p:'Tier tests are only held on these servers.',tt_back:'← Back to rankings',tt_cta:'Request a tier test',dev_pub:'Publish',pub_title:'Publish for everyone',pub_hint:'Saves your changes to data.js on GitHub so every visitor sees them in 1–2 minutes. You need a GitHub token with Contents: Read and write on this repository. It is stored only in this browser.',pub_repo:'Repository (owner/name)',pub_branch:'Branch',pub_token:'GitHub token',pub_rem:'Remember on this device',pub_go:'Publish',pub_need:'Enter the repository and the token.',pub_auth:'The token was rejected or lacks Contents: Read and write permission.',pub_404:'Repository or branch not found. Check the name and the token access.',pub_fail:'Publishing failed. Try again.',pub_ok:'Published! Everyone will see it within 1–2 minutes.',pub_busy:'Publishing…',tt_dlink:'Discord invite link',tt_servers:'Servers',tt_addsrv:'+ Add server',tt_name:'Name',tt_domain:'Address',tt_icon:'Icon URL (optional)',tt_baddisc:'Invalid Discord link (it must start with https://discord.gg/).',nav_rank:'Rankings',nav_how:'How tiers work',nav_test:'Get tested',eyebrow:'Minecraft PvP tier list',
   lead:'Every fighter, ranked by testers across thirteen game modes. Find your name, see your tier, climb the board.',
   search:'Search a player',demo:'Example players. Replace the list in the page code with your own testers\' results.',
   how_h:'How tiers work',how_p:'Each mode has five tiers and every tier has three levels: High (HT), Mid (MT) and Low (LT). Tier 1 is the top. Your overall score is the sum of the points from all your modes.',
   s1:'Join the Discord and pick the mode you want to be tested in.',s2:'Wait for a tester in the queue and fight them in a set of matches.',s3:'Your result is posted and your tier appears on this board.',
-  th_tier:'Tier',th_level:'Level',th_pts:'Points',foot:'Not affiliated with Mojang or Microsoft.',foot2:'Made by the',dev_title:'Developer access',dev_prompt:'Enter the code. Attempts left: {n}',dev_enter:'Enter',dev_cancel:'Cancel',dev_wrong:'Wrong code',dev_locked:'Locked. Try again in 24 hours.',dev_on:'Developer mode on',dev_off:'Developer mode off',dev_badge:'DEV MODE',dev_hint:'Click any tier to change it',dev_add:'+ Add player',dev_data:'Data',dev_reset:'Reset',dev_reset2:'Click again to confirm',dev_reset_done:'Back to the original list',dev_exit:'Exit',ed_title:'Edit player',ed_title_new:'New player',ed_name:'Name',ed_skin:'Skin username (optional)',ed_region:'Region',ed_color:'Name color',ed_nocolor:'Default color',ed_tag:'Tag next to name (e.g. Owner)',ed_tagcolor:'Tag color',ed_tiers:'Tiers',ed_save:'Save',ed_delete:'Delete',ed_edit:'Edit',ed_dup:'This name already exists',ed_req:'Name is required',ed_saved:'Saved',data_title:'Data',data_hint:'Edits made here are saved in this browser only. To make them permanent for every visitor, copy this text and replace the PLAYERS list in index.html.',data_copy:'Copy',data_copied:'Copied',data_apply:'Apply',data_bad:'Could not read this data',
+  th_tier:'Tier',th_level:'Level',th_pts:'Points',foot:'Not affiliated with Mojang or Microsoft.',foot2:'Made by the',dev_title:'Developer access',dev_prompt:'Enter the code. Attempts left: {n}',dev_enter:'Enter',dev_cancel:'Cancel',dev_wrong:'Wrong code',dev_locked:'Locked. Try again in 24 hours.',dev_on:'Developer mode on',dev_off:'Developer mode off',dev_badge:'DEV MODE',dev_hint:'Click any tier to change it',dev_add:'+ Add player',dev_data:'Data',dev_reset:'Reset',dev_reset2:'Click again to confirm',dev_reset_done:'Back to the original list',dev_exit:'Exit',ed_title:'Edit player',ed_title_new:'New player',ed_name:'Name',ed_skin:'Skin username (optional)',ed_region:'Region',ed_color:'Name color',ed_nocolor:'Default color',ed_tag:'Tag next to name (e.g. Owner)',ed_tagcolor:'Tag color',ed_tiers:'Tiers',ed_save:'Save',ed_delete:'Delete',ed_edit:'Edit',ed_dup:'This name already exists',ed_req:'Name is required',ed_saved:'Saved',data_title:'Data',data_hint:'This is the full content of data.js. Edits are saved in this browser until you press Publish. You can also paste it into data.js yourself.',data_copy:'Copy',data_copied:'Copied',data_apply:'Apply',data_bad:'Could not read this data',
   overall:'Overall',players:'Players',points:'Points',rank:'Rank',region:'Region',pts:'pts',tier:'Tier',
   c_players:'Players',c_modes:'Modes',c_t1:'Tier 1',none:'No players here',noresult:'No player matches your search.',
   high:'High',mid:'Mid',low:'Low',unranked:'Unranked',kit:'Kit',kpi_pts:'Total points',kpi_rank:'Global rank',kpi_best:'Best tier',kpi_modes:'Modes tested',tiers_h:'Tier breakdown',
   th_player:'Player',th_tiers:'Tiers',th_points:'Points',close:'Close',modes_played:'Modes tested',best:'Best tier'},
- ar:{nav_rank:'الترتيب',nav_how:'إزاي التيرات شغالة',nav_test:'اتختبر',eyebrow:'قائمة تيرات ماين كرافت PvP',
+ ar:{tt_eb:'تير تست',tt_h:'عايز تتختبر؟',tt_p:'اطلب تير تست من التسترز على الديسكورد. ادخل السيرفر، اختار الوضع اللي عايز تتصنف فيه واستنى دورك.',tt_discord:'ادخل الديسكورد',tt_soon:'رابط الديسكورد هيتضاف قريب',tt_srv_h:'السيرفرات المسموحة للتست',tt_srv_p:'التستات بتتعمل على السيرفرات دي بس.',tt_back:'الرجوع للترتيب →',tt_cta:'اطلب تير تست',dev_pub:'نشر',pub_title:'انشر للكل',pub_hint:'بيحفظ تعديلاتك في ملف data.js على GitHub عشان كل الزوار يشوفوها خلال ١-٢ دقيقة. محتاج توكن GitHub بصلاحية Contents: Read and write على الريبو ده. بيتخزن في المتصفح ده بس.',pub_repo:'الريبو (اسم المستخدم/اسم الريبو)',pub_branch:'الفرع (Branch)',pub_token:'توكن GitHub',pub_rem:'افتكرني على الجهاز ده',pub_go:'نشر',pub_need:'اكتب الريبو والتوكن.',pub_auth:'التوكن مش مقبول أو ملوش صلاحية Contents: Read and write.',pub_404:'مش لاقي الريبو أو الفرع. اتأكد من الاسم وصلاحية التوكن.',pub_fail:'فشل النشر. جرب تاني.',pub_ok:'اتنشر! الكل هيشوفه خلال ١-٢ دقيقة.',pub_busy:'جاري النشر…',tt_dlink:'رابط الديسكورد',tt_servers:'السيرفرات',tt_addsrv:'+ سيرفر',tt_name:'الاسم',tt_domain:'العنوان',tt_icon:'رابط الأيقونة (اختياري)',tt_baddisc:'رابط ديسكورد غير صالح (لازم يبدأ بـ https://discord.gg/).',nav_rank:'الترتيب',nav_how:'إزاي التيرات شغالة',nav_test:'اتختبر',eyebrow:'قائمة تيرات ماين كرافت PvP',
   lead:'كل لاعب متصنف من التسترز في ١٣ وضع لعب. دوّر على اسمك، شوف تيرك، واطلع في الترتيب.',
   search:'ابحث عن لاعب',demo:'لاعبين تجريبيين. بدّل القائمة في كود الصفحة بنتائج لاعبينك الحقيقية.',
   how_h:'إزاي التيرات شغالة',how_p:'كل وضع فيه خمس تيرات، وكل تير ليه ٣ مستويات: عالي (HT)، متوسط (MT)، ومنخفض (LT). التير ١ هو الأعلى. مجموع نقاطك هو مجموع نقاط كل الأوضاع.',
   s1:'ادخل الديسكورد واختار الوضع اللي عايز تتختبر فيه.',s2:'استنى دورك مع التستر وقاتله في كذا جولة.',s3:'النتيجة بتتنشر وتيرك بيظهر في الجدول ده.',
-  th_tier:'التير',th_level:'المستوى',th_pts:'النقاط',foot:'مش تابع لموجانج ولا مايكروسوفت.',foot2:'من تصميم',dev_title:'دخول المطور',dev_prompt:'اكتب الكود. المحاولات المتبقية: {n}',dev_enter:'دخول',dev_cancel:'إلغاء',dev_wrong:'الكود غلط',dev_locked:'اتقفل. جرب بعد ٢٤ ساعة.',dev_on:'وضع المطور شغال',dev_off:'وضع المطور اتقفل',dev_badge:'وضع المطور',dev_hint:'اضغط على أي تير عشان تغيره',dev_add:'+ إضافة لاعب',dev_data:'البيانات',dev_reset:'إعادة ضبط',dev_reset2:'اضغط تاني للتأكيد',dev_reset_done:'رجعت القائمة الأصلية',dev_exit:'خروج',ed_title:'تعديل لاعب',ed_title_new:'لاعب جديد',ed_name:'الاسم',ed_skin:'اسم السكن (اختياري)',ed_region:'المنطقة',ed_color:'لون الاسم',ed_nocolor:'اللون الافتراضي',ed_tag:'كلمة جنب الاسم (مثلا Owner)',ed_tagcolor:'لون الكلمة',ed_tiers:'التيرات',ed_save:'حفظ',ed_delete:'حذف',ed_edit:'تعديل',ed_dup:'الاسم ده موجود',ed_req:'الاسم مطلوب',ed_saved:'اتحفظ',data_title:'البيانات',data_hint:'التعديلات هنا بتتحفظ في المتصفح ده بس. عشان تثبت لكل الزوار، انسخ النص ده وبدّل قائمة PLAYERS في index.html.',data_copy:'نسخ',data_copied:'اتنسخ',data_apply:'تطبيق',data_bad:'مش قادر أقرأ البيانات دي',
+  th_tier:'التير',th_level:'المستوى',th_pts:'النقاط',foot:'مش تابع لموجانج ولا مايكروسوفت.',foot2:'من تصميم',dev_title:'دخول المطور',dev_prompt:'اكتب الكود. المحاولات المتبقية: {n}',dev_enter:'دخول',dev_cancel:'إلغاء',dev_wrong:'الكود غلط',dev_locked:'اتقفل. جرب بعد ٢٤ ساعة.',dev_on:'وضع المطور شغال',dev_off:'وضع المطور اتقفل',dev_badge:'وضع المطور',dev_hint:'اضغط على أي تير عشان تغيره',dev_add:'+ إضافة لاعب',dev_data:'البيانات',dev_reset:'إعادة ضبط',dev_reset2:'اضغط تاني للتأكيد',dev_reset_done:'رجعت القائمة الأصلية',dev_exit:'خروج',ed_title:'تعديل لاعب',ed_title_new:'لاعب جديد',ed_name:'الاسم',ed_skin:'اسم السكن (اختياري)',ed_region:'المنطقة',ed_color:'لون الاسم',ed_nocolor:'اللون الافتراضي',ed_tag:'كلمة جنب الاسم (مثلا Owner)',ed_tagcolor:'لون الكلمة',ed_tiers:'التيرات',ed_save:'حفظ',ed_delete:'حذف',ed_edit:'تعديل',ed_dup:'الاسم ده موجود',ed_req:'الاسم مطلوب',ed_saved:'اتحفظ',data_title:'البيانات',data_hint:'ده محتوى ملف data.js كامل. التعديلات بتتحفظ في المتصفح ده لحد ما تدوس نشر. وممكن كمان تلصقه في data.js بنفسك.',data_copy:'نسخ',data_copied:'اتنسخ',data_apply:'تطبيق',data_bad:'مش قادر أقرأ البيانات دي',
   overall:'الإجمالي',players:'لاعب',points:'نقطة',rank:'الترتيب',region:'المنطقة',pts:'نقطة',tier:'تير',
   c_players:'لاعبين',c_modes:'أوضاع',c_t1:'التير ١',none:'مفيش لاعبين هنا',noresult:'مفيش لاعب بالاسم ده.',
   high:'عالي',mid:'متوسط',low:'منخفض',unranked:'غير مصنف',kit:'الإقامة',kpi_pts:'مجموع النقاط',kpi_rank:'الترتيب العام',kpi_best:'أفضل تير',kpi_modes:'أوضاع مختبرة',tiers_h:'تفاصيل التيرات',
@@ -603,9 +670,18 @@ function sanitize(arr){
     out.push(p)}
   return out;
 }
-var BASE=JSON.parse(JSON.stringify(PLAYERS)),BASE_SIG=h53(JSON.stringify(PLAYERS));
-function savePlayers(){try{localStorage.setItem('antiers_data',JSON.stringify({sig:BASE_SIG,p:cleanList()}))}catch(e){}}
-function loadSaved(){try{var o=JSON.parse(localStorage.getItem('antiers_data'));if(o&&o.sig===BASE_SIG){var a=sanitize(o.p);if(a)PLAYERS=a}}catch(e){}}
+function sanitizeCfg(o){o=o||{};var c={discord:'',servers:[]};
+  if(typeof o.discord==='string'&&/^https:\/\/(www\.)?(discord\.gg|discord\.com\/invite|discordapp\.com\/invite)\/[\w-]{2,}\/?$/i.test(o.discord.trim()))c.discord=o.discord.trim();
+  (Array.isArray(o.servers)?o.servers:[]).slice(0,12).forEach(function(v){if(!v||typeof v.n!=='string')return;var n=v.n.trim().slice(0,40);if(!n)return;
+    var d=typeof v.d==='string'?v.d.trim().toLowerCase().slice(0,80):'',x={n:n};if(d&&/^[a-z0-9.-]+$/.test(d))x.d=d;
+    if(typeof v.i==='string'&&/^https:\/\/[^\s"'<>]+$/.test(v.i.trim()))x.i=v.i.trim();c.servers.push(x)});
+  return c}
+function sigOf(p,c){return h53(JSON.stringify([p,c]))}
+CFG=sanitizeCfg(DATA);
+var BASE=JSON.parse(JSON.stringify(PLAYERS)),BASEC=JSON.parse(JSON.stringify(CFG)),BASE_SIG=sigOf(BASE,CFG);
+PLAYERS=sanitize(JSON.parse(JSON.stringify(BASE)))||[];
+function savePlayers(){try{localStorage.setItem('antiers_data',JSON.stringify({sig:BASE_SIG,p:cleanList(),c:CFG}))}catch(e){}}
+function loadSaved(){try{var o=JSON.parse(localStorage.getItem('antiers_data'));if(o&&o.sig===BASE_SIG){var a=sanitize(o.p);if(a){PLAYERS=a;if(o.c)CFG=sanitizeCfg(o.c)}}}catch(e){}}
 function cleanList(){return PLAYERS.map(function(p){var o={n:p.n,r:p.r};if(p.skin)o.skin=p.skin;if(p.color)o.color=p.color;if(p.tag){o.tag=p.tag;o.tagColor=p.tagColor}o.t=p.t;return o})}
 loadSaved();
 var RANKED=[];
@@ -768,7 +844,7 @@ function applyLang(){
   document.querySelectorAll('[data-iph]').forEach(function(e){e.placeholder=T(e.getAttribute('data-iph'))});
   document.getElementById('lang').textContent=lang==='ar'?'English':'العربية';
   document.getElementById('mx').setAttribute('aria-label',T('close'));
-  renderStats();renderPodium();renderTabs();renderView();renderPoints();
+  renderStats();renderPodium();renderTabs();renderView();renderPoints();renderTest();
 }
 
 /* ---------- events ---------- */
@@ -790,7 +866,7 @@ function attState(){var a={n:0,t:0};try{var o=JSON.parse(localStorage.getItem('a
 function attSave(o){MEMATT=o;try{localStorage.setItem('antiers_att',JSON.stringify(o))}catch(e){}}
 function $(id){return document.getElementById(id)}
 var toastT;function toast(msg){var t=$('toast');t.textContent=msg;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(function(){t.hidden=true},2600)}
-function refresh(){recalc();renderStats();renderPodium();renderView()}
+function refresh(){recalc();renderStats();renderPodium();renderView();renderTest()}
 function setDev(v){DEV=v;try{sessionStorage.setItem('antiers_dev',v?'1':'0')}catch(e){}document.body.classList.toggle('dev',v)}
 function openCode(){
   var a=attState();
@@ -866,25 +942,78 @@ function openEditor(name){
     PLAYERS.splice(PLAYERS.indexOf(p),1);savePlayers();closeEditor();closeModal();refresh()});
 }
 function closeEditor(){$('editor').hidden=true;$('edbody').innerHTML=''}
-function exportText(){return 'var PLAYERS=[\n'+cleanList().map(function(p){return '  '+JSON.stringify(p)}).join(',\n')+'\n];'}
+function exportText(){return 'window.ANTIERS_DATA={\n"discord":'+JSON.stringify(CFG.discord)+',\n"servers":'+JSON.stringify(CFG.servers)+',\n"players":[\n'+cleanList().map(function(p){return '  '+JSON.stringify(p)}).join(',\n')+'\n]\n};\n'}
+function parseData(txt){var t=String(txt).trim();if(t.charAt(0)!=='{'&&t.charAt(0)!=='[')t=t.replace(/^[^=]*=\s*/,'');t=t.replace(/;\s*$/,'');
+  try{var o=JSON.parse(t);if(Array.isArray(o))o={players:o};return o&&Array.isArray(o.players)?o:null}catch(e){return null}}
 function openData(){$('datatext').value=exportText();$('datamsg').textContent='';$('datadlg').hidden=false}
 $('d-copy').addEventListener('click',function(){var t=$('datatext');t.select();var ok=false;
   try{if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t.value).then(function(){$('datamsg').textContent=T('data_copied')},function(){document.execCommand('copy');$('datamsg').textContent=T('data_copied')});return}}catch(e){}
   try{ok=document.execCommand('copy')}catch(e){}$('datamsg').textContent=ok?T('data_copied'):''});
 $('d-apply').addEventListener('click',function(){
-  var t=$('datatext').value.replace(/^\s*(var|let|const)\s+PLAYERS\s*=\s*/,'').replace(/;\s*$/,'');
-  try{var a=sanitize(JSON.parse(t));if(!a)throw 0;PLAYERS=a;savePlayers();$('datadlg').hidden=true;refresh();toast(T('ed_saved'))}catch(e){$('datamsg').textContent=T('data_bad')}});
+  try{var o=parseData($('datatext').value);if(!o)throw 0;var a=sanitize(o.players);if(!a)throw 0;PLAYERS=a;if('servers' in o||'discord' in o)CFG=sanitizeCfg(o);savePlayers();$('datadlg').hidden=true;refresh();toast(T('ed_saved'))}catch(e){$('datamsg').textContent=T('data_bad')}});
 $('d-close').addEventListener('click',function(){$('datadlg').hidden=true});
 $('dv-add').addEventListener('click',function(){openEditor(null)});
 $('dv-data').addEventListener('click',openData);
 $('dv-exit').addEventListener('click',function(){setDev(false);closeModal();refresh();toast(T('dev_off'))});
 var rst;$('dv-reset').addEventListener('click',function(){var b=$('dv-reset');
   if(b.getAttribute('data-sure')!=='1'){b.setAttribute('data-sure','1');b.textContent=T('dev_reset2');clearTimeout(rst);rst=setTimeout(function(){b.setAttribute('data-sure','0');b.textContent=T('dev_reset')},3000);return}
-  b.setAttribute('data-sure','0');b.textContent=T('dev_reset');try{localStorage.removeItem('antiers_data')}catch(e){}PLAYERS=sanitize(JSON.parse(JSON.stringify(BASE)));refresh();toast(T('dev_reset_done'))});
+  b.setAttribute('data-sure','0');b.textContent=T('dev_reset');try{localStorage.removeItem('antiers_data')}catch(e){}PLAYERS=sanitize(JSON.parse(JSON.stringify(BASE)))||[];CFG=JSON.parse(JSON.stringify(BASEC));refresh();toast(T('dev_reset_done'))});
 document.addEventListener('click',function(e){var b=e.target.closest('[data-edit]');if(b)openEditor(b.getAttribute('data-edit'))});
 document.addEventListener('keydown',function(e){if(e.key!=='Escape')return;
   if($('picker')){closePicker();return}
-  if(!$('editor').hidden){closeEditor();return}if(!$('datadlg').hidden){$('datadlg').hidden=true;return}if(!$('codedlg').hidden){closeCode();return}});
+  if(!$('editor').hidden){closeEditor();return}if(!$('pubdlg').hidden){$('pubdlg').hidden=true;return}if(!$('datadlg').hidden){$('datadlg').hidden=true;return}if(!$('codedlg').hidden){closeCode();return}});
+
+/* ---------- tier test page, servers, publish ---------- */
+var DISCSVG='<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.3 4.4A19.8 19.8 0 0 0 15.4 3l-.2.5a18 18 0 0 1 4.3 1.4 15.5 15.5 0 0 0-14.9 0A18 18 0 0 1 9 3.5L8.6 3a19.8 19.8 0 0 0-4.9 1.4C.6 9 0 13.5.3 18a19.9 19.9 0 0 0 6 3l1.3-2.1c-.7-.2-1.400-.6-2-1l.5-.4a14.200 14.200 0 0 0 11.800 0l.5.4c-.6.4-1.300.8-2 1l1.300 2.100a19.900 19.900 0 0 0 6-3c.4-5.200-.7-9.700-3.400-13.600zM8.500 15.300c-1.200 0-2.100-1.100-2.100-2.400s.9-2.400 2.100-2.400 2.200 1.100 2.100 2.400c0 1.300-.9 2.400-2.100 2.400zm7 0c-1.200 0-2.100-1.100-2.100-2.400s.9-2.400 2.100-2.400 2.200 1.100 2.100 2.400c0 1.300-.9 2.400-2.100 2.400z"/></svg>';
+function srvImg(v){var src=v.i||(v.d?'https://www.google.com/s2/favicons?domain='+encodeURIComponent(v.d)+'&sz=128':''),l=esc(v.n.charAt(0).toUpperCase());
+  return src?'<img class="simg" src="'+esc(src)+'" alt="" referrerpolicy="no-referrer" data-f="'+(v.i&&v.d?'0':'1')+'" data-d="'+esc(v.d||'')+'" data-l="'+l+'">':'<span class="simg ltr">'+l+'</span>'}
+document.addEventListener('error',function(e){var t=e.target;if(!t||!t.classList||!t.classList.contains('simg'))return;
+  var d=t.getAttribute('data-d');if(t.getAttribute('data-f')==='0'&&d){t.setAttribute('data-f','1');t.src='https://www.google.com/s2/favicons?domain='+encodeURIComponent(d)+'&sz=128';return}
+  var sp=document.createElement('span');sp.className='simg ltr';sp.textContent=t.getAttribute('data-l')||'?';t.replaceWith(sp)},true);
+function renderTest(force){
+  var el=$('ttdisc');if(!el)return;
+  el.innerHTML=CFG.discord?'<a class="dbtn" href="'+esc(CFG.discord)+'" target="_blank" rel="noopener noreferrer">'+DISCSVG+T('tt_discord')+'</a>':'<span class="dbtn off">'+DISCSVG+T('tt_soon')+'</span>';
+  $('ttsrv').innerHTML=CFG.servers.map(function(v){return '<div class="srv">'+srvImg(v)+'<b>'+esc(v.n)+'</b></div>'}).join('');
+  var dv=$('ttdev');
+  if(!DEV){dv.hidden=true;dv.innerHTML='';return}
+  if(!force&&dv.contains(document.activeElement))return;
+  dv.hidden=false;
+  dv.innerHTML='<h4>'+T('tt_dlink')+'</h4><input id="dv-disc" autocomplete="off" spellcheck="false" placeholder="https://discord.gg/..." value="'+esc(CFG.discord)+'">'
+   +'<h4>'+T('tt_servers')+'</h4>'+CFG.servers.map(function(v,i){return '<div class="srow" data-i2="'+i+'"><input class="s-n" placeholder="'+T('tt_name')+'" value="'+esc(v.n)+'"><input class="s-d" placeholder="'+T('tt_domain')+'" value="'+esc(v.d||'')+'"><input class="s-i" placeholder="'+T('tt_icon')+'" value="'+esc(v.i||'')+'"><button class="btn dan" type="button" data-sdel="'+i+'">×</button></div>'}).join('')
+   +'<button class="btn" id="s-add" type="button">'+T('tt_addsrv')+'</button>'}
+function cfgFromDom(){var dv=$('ttdev'),disc=dv.querySelector('#dv-disc').value.trim(),rows=[].slice.call(dv.querySelectorAll('.srow')).map(function(r){return {n:r.querySelector('.s-n').value,d:r.querySelector('.s-d').value,i:r.querySelector('.s-i').value}});
+  var c=sanitizeCfg({discord:disc,servers:rows});if(disc&&!c.discord)toast(T('tt_baddisc'));return c}
+$('ttdev').addEventListener('change',function(){CFG=cfgFromDom();savePlayers();renderTest(true)});
+$('ttdev').addEventListener('click',function(e){var d=e.target.closest('[data-sdel]');
+  if(d){CFG.servers.splice(+d.getAttribute('data-sdel'),1);savePlayers();renderTest(true);return}
+  if(e.target.id==='s-add'){CFG.servers.push({n:'New server'});savePlayers();renderTest(true)}});
+function route(){var tt=location.hash==='#tiertest';document.body.classList.toggle('pg-test',tt);
+  if(tt){window.scrollTo(0,0)}else{var id=location.hash.slice(1),t=id&&document.getElementById(id);if(t)setTimeout(function(){t.scrollIntoView()},0)}}
+window.addEventListener('hashchange',route);
+
+function ghCfg(){var c={repo:'',branch:'main',token:''};try{var o=JSON.parse(localStorage.getItem('antiers_gh'));if(o)c=Object.assign(c,o)}catch(e){}
+  if(!c.repo){var m=location.hostname.match(/^([^.]+)\.github\.io$/);if(m){var seg=location.pathname.split('/')[1];c.repo=m[1]+'/'+(seg||m[1]+'.github.io')}}return c}
+function b64(t){var u=new TextEncoder().encode(t),b='';for(var i=0;i<u.length;i++)b+=String.fromCharCode(u[i]);return btoa(b)}
+$('dv-pub').addEventListener('click',function(){var c=ghCfg();$('gh-repo').value=c.repo;$('gh-branch').value=c.branch;$('gh-token').value=c.token;$('pubmsg').textContent='';$('pubmsg').style.color='';$('pubdlg').hidden=false});
+$('pub-x').addEventListener('click',function(){$('pubdlg').hidden=true});
+$('pub-go').addEventListener('click',function(){
+  var repo=$('gh-repo').value.trim(),br=$('gh-branch').value.trim()||'main',tok=$('gh-token').value.trim(),msg=$('pubmsg'),btn=$('pub-go');
+  msg.style.color='';if(!/^[\w.-]+\/[\w.-]+$/.test(repo)||!tok){msg.textContent=T('pub_need');return}
+  var api='https://api.github.com/repos/'+repo+'/contents/data.js',H={'Authorization':'Bearer '+tok,'Accept':'application/vnd.github+json'};
+  btn.disabled=true;msg.style.color='var(--muted)';msg.textContent=T('pub_busy');
+  fetch(api+'?ref='+encodeURIComponent(br)+'&t='+Date.now(),{headers:H,cache:'no-store'}).then(function(r){if(r.status===404)return null;if(!r.ok)throw r;return r.json()}).then(function(j){
+    var body={message:'Update data (ANtiers dev mode)',content:b64(exportText()),branch:br};if(j&&j.sha)body.sha=j.sha;
+    return fetch(api,{method:'PUT',headers:Object.assign({'Content-Type':'application/json'},H),body:JSON.stringify(body)})
+  }).then(function(r){if(!r.ok)throw r;
+    try{if($('gh-rem').checked)localStorage.setItem('antiers_gh',JSON.stringify({repo:repo,branch:br,token:tok}));else localStorage.setItem('antiers_gh',JSON.stringify({repo:repo,branch:br,token:''}))}catch(e){}
+    btn.disabled=false;msg.style.color='var(--accent)';msg.textContent=T('pub_ok');toast(T('pub_ok'))
+  }).catch(function(e){btn.disabled=false;msg.style.color='';var st=e&&e.status;msg.textContent=(st===401||st===403)?T('pub_auth'):st===404?T('pub_404'):T('pub_fail')})});
+
+/* fetch the newest data.js so visitors never see a stale cached copy */
+if(/^https?:$/.test(location.protocol)){fetch('data.js?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.text():Promise.reject()}).then(function(txt){
+  var o=parseData(txt);if(!o)return;var c=sanitizeCfg(o),sig=sigOf(o.players,c);if(sig===BASE_SIG)return;
+  BASE=JSON.parse(JSON.stringify(o.players));BASEC=JSON.parse(JSON.stringify(c));BASE_SIG=sig;
+  PLAYERS=sanitize(JSON.parse(JSON.stringify(BASE)))||[];CFG=c;loadSaved();refresh()}).catch(function(){})}
 
 /* ---------- hero ambient: drifting ender-pixels ---------- */
 (function(){
@@ -902,6 +1031,7 @@ document.addEventListener('keydown',function(e){if(e.key!=='Escape')return;
 })();
 
 gradDefs();
+route();
 document.body.classList.toggle('dev',DEV);
 applyLang();
 })();
