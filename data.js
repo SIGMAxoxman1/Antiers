@@ -2,8 +2,8 @@ window.ANTIERS_DATA={
 "discord":"",
 "servers":[{"n":"minemen.club","d":"minemen.club","i":"https://minemen.club/img/mmc_logo.png"}],
 "players":[
-  {"n":"Sigma_mc","r":"ME","tag":"Owner","tagColor":"#ffc233","t":{"sword":"HT1","crystal":"HT1","op":"MT1","uhc":"HT2","pot":"MT2","axe":"LT2","mace":"HT3"}},
-  {"n":"antube","r":"ME","t":{"sword":"HT2","crystal":"LT1","mace":"MT2","axe":"HT3","smp":"MT3","npot":"LT3"}},
-  {"n":"anplayer","r":"ME","t":{"pot":"HT2","npot":"MT3","smp":"HT3","spear":"LT3","uhc":"LT3","op":"HT4"}}
+  {"n":"Sigma_mc","r":"ME","tag":"Owner","tagColor":"#ffc233","t":{"sword":"LT3","crystal":"LT5","op":"HT5","uhc":"HT2","pot":"MT2","axe":"LT2","mace":"HT3"}},
+  {"n":"antube","r":"ME","t":{"sword":"HT2","crystal":"MT4","mace":"MT2","axe":"HT3","smp":"MT3","npot":"LT3"}},
+  {"n":"anplayer","r":"ME","t":{"pot":"HT2","npot":"MT3","smp":"HT3","spear":"LT3","uhc":"LT3","op":"HT4","sword":"HT2"}}
 ]
 };
