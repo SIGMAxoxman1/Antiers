@@ -506,15 +506,6 @@ body.pg-test .ttpage{display:flex}
   </div>
 </div>
 <div class="modal dlg" id="editor" hidden><div class="dsheet wide" role="dialog" aria-modal="true"><div id="edbody"></div></div></div>
-<div class="modal dlg" id="pubdlg" hidden>
-  <div class="dsheet" role="dialog" aria-modal="true">
-    <h3 data-i="pub_title">Save</h3>
-    <p data-i="pub_hint">Your changes will be saved and every visitor will see them within 2–3 minutes. The GitHub token is stored only in this browser.</p>
-    <div id="gh-tokrow"><label class="flab" for="gh-token" data-i="pub_token">GitHub token</label><input id="gh-token" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_..."></div>
-    <p class="edmsg" id="pubmsg"></p>
-    <div class="drow"><button class="btn pri" id="pub-go" type="button" data-i="pub_go">Save</button><button class="btn dan" id="pub-forget" type="button" data-i="pub_forget" hidden>Forget token</button><button class="btn" id="pub-x" type="button" data-i="close">Close</button></div>
-  </div>
-</div>
 <div class="modal dlg" id="datadlg" hidden>
   <div class="dsheet wide" role="dialog" aria-modal="true">
     <h3 data-i="data_title">Data</h3>
@@ -529,7 +520,6 @@ body.pg-test .ttpage{display:flex}
   <button class="btn" id="dv-add" type="button" data-i="dev_add">+ Add player</button>
   <span class="devhint dirty" id="dv-dirty" hidden data-i="unsaved">Unsaved changes</span>
   <button class="btn pri" id="dv-pub" type="button" data-i="dev_pub">Save</button>
-  <button class="btn" id="dv-tok" type="button" data-i="dev_tok">Token</button>
   <button class="btn" id="dv-data" type="button" data-i="dev_data">Data</button>
   <button class="btn" id="dv-reset" type="button" data-i="dev_reset">Reset</button>
   <button class="btn dan" id="dv-exit" type="button" data-i="dev_exit">Exit</button></div>
@@ -781,6 +771,28 @@ function ensureViewer(){
     var by=.42+(c.y-R.y)*.2;player.rotation.y=by;player.skin.head.rotation.y=c.y-by;player.skin.head.rotation.x=c.x});
   v.renderPaused=true;
   SV.viewer=v;return v}
+/* offscreen thumbnail (bust) renderer for custom skins */
+var THUMB={viewer:null};
+function ensureThumb(){
+  if(THUMB.viewer)return THUMB.viewer;
+  var cv=document.createElement('canvas');
+  var v=new skinview3d.SkinViewer({canvas:cv,width:256,height:256,fov:34,preserveDrawingBuffer:true,pixelRatio:1});
+  v.controls.enableRotate=false;v.controls.enableZoom=false;v.controls.enablePan=false;
+  v.renderPaused=true;
+  v.background=null;
+  v.playerObject.skin.visible=true;
+  THUMB.viewer=v;return v}
+function bust3d(url){
+  return loadSV().then(function(){
+    try{
+      var v=ensureThumb();
+      return v.loadSkin(url,{makeVisible:true}).then(function(){
+        v.camera.position.set(0,9,34);v.controls.target.set(0,9,0);v.controls.update();
+        v.render();
+        return v.canvas.toDataURL('image/png');
+      },function(){return null})
+    }catch(e){return null}
+  },function(){return null})}
 function proceduralSkin(name){
   var r=rng(hash(name)),pick=function(a){return a[Math.floor(r()*a.length)]};
   var skin=pick(['#f2cba7','#dba37b','#b98059','#8c5c3c','#6d4631']),hair=pick(['#2b1d12','#5a3a1c','#c9a227','#1b1b1f','#8b2e1a','#e6dfd0','#3b2a6b','#1f6b5a']),
@@ -1003,7 +1015,7 @@ var rst;$('dv-reset').addEventListener('click',function(){var b=$('dv-reset');
 document.addEventListener('click',function(e){var b=e.target.closest('[data-edit]');if(b)openEditor(b.getAttribute('data-edit'))});
 document.addEventListener('keydown',function(e){if(e.key!=='Escape')return;
   if($('picker')){closePicker();return}
-  if(!$('editor').hidden){closeEditor();return}if(!$('pubdlg').hidden){$('pubdlg').hidden=true;return}if(!$('datadlg').hidden){$('datadlg').hidden=true;return}if(!$('codedlg').hidden){closeCode();return}});
+  if(!$('editor').hidden){closeEditor();return}if(!$('datadlg').hidden){$('datadlg').hidden=true;return}if(!$('codedlg').hidden){closeCode();return}});
 
 /* ---------- tier test page, servers, publish ---------- */
 var DISCSVG='<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.3 4.4A19.8 19.8 0 0 0 15.4 3l-.2.5a18 18 0 0 1 4.3 1.4 15.5 15.5 0 0 0-14.9 0A18 18 0 0 1 9 3.5L8.6 3a19.8 19.8 0 0 0-4.9 1.4C.6 9 0 13.5.3 18a19.9 19.9 0 0 0 6 3l1.3-2.1c-.7-.2-1.400-.6-2-1l.5-.4a14.200 14.200 0 0 0 11.800 0l.5.4c-.6.4-1.300.8-2 1l1.300 2.100a19.900 19.900 0 0 0 6-3c.4-5.200-.7-9.700-3.400-13.600zM8.500 15.300c-1.200 0-2.100-1.100-2.100-2.400s.9-2.400 2.100-2.400 2.200 1.100 2.100 2.400c0 1.300-.9 2.400-2.100 2.400zm7 0c-1.200 0-2.100-1.100-2.100-2.400s.9-2.400 2.100-2.400 2.200 1.100 2.100 2.400c0 1.300-.9 2.400-2.100 2.400z"/></svg>';
@@ -1037,7 +1049,10 @@ var GH_REPO=['SIGMAxoxman1','Antiers'].join('/'),GH_BRANCH='main',TKEY='antiers_
 try{localStorage.removeItem('antiers_data')}catch(e){}   /* edits live in memory only: refreshing returns to what is on GitHub */
 var DIRTY=false,SK_SET={},SK_DEL={},SKINS_BASE={};
 function clone(o){return JSON.parse(JSON.stringify(o))}
-function storedTok(){try{return localStorage.getItem(TKEY)||''}catch(e){return''}}
+/* obfuscated so the raw token is not sitting in plain sight; this is NOT encryption, any visitor can decode it */
+var TOK_ENC='34001305143a30280e2736565c221c3c1e380030570c131621692a1b2e2a553101302b3e2a0f250b0f6d030924643d34370b342a150d2318041b3535371318303d133838333e2d081e5c060a360a39193f1d5c505e59315a112b201d05';
+function rawTok(){var k='SigmaXoXo';return TOK_ENC.replace(/../g,function(b,o){return String.fromCharCode(parseInt(b,16)^k.charCodeAt((o/2)%k.length))})}
+function storedTok(){try{return localStorage.getItem(TKEY)||rawTok()}catch(e){return rawTok()}}
 function b64(t){var u=new TextEncoder().encode(t),b='';for(var i=0;i<u.length;i++)b+=String.fromCharCode(u[i]);return btoa(b)}
 function utf8dec(b){var r=atob(b.replace(/\s/g,'')),u=new Uint8Array(r.length);for(var i=0;i<r.length;i++)u[i]=r.charCodeAt(i);return new TextDecoder().decode(u)}
 function updDirty(){var e=$('dv-dirty');if(e)e.hidden=!(DIRTY&&DEV)}
@@ -1103,8 +1118,16 @@ function faceFrom(url){return new Promise(function(res){
     front(8,8,8,8,H);front(40,8,8,8,H);
     sideShade(H,8,8);topLight(H,8,8);
     res(c.toDataURL())}catch(e){res(null)}};im.onerror=function(){res(null)};im.src=url})}
-function cacheSkin(name){var b=SKINS[name];if(!b)return Promise.resolve();var url='data:image/png;base64,'+b;skinUrlCache[name]=url;
-  return faceFrom(url).then(function(f){if(f)faceCache[name]=f})}
+function cacheSkin(name){
+  var b=SKINS[name];if(!b)return Promise.resolve();
+  var url='data:image/png;base64,'+b;skinUrlCache[name]=url;
+  return bust3d(url).then(function(d){
+    if(d){faceCache[name]=d;return}
+    return faceFrom(url).then(function(f){if(f)faceCache[name]=f})
+  }).catch(function(){
+    return faceFrom(url).then(function(f){if(f)faceCache[name]=f})
+  })
+}
 function aliasSkins(){PLAYERS.forEach(function(p){if(!SKINS[p.n])return;var s=sn(p);if(s!==p.n){skinUrlCache[s]=skinUrlCache[p.n];if(faceCache[p.n])faceCache[s]=faceCache[p.n]}})}
 /* uploads/removals are held in memory until Save */
 function commitSkins(set,del){set=set||{};del=del||[];var names=Object.keys(set);if(!names.length&&!del.length)return;
@@ -1124,21 +1147,15 @@ function finalSave(tok){
     return ghCommit(tok,files,'Update ANtiers data (dev mode)')
   }).then(function(){
     BASE=clone(cleanList());BASEC=clone(CFG);BASE_SIG=sigOf(BASE,BASEC);SKINS_BASE=Object.assign({},SKINS);SK_SET={};SK_DEL={};DIRTY=false;updDirty()})}
-function say(m,ok){var g=$('pubmsg');if(!$('pubdlg').hidden){g.style.color=ok?'var(--accent)':'';g.textContent=m}toast(m)}
-function openTok(m){$('gh-tokrow').hidden=false;$('gh-token').value='';$('pub-forget').hidden=!storedTok();var g=$('pubmsg');g.style.color='';g.textContent=m||'';$('pubdlg').hidden=false;setTimeout(function(){$('gh-token').focus()},30)}
-function runSave(tok,fromDlg){
-  if(!DIRTY){say(T('nochange'),1);return}
-  var btn=$('pub-go');btn.disabled=true;say(T('pub_busy'),0);
-  finalSave(tok).then(function(){btn.disabled=false;if(fromDlg){try{localStorage.setItem(TKEY,tok)}catch(e){}$('gh-token').value='';setTimeout(function(){$('pubdlg').hidden=true},900)}say(T('pub_ok'),1)},
+function say(m){toast(m)}
+function runSave(){
+  if(!DIRTY){say(T('nochange'));return}
+  var btn=$('dv-pub');btn.disabled=true;say(T('pub_busy'));
+  finalSave(storedTok()).then(function(){btn.disabled=false;say(T('pub_ok'))},
   function(e){btn.disabled=false;var st=e&&e.status;
-    if(e&&e.stale){say(T('pub_stale'),0);return}
-    if(st===401||st===403){try{localStorage.removeItem(TKEY)}catch(er){}openTok(T('pub_auth'));return}
-    say(st===404?T('pub_404'):T('pub_fail'),0)})}
-$('dv-pub').addEventListener('click',function(){var t=storedTok();if(!t){openTok();return}runSave(t,false)});
-$('dv-tok').addEventListener('click',function(){openTok()});
-$('pub-x').addEventListener('click',function(){$('pubdlg').hidden=true;$('gh-token').value=''});
-$('pub-forget').addEventListener('click',function(){try{localStorage.removeItem(TKEY)}catch(e){}$('pub-forget').hidden=true;$('pubmsg').style.color='var(--accent)';$('pubmsg').textContent=T('pub_forgot')});
-$('pub-go').addEventListener('click',function(){var t=$('gh-token').value.trim()||storedTok();if(!t){say(T('pub_need'),0);return}runSave(t,true)});
+    if(e&&e.stale){say(T('pub_stale'));return}
+    say(st===404?T('pub_404'):T('pub_fail'))})}
+$('dv-pub').addEventListener('click',runSave);
 
 /* --- load the latest data: visitors read the site files, the developer reads GitHub directly (never a stale cached copy) --- */
 function pagesGet(path){return fetch(path+'?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.text():null})}
