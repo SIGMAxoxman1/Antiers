@@ -101,6 +101,7 @@ h1 span{background:linear-gradient(100deg,var(--accent),#7b9cff 65%,var(--t3));-
 /* shadow of the character on the wall behind it: two soft shapes (head, shoulders) shifted down-right. Gradients only, so it stays cheap on weak devices. */
 .avw{position:relative;display:block;flex:none;line-height:0}
 .avw>.av{position:relative;z-index:1}
+.av.cus{-webkit-mask-image:linear-gradient(#000 80%,transparent);mask-image:linear-gradient(#000 80%,transparent)}
 .avw::before{content:"";position:absolute;z-index:0;inset:-4% -12% -6% 4%;pointer-events:none;transform:translate(10%,5%);
   background:radial-gradient(ellipse 30% 27% at 50% 33%,rgba(0,0,0,.5) 0 58%,transparent 100%),radial-gradient(ellipse 50% 28% at 50% 86%,rgba(0,0,0,.5) 0 58%,transparent 100%)}
 [data-theme="light"] .avw::before{background:radial-gradient(ellipse 30% 27% at 50% 33%,rgba(25,30,70,.3) 0 58%,transparent 100%),radial-gradient(ellipse 50% 28% at 50% 86%,rgba(25,30,70,.3) 0 58%,transparent 100%)}
@@ -621,7 +622,7 @@ function rankBadge(n){return '<span class="rk">'+(n>3?n:crest(n))+'</span>'}
 var avCache={};
 var AVS={bust:[function(n,s){return 'https://visage.surgeplay.com/bust/'+s+'/'+encodeURIComponent(n)},function(n){return 'https://starlightskins.lunareclipse.studio/render/default/'+encodeURIComponent(n)+'/bust'}],
   full:[function(n,s){return 'https://visage.surgeplay.com/full/'+s+'/'+encodeURIComponent(n)},function(n){return 'https://starlightskins.lunareclipse.studio/render/default/'+encodeURIComponent(n)+'/full'}]};
-function avImg(n,s){var f=faceCache[n];if(f)return '<span class="avw"><img class="av" alt="" decoding="async" src="'+f+'"></span>';return '<span class="avw">'+avImgRemote(n,s)+'</span>'}
+function avImg(n,s){var f=faceCache[n];if(f)return '<span class="avw"><img class="av cus" alt="" decoding="async" src="'+f+'"></span>';return '<span class="avw">'+avImgRemote(n,s)+'</span>'}
 function avImgRemote(n,s){return '<img class="av" alt="" decoding="async" data-k="bust" data-s="'+(s||256)+'" data-f="0" data-n="'+esc(n)+'" src="'+AVS.bust[0](n,s||256)+'">'}
 function skinImg(n){return '<img class="skin" alt="" decoding="async" data-k="full" data-s="512" data-f="0" data-n="'+esc(n)+'" src="'+AVS.full[0](n,512)+'">'}
 document.addEventListener('error',function(e){var t=e.target;
@@ -789,7 +790,7 @@ function bust3d(url){
     return v.loadSkin(url,{makeVisible:true}).then(function(){
       var P=v.playerObject.skin;
       v.playerObject.rotation.y=.35;P.head.rotation.y=.05;P.head.rotation.x=0;
-      P.rightArm.rotation.z=-.2;P.leftArm.rotation.z=-.1;
+      P.rightArm.rotation.z=-.25;P.leftArm.rotation.z=.3;
       v.camera.position.set(0,18.3,41);v.controls.target.set(0,7.8,0);v.controls.update();
       v.render();
       return v.canvas.toDataURL('image/png')})
