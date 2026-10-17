@@ -771,28 +771,30 @@ function ensureViewer(){
     var by=.42+(c.y-R.y)*.2;player.rotation.y=by;player.skin.head.rotation.y=c.y-by;player.skin.head.rotation.x=c.x});
   v.renderPaused=true;
   SV.viewer=v;return v}
-/* offscreen thumbnail (bust) renderer for custom skins */
-var THUMB={viewer:null};
+/* offscreen thumbnail (bust) renderer for custom skins: same look as the avatars of real accounts
+   (head turned so its side shows on the left, seen slightly from above, arms spread, soft shading) */
+var THUMB={viewer:null,q:Promise.resolve()};
 function ensureThumb(){
   if(THUMB.viewer)return THUMB.viewer;
   var cv=document.createElement('canvas');
-  var v=new skinview3d.SkinViewer({canvas:cv,width:256,height:256,fov:34,preserveDrawingBuffer:true,pixelRatio:1});
+  var v=new skinview3d.SkinViewer({canvas:cv,width:320,height:320,fov:28,preserveDrawingBuffer:true,pixelRatio:1});
   v.controls.enableRotate=false;v.controls.enableZoom=false;v.controls.enablePan=false;
-  v.renderPaused=true;
-  v.background=null;
-  v.playerObject.skin.visible=true;
+  v.renderPaused=true;v.animation=null;v.background=null;
+  v.globalLight.intensity=1.8;v.cameraLight.intensity=1400;
   THUMB.viewer=v;return v}
 function bust3d(url){
-  return loadSV().then(function(){
-    try{
-      var v=ensureThumb();
-      return v.loadSkin(url,{makeVisible:true}).then(function(){
-        v.camera.position.set(0,9,34);v.controls.target.set(0,9,0);v.controls.update();
-        v.render();
-        return v.canvas.toDataURL('image/png');
-      },function(){return null})
-    }catch(e){return null}
-  },function(){return null})}
+  if(document.documentElement.classList.contains('lite')||!window.WebGLRenderingContext)return Promise.resolve(null);
+  THUMB.q=THUMB.q.then(function(){return loadSV().then(function(){
+    var v=ensureThumb();
+    return v.loadSkin(url,{makeVisible:true}).then(function(){
+      var P=v.playerObject.skin;
+      v.playerObject.rotation.y=.35;P.head.rotation.y=.05;P.head.rotation.x=0;
+      P.rightArm.rotation.z=-.5;P.leftArm.rotation.z=-.3;
+      v.camera.position.set(0,18.3,41);v.controls.target.set(0,7.8,0);v.controls.update();
+      v.render();
+      return v.canvas.toDataURL('image/png')})
+  }).catch(function(){return null})});
+  return THUMB.q}
 function proceduralSkin(name){
   var r=rng(hash(name)),pick=function(a){return a[Math.floor(r()*a.length)]};
   var skin=pick(['#f2cba7','#dba37b','#b98059','#8c5c3c','#6d4631']),hair=pick(['#2b1d12','#5a3a1c','#c9a227','#1b1b1f','#8b2e1a','#e6dfd0','#3b2a6b','#1f6b5a']),
