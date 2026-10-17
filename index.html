@@ -665,7 +665,7 @@ function tipName(t){return T(isHT(t)?'high':isMT(t)?'mid':'low')+' '+T('tier')+'
 function mname(k){return MODES.filter(function(m){return m.k===k})[0]}
 function pts(p){var s=0;for(var k in p.t)s+=PTS[p.t[k]]||0;return s}
 function best(p){var b=null;for(var k in p.t){if(b===null||PTS[p.t[k]]>PTS[b])b=p.t[k]}return b}
-function bestK(p){var b=null;for(var k in p.t){if(b===null||PTS[p.t[k]]>PTS[b])b=k}return b}
+function bestK(p){var b=null,bv=-1;for(var k in p.t){var v=PTS[p.t[k]]||0;if(b===null||v>bv){b=k;bv=v}}return b}
 function emptySlot(k,pn){return '<span class="tb un" data-tip="'+esc(mname(k).n+' · '+T('unranked'))+'"'+(pn?' data-pk="'+esc(pn)+'" data-mk="'+k+'"':'')+'>'+icon(k,40)+'<span>--</span></span>'}
 function chip(k,t,pn){return '<span class="tb t'+tierNum(t)+(isHT(t)?' ht':isMT(t)?' mid':'')+'" data-tip="'+esc(mname(k).n+' · '+tipName(t))+'"'+(pn?' data-pk="'+esc(pn)+'" data-mk="'+k+'"':'')+'>'+icon(k,40)+'<span>'+t+'</span></span>'}
 function unChip(){return '<span class="chip un" data-tip="'+esc(T('unranked'))+'">--</span>'}
