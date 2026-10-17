@@ -6,6 +6,7 @@
 <title>ANtiers</title>
 <meta name="description" content="ANtiers – Minecraft PvP tier list. Player rankings across 13 game modes.">
 <meta name="theme-color" content="#0b0d18">
+<script>try{var q=location.search,n=navigator,l=/[?&]lite=1/.test(q)||(!/[?&]lite=0/.test(q)&&((n.hardwareConcurrency&&n.hardwareConcurrency<=4)||(n.deviceMemory&&n.deviceMemory<=4)||matchMedia("(prefers-reduced-motion: reduce)").matches));if(l)document.documentElement.classList.add("lite")}catch(e){}</script>
 <script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("antiers_theme")==="light"?"light":"dark")}catch(e){document.documentElement.setAttribute("data-theme","dark")}</script>
 <meta property="og:title" content="ANtiers"><meta property="og:description" content="Minecraft PvP tier list. Player rankings across 13 game modes."><meta property="og:type" content="website">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -81,7 +82,8 @@ h1 span{background:linear-gradient(100deg,var(--accent),#7b9cff 65%,var(--t3));-
 .pod{border:1px solid var(--line);background:var(--bg);border-radius:6px;padding:16px 10px 14px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;min-width:0;transition:transform .2s,border-color .2s}
 .pod:hover{transform:translateY(-3px);border-color:var(--rc)}
 .pod .av{width:108px;height:108px}
-.pod.p1{--rc:var(--t1);padding-block:26px 20px;border-color:color-mix(in srgb,var(--t1) 60%,var(--line));box-shadow:0 0 40px color-mix(in srgb,var(--t1) 18%,transparent);animation:pulse 3.6s ease-in-out infinite}
+.pod.p1{--rc:var(--t1);padding-block:26px 20px;border-color:color-mix(in srgb,var(--t1) 60%,var(--line));box-shadow:0 0 40px color-mix(in srgb,var(--t1) 18%,transparent);position:relative}
+.pod.p1::after{content:"";position:absolute;inset:-1px;border-radius:inherit;pointer-events:none;box-shadow:0 0 56px color-mix(in srgb,var(--t1) 32%,transparent);opacity:0;animation:pulse 3.6s ease-in-out infinite}
 .pod.p1 .av{width:144px;height:144px}
 .pod.p2{--rc:var(--silver);border-color:color-mix(in srgb,var(--silver) 50%,var(--line));box-shadow:0 0 26px color-mix(in srgb,var(--silver) 14%,transparent)}
 .pod.p3{--rc:var(--bronze);border-color:color-mix(in srgb,var(--bronze) 50%,var(--line));box-shadow:0 0 26px color-mix(in srgb,var(--bronze) 14%,transparent)}
@@ -90,12 +92,23 @@ h1 span{background:linear-gradient(100deg,var(--accent),#7b9cff 65%,var(--t3));-
 .pod .nm{font-weight:600;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pod .pp{font:700 20px/1 var(--px);font-variant-numeric:tabular-nums}
 .pod .pp small{font:500 11px var(--ui);color:var(--muted);letter-spacing:.08em;margin-inline-start:4px}
-@keyframes pulse{50%{box-shadow:0 0 56px color-mix(in srgb,var(--t1) 30%,transparent)}}
+@keyframes pulse{50%{opacity:1}}
 
 /* avatars, chips */
 .av{display:block;object-fit:contain;border-radius:3px;background:none;transform-origin:50% 85%;
   transition:transform .28s cubic-bezier(.2,.9,.25,1.25),filter .28s;will-change:transform}
 .av.px{image-rendering:pixelated;background:var(--surface2)}
+/* shadow of the character on the wall behind it: two soft shapes (head, shoulders) shifted down-right. Gradients only, so it stays cheap on weak devices. */
+.avw{position:relative;display:block;flex:none;line-height:0}
+.avw>.av{position:relative;z-index:1}
+.avw::before{content:"";position:absolute;z-index:0;inset:-4% -12% -6% 4%;pointer-events:none;transform:translate(10%,5%);
+  background:radial-gradient(ellipse 30% 27% at 50% 33%,rgba(0,0,0,.5) 0 58%,transparent 100%),radial-gradient(ellipse 50% 28% at 50% 86%,rgba(0,0,0,.5) 0 58%,transparent 100%)}
+[data-theme="light"] .avw::before{background:radial-gradient(ellipse 30% 27% at 50% 33%,rgba(25,30,70,.3) 0 58%,transparent 100%),radial-gradient(ellipse 50% 28% at 50% 86%,rgba(25,30,70,.3) 0 58%,transparent 100%)}
+.dirty{color:#ffb14a!important;font-weight:700}
+/* lite mode (weak devices, reduced motion, or ?lite=1): no animations, no heavy filters */
+.lite *,.lite *::before,.lite *::after{animation:none!important}
+.lite .crest{filter:none}
+.lite .row:hover .av,.lite .col li button:hover .av,.lite .pod:hover .av{transform:none}
 .row:hover .av,.col li button:hover .av,.pod:hover .av,.phead .av:hover{transform:scale(1.22) translateY(-3px) rotate(-2deg)}
 .pod:hover{transform:none}
 .chip{display:inline-flex;align-items:center;gap:6px;color:var(--c);font:700 14px/1.4 var(--px);letter-spacing:.03em}
@@ -228,6 +241,7 @@ footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--line);color:v
   background:radial-gradient(ellipse at 50% 40%,color-mix(in srgb,var(--c,var(--accent)) 40%,transparent),transparent 64%),linear-gradient(180deg,var(--bg2),var(--bg))}
 .stage::before{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:34px 34px;opacity:.4;
   -webkit-mask-image:radial-gradient(ellipse at 50% 45%,#000,transparent 72%);mask-image:radial-gradient(ellipse at 50% 45%,#000,transparent 72%)}
+.stage::after{content:"";position:absolute;z-index:1;left:50%;top:50%;width:230px;height:330px;pointer-events:none;transform:translate(-30%,-42%);background:radial-gradient(ellipse 34% 20% at 50% 22%,rgba(0,0,0,.45) 0 55%,transparent 100%),radial-gradient(ellipse 50% 28% at 50% 66%,rgba(0,0,0,.45) 0 55%,transparent 100%)}
 .stage .ped{position:absolute;bottom:26px;left:50%;width:250px;height:56px;transform:translateX(-50%);border-radius:50%;
   background:radial-gradient(ellipse,color-mix(in srgb,var(--c,var(--accent)) 75%,transparent),transparent 68%)}
 .stage .rb{position:absolute;top:14px;left:14px;z-index:3}
@@ -293,7 +307,7 @@ footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--line);color:v
 .nrow .nm{min-width:0}
 .ptag{flex:none;font:800 10px/1 var(--ui);letter-spacing:.12em;text-transform:uppercase;color:var(--tc);padding:4px 7px;border-radius:4px;border:1px solid color-mix(in srgb,var(--tc) 55%,transparent);background:color-mix(in srgb,var(--tc) 16%,transparent);text-shadow:0 0 10px color-mix(in srgb,var(--tc) 50%,transparent)}
 .pod .ptag{margin-top:-2px}
-.stage canvas.sv{position:relative;z-index:2;width:min(100%,320px);height:320px;display:block;filter:drop-shadow(0 18px 18px rgba(0,0,0,.5));-webkit-mask-image:linear-gradient(to bottom,#000 72%,transparent 98%);mask-image:linear-gradient(to bottom,#000 72%,transparent 98%)}
+.stage canvas.sv{position:relative;z-index:2;width:min(100%,320px);height:320px;display:block;-webkit-mask-image:linear-gradient(to bottom,#000 72%,transparent 98%);mask-image:linear-gradient(to bottom,#000 72%,transparent 98%)}
 .stage:has(canvas.sv) .ped{display:none}
 .stage .skin{position:relative}
 .sv-load{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;font:700 13px var(--ui);letter-spacing:.2em;color:var(--muted);animation:glint 1.2s ease-in-out infinite}
@@ -498,7 +512,7 @@ body.pg-test .ttpage{display:flex}
     <p data-i="pub_hint">Your changes will be saved and every visitor will see them within 2–3 minutes. The GitHub token is stored only in this browser.</p>
     <div id="gh-tokrow"><label class="flab" for="gh-token" data-i="pub_token">GitHub token</label><input id="gh-token" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_..."></div>
     <p class="edmsg" id="pubmsg"></p>
-    <div class="drow"><button class="btn pri" id="pub-go" type="button" data-i="pub_go">Save</button><button class="btn" id="pub-x" type="button" data-i="close">Close</button></div>
+    <div class="drow"><button class="btn pri" id="pub-go" type="button" data-i="pub_go">Save</button><button class="btn dan" id="pub-forget" type="button" data-i="pub_forget" hidden>Forget token</button><button class="btn" id="pub-x" type="button" data-i="close">Close</button></div>
   </div>
 </div>
 <div class="modal dlg" id="datadlg" hidden>
@@ -513,7 +527,9 @@ body.pg-test .ttpage{display:flex}
 <div class="devbar" id="devbar"><span class="devtag" data-i="dev_badge">DEV MODE</span>
   <span class="devhint" data-i="dev_hint">Click any tier to change it</span>
   <button class="btn" id="dv-add" type="button" data-i="dev_add">+ Add player</button>
-  <button class="btn pri" id="dv-pub" type="button" data-i="dev_pub">Publish</button>
+  <span class="devhint dirty" id="dv-dirty" hidden data-i="unsaved">Unsaved changes</span>
+  <button class="btn pri" id="dv-pub" type="button" data-i="dev_pub">Save</button>
+  <button class="btn" id="dv-tok" type="button" data-i="dev_tok">Token</button>
   <button class="btn" id="dv-data" type="button" data-i="dev_data">Data</button>
   <button class="btn" id="dv-reset" type="button" data-i="dev_reset">Reset</button>
   <button class="btn dan" id="dv-exit" type="button" data-i="dev_exit">Exit</button></div>
@@ -562,22 +578,22 @@ function icon(k,size){
 
 /* ---------- i18n ---------- */
 var I18={
- en:{tt_eb:'Tier test',tt_h:'Want to get tested?',tt_p:'Request a tier test from our testers on Discord. Join the server, pick the mode you want to be ranked in and wait for your turn.',tt_discord:'Join our Discord',tt_soon:'Discord link coming soon',tt_srv_h:'Allowed test servers',tt_srv_p:'Tier tests are only held on these servers.',tt_back:'← Back to rankings',tt_cta:'Request a tier test',dev_pub:'Save',pub_title:'Save',pub_hint:'Your changes will be saved and every visitor will see them within 2–3 minutes.',theme_light:'Light mode',theme_dark:'Dark mode',pub_token:'GitHub token',pub_go:'Save',pub_need:'Enter the GitHub token.',pub_auth:'GitHub rejected the save. The token may lack permission.',pub_404:'Repository or branch not found.',pub_fail:'Saving failed. Try again.',pub_ok:'Saved! Everyone will see the update within 2–3 minutes.',pub_busy:'Saving…',tt_dlink:'Discord invite link',tt_servers:'Servers',tt_addsrv:'+ Add server',tt_name:'Name',tt_domain:'Address',tt_icon:'Icon URL (optional)',tt_baddisc:'Invalid Discord link (it must start with https://discord.gg/).',nav_rank:'Rankings',nav_how:'How tiers work',nav_test:'Get tested',eyebrow:'Minecraft PvP tier list',
+ en:{unsaved:'Unsaved changes',nochange:'No changes to save.',pub_stale:'GitHub has newer changes than this page. Refresh the page first, then redo your edits.',pub_forget:'Forget token',pub_forgot:'Token removed from this browser.',dev_tok:'Token',tt_eb:'Tier test',tt_h:'Want to get tested?',tt_p:'Request a tier test from our testers on Discord. Join the server, pick the mode you want to be ranked in and wait for your turn.',tt_discord:'Join our Discord',tt_soon:'Discord link coming soon',tt_srv_h:'Allowed test servers',tt_srv_p:'Tier tests are only held on these servers.',tt_back:'← Back to rankings',tt_cta:'Request a tier test',dev_pub:'Save',pub_title:'Save',pub_hint:'Paste your GitHub token once; it is kept in this browser. Save then uploads everything you changed, all at once.',theme_light:'Light mode',theme_dark:'Dark mode',pub_token:'GitHub token',pub_go:'Save',pub_need:'Enter the GitHub token.',pub_auth:'GitHub rejected the save. The token may lack permission.',pub_404:'Repository or branch not found.',pub_fail:'Saving failed. Try again.',pub_ok:'Saved! Everyone will see the update within 2–3 minutes.',pub_busy:'Saving…',tt_dlink:'Discord invite link',tt_servers:'Servers',tt_addsrv:'+ Add server',tt_name:'Name',tt_domain:'Address',tt_icon:'Icon URL (optional)',tt_baddisc:'Invalid Discord link (it must start with https://discord.gg/).',nav_rank:'Rankings',nav_how:'How tiers work',nav_test:'Get tested',eyebrow:'Minecraft PvP tier list',
   lead:'Every fighter, ranked by testers across thirteen game modes. Find your name, see your tier, climb the board.',
   search:'Search a player',demo:'Example players. Replace the list in the page code with your own testers\' results.',
   how_h:'How tiers work',how_p:'Each mode has five tiers and every tier has three levels: High (HT), Mid (MT) and Low (LT). Tier 1 is the top. Your overall score is the sum of the points from all your modes.',
   s1:'Join the Discord and pick the mode you want to be tested in.',s2:'Wait for a tester in the queue and fight them in a set of matches.',s3:'Your result is posted and your tier appears on this board.',
-  th_tier:'Tier',th_level:'Level',th_pts:'Points',foot:'Not affiliated with Mojang or Microsoft.',foot2:'Made by the',dev_title:'Developer access',dev_prompt:'Enter the code. Attempts left: {n}',dev_enter:'Enter',dev_cancel:'Cancel',dev_wrong:'Wrong code',dev_locked:'Locked. Try again in 24 hours.',dev_on:'Developer mode on',dev_off:'Developer mode off',dev_badge:'DEV MODE',dev_hint:'Click any tier to change it',dev_add:'+ Add player',dev_data:'Data',dev_reset:'Reset',dev_reset2:'Click again to confirm',dev_reset_done:'Back to the original list',dev_exit:'Exit',ed_title:'Edit player',ed_title_new:'New player',ed_name:'Name',ed_skin:'Skin username (optional)',ed_region:'Region',ed_color:'Name color',ed_nocolor:'Default color',ed_tag:'Tag next to name (e.g. Owner)',ed_tagcolor:'Tag color',ed_tiers:'Tiers',ed_save:'Save',ed_delete:'Delete',ed_edit:'Edit',ed_dup:'This name already exists',ed_req:'Name is required',ed_saved:'Saved',ed_skinfile:'Custom skin (PNG 64×64)',ed_skincur:'Current custom skin',ed_skinrm:'Remove skin',skin_bad:'The skin file must be a PNG of 64×64 or 64×32.',skin_upok:'Skin saved to skins.json in the repo.',skin_rmok:'Skin removed from the repo.',skin_upfail:'Skin upload failed. Try again.',data_title:'Data',data_hint:'This is the full content of data.js. Edits are saved in this browser until you press Publish. You can also paste it into data.js yourself.',data_copy:'Copy',data_copied:'Copied',data_apply:'Apply',data_bad:'Could not read this data',
+  th_tier:'Tier',th_level:'Level',th_pts:'Points',foot:'Not affiliated with Mojang or Microsoft.',foot2:'Made by the',dev_title:'Developer access',dev_prompt:'Enter the code. Attempts left: {n}',dev_enter:'Enter',dev_cancel:'Cancel',dev_wrong:'Wrong code',dev_locked:'Locked. Try again in 24 hours.',dev_on:'Developer mode on',dev_off:'Developer mode off',dev_badge:'DEV MODE',dev_hint:'Click any tier to change it',dev_add:'+ Add player',dev_data:'Data',dev_reset:'Reset',dev_reset2:'Click again to confirm',dev_reset_done:'Back to the original list',dev_exit:'Exit',ed_title:'Edit player',ed_title_new:'New player',ed_name:'Name',ed_skin:'Skin username (optional)',ed_region:'Region',ed_color:'Name color',ed_nocolor:'Default color',ed_tag:'Tag next to name (e.g. Owner)',ed_tagcolor:'Tag color',ed_tiers:'Tiers',ed_save:'Save',ed_delete:'Delete',ed_edit:'Edit',ed_dup:'This name already exists',ed_req:'Name is required',ed_saved:'Saved',ed_skinfile:'Custom skin (PNG 64×64)',ed_skincur:'Current custom skin',ed_skinrm:'Remove skin',skin_bad:'The skin file must be a PNG of 64×64 or 64×32.',skin_upok:'Skin added. Press Save to upload it.',skin_rmok:'Skin removed. Press Save to apply it.',skin_upfail:'Skin upload failed. Try again.',data_title:'Data',data_hint:'This is the full content of data.js. Edits are saved in this browser until you press Publish. You can also paste it into data.js yourself.',data_copy:'Copy',data_copied:'Copied',data_apply:'Apply',data_bad:'Could not read this data',
   overall:'Overall',players:'Players',points:'Points',rank:'Rank',region:'Region',pts:'pts',tier:'Tier',
   c_players:'Players',c_modes:'Modes',c_t1:'Tier 1',none:'No players here',noresult:'No player matches your search.',
   high:'High',mid:'Mid',low:'Low',unranked:'Unranked',kit:'Kit',kpi_pts:'Total points',kpi_rank:'Global rank',kpi_best:'Best tier',kpi_modes:'Modes tested',tiers_h:'Tier breakdown',
   th_player:'Player',th_tiers:'Tiers',th_points:'Points',close:'Close',modes_played:'Modes tested',best:'Best tier'},
- ar:{tt_eb:'تير تست',tt_h:'عايز تتختبر؟',tt_p:'اطلب تير تست من التسترز على الديسكورد. ادخل السيرفر، اختار الوضع اللي عايز تتصنف فيه واستنى دورك.',tt_discord:'ادخل الديسكورد',tt_soon:'رابط الديسكورد هيتضاف قريب',tt_srv_h:'السيرفرات المسموحة للتست',tt_srv_p:'التستات بتتعمل على السيرفرات دي بس.',tt_back:'الرجوع للترتيب →',tt_cta:'اطلب تير تست',dev_pub:'حفظ',pub_title:'حفظ',pub_hint:'تعديلاتك هتتحفظ وكل الزوار هيشوفوها خلال ٢-٣ دقيقة.',theme_light:'الوضع الفاتح',theme_dark:'الوضع الداكن',pub_token:'توكن GitHub',pub_go:'حفظ',pub_need:'اكتب توكن GitHub.',pub_auth:'جيت هب رفضت الحفظ. التوكن ممكن ميكونوش عنده صلاحية.',pub_404:'مش لاقي الريبو أو الفرع.',pub_fail:'فشل الحفظ. جرب تاني.',pub_ok:'اتحفظ! الكل هيشوف التحديث خلال ٢-٣ دقائق.',pub_busy:'جاري الحفظ…',tt_dlink:'رابط الديسكورد',tt_servers:'السيرفرات',tt_addsrv:'+ سيرفر',tt_name:'الاسم',tt_domain:'العنوان',tt_icon:'رابط الأيقونة (اختياري)',tt_baddisc:'رابط ديسكورد غير صالح (لازم يبدأ بـ https://discord.gg/).',nav_rank:'الترتيب',nav_how:'إزاي التيرات شغالة',nav_test:'اتختبر',eyebrow:'قائمة تيرات ماين كرافت PvP',
+ ar:{unsaved:'تعديلات غير محفوظة',nochange:'مفيش تعديلات للحفظ.',pub_stale:'GitHub فيه تعديلات أحدث من الصفحة دي. اعمل ريفرش الأول وبعدين كرر تعديلاتك.',pub_forget:'امسح التوكن',pub_forgot:'التوكن اتمسح من المتصفح ده.',dev_tok:'التوكن',tt_eb:'تير تست',tt_h:'عايز تتختبر؟',tt_p:'اطلب تير تست من التسترز على الديسكورد. ادخل السيرفر، اختار الوضع اللي عايز تتصنف فيه واستنى دورك.',tt_discord:'ادخل الديسكورد',tt_soon:'رابط الديسكورد هيتضاف قريب',tt_srv_h:'السيرفرات المسموحة للتست',tt_srv_p:'التستات بتتعمل على السيرفرات دي بس.',tt_back:'الرجوع للترتيب →',tt_cta:'اطلب تير تست',dev_pub:'حفظ',pub_title:'حفظ',pub_hint:'حط توكن GitHub مرة واحدة وبيتحفظ في المتصفح ده. زرار الحفظ بيرفع كل اللي عدلته مرة واحدة.',theme_light:'الوضع الفاتح',theme_dark:'الوضع الداكن',pub_token:'توكن GitHub',pub_go:'حفظ',pub_need:'اكتب توكن GitHub.',pub_auth:'جيت هب رفضت الحفظ. التوكن ممكن ميكونوش عنده صلاحية.',pub_404:'مش لاقي الريبو أو الفرع.',pub_fail:'فشل الحفظ. جرب تاني.',pub_ok:'اتحفظ! الكل هيشوف التحديث خلال ٢-٣ دقائق.',pub_busy:'جاري الحفظ…',tt_dlink:'رابط الديسكورد',tt_servers:'السيرفرات',tt_addsrv:'+ سيرفر',tt_name:'الاسم',tt_domain:'العنوان',tt_icon:'رابط الأيقونة (اختياري)',tt_baddisc:'رابط ديسكورد غير صالح (لازم يبدأ بـ https://discord.gg/).',nav_rank:'الترتيب',nav_how:'إزاي التيرات شغالة',nav_test:'اتختبر',eyebrow:'قائمة تيرات ماين كرافت PvP',
   lead:'كل لاعب متصنف من التسترز في ١٣ وضع لعب. دوّر على اسمك، شوف تيرك، واطلع في الترتيب.',
   search:'ابحث عن لاعب',demo:'لاعبين تجريبيين. بدّل القائمة في كود الصفحة بنتائج لاعبينك الحقيقية.',
   how_h:'إزاي التيرات شغالة',how_p:'كل وضع فيه خمس تيرات، وكل تير ليه ٣ مستويات: عالي (HT)، متوسط (MT)، ومنخفض (LT). التير ١ هو الأعلى. مجموع نقاطك هو مجموع نقاط كل الأوضاع.',
   s1:'ادخل الديسكورد واختار الوضع اللي عايز تتختبر فيه.',s2:'استنى دورك مع التستر وقاتله في كذا جولة.',s3:'النتيجة بتتنشر وتيرك بيظهر في الجدول ده.',
-  th_tier:'التير',th_level:'المستوى',th_pts:'النقاط',foot:'مش تابع لموجانج ولا مايكروسوفت.',foot2:'من تصميم',dev_title:'دخول المطور',dev_prompt:'اكتب الكود. المحاولات المتبقية: {n}',dev_enter:'دخول',dev_cancel:'إلغاء',dev_wrong:'الكود غلط',dev_locked:'اتقفل. جرب بعد ٢٤ ساعة.',dev_on:'وضع المطور شغال',dev_off:'وضع المطور اتقفل',dev_badge:'وضع المطور',dev_hint:'اضغط على أي تير عشان تغيره',dev_add:'+ إضافة لاعب',dev_data:'البيانات',dev_reset:'إعادة ضبط',dev_reset2:'اضغط تاني للتأكيد',dev_reset_done:'رجعت القائمة الأصلية',dev_exit:'خروج',ed_title:'تعديل لاعب',ed_title_new:'لاعب جديد',ed_name:'الاسم',ed_skin:'اسم السكن (اختياري)',ed_region:'المنطقة',ed_color:'لون الاسم',ed_nocolor:'اللون الافتراضي',ed_tag:'كلمة جنب الاسم (مثلا Owner)',ed_tagcolor:'لون الكلمة',ed_tiers:'التيرات',ed_save:'حفظ',ed_delete:'حذف',ed_edit:'تعديل',ed_dup:'الاسم ده موجود',ed_req:'الاسم مطلوب',ed_saved:'اتحفظ',ed_skinfile:'اسكن مخصص (PNG 64×64)',ed_skincur:'الاسكن المخصص الحالي',ed_skinrm:'شيل الاسكن',skin_bad:'ملف الاسكن لازم يكون PNG بمقاس 64×64 أو 64×32.',skin_upok:'اتحفظ الاسكن في ملف skins.json بالريبو.',skin_rmok:'اتشال الاسكن من الريبو.',skin_upfail:'رفع الاسكن فشل. جرب تاني.',data_title:'البيانات',data_hint:'ده محتوى ملف data.js كامل. التعديلات بتتحفظ في المتصفح ده لحد ما تدوس نشر. وممكن كمان تلصقه في data.js بنفسك.',data_copy:'نسخ',data_copied:'اتنسخ',data_apply:'تطبيق',data_bad:'مش قادر أقرأ البيانات دي',
+  th_tier:'التير',th_level:'المستوى',th_pts:'النقاط',foot:'مش تابع لموجانج ولا مايكروسوفت.',foot2:'من تصميم',dev_title:'دخول المطور',dev_prompt:'اكتب الكود. المحاولات المتبقية: {n}',dev_enter:'دخول',dev_cancel:'إلغاء',dev_wrong:'الكود غلط',dev_locked:'اتقفل. جرب بعد ٢٤ ساعة.',dev_on:'وضع المطور شغال',dev_off:'وضع المطور اتقفل',dev_badge:'وضع المطور',dev_hint:'اضغط على أي تير عشان تغيره',dev_add:'+ إضافة لاعب',dev_data:'البيانات',dev_reset:'إعادة ضبط',dev_reset2:'اضغط تاني للتأكيد',dev_reset_done:'رجعت القائمة الأصلية',dev_exit:'خروج',ed_title:'تعديل لاعب',ed_title_new:'لاعب جديد',ed_name:'الاسم',ed_skin:'اسم السكن (اختياري)',ed_region:'المنطقة',ed_color:'لون الاسم',ed_nocolor:'اللون الافتراضي',ed_tag:'كلمة جنب الاسم (مثلا Owner)',ed_tagcolor:'لون الكلمة',ed_tiers:'التيرات',ed_save:'حفظ',ed_delete:'حذف',ed_edit:'تعديل',ed_dup:'الاسم ده موجود',ed_req:'الاسم مطلوب',ed_saved:'اتحفظ',ed_skinfile:'اسكن مخصص (PNG 64×64)',ed_skincur:'الاسكن المخصص الحالي',ed_skinrm:'شيل الاسكن',skin_bad:'ملف الاسكن لازم يكون PNG بمقاس 64×64 أو 64×32.',skin_upok:'الاسكن اتضاف. دوس حفظ عشان يترفع.',skin_rmok:'الاسكن اتشال. دوس حفظ عشان يتطبق.',skin_upfail:'رفع الاسكن فشل. جرب تاني.',data_title:'البيانات',data_hint:'ده محتوى ملف data.js كامل. التعديلات بتتحفظ في المتصفح ده لحد ما تدوس نشر. وممكن كمان تلصقه في data.js بنفسك.',data_copy:'نسخ',data_copied:'اتنسخ',data_apply:'تطبيق',data_bad:'مش قادر أقرأ البيانات دي',
   overall:'الإجمالي',players:'لاعب',points:'نقطة',rank:'الترتيب',region:'المنطقة',pts:'نقطة',tier:'تير',
   c_players:'لاعبين',c_modes:'أوضاع',c_t1:'التير ١',none:'مفيش لاعبين هنا',noresult:'مفيش لاعب بالاسم ده.',
   high:'عالي',mid:'متوسط',low:'منخفض',unranked:'غير مصنف',kit:'الإقامة',kpi_pts:'مجموع النقاط',kpi_rank:'الترتيب العام',kpi_best:'أفضل تير',kpi_modes:'أوضاع مختبرة',tiers_h:'تفاصيل التيرات',
@@ -615,7 +631,8 @@ function rankBadge(n){return '<span class="rk">'+(n>3?n:crest(n))+'</span>'}
 var avCache={};
 var AVS={bust:[function(n,s){return 'https://visage.surgeplay.com/bust/'+s+'/'+encodeURIComponent(n)},function(n){return 'https://starlightskins.lunareclipse.studio/render/default/'+encodeURIComponent(n)+'/bust'}],
   full:[function(n,s){return 'https://visage.surgeplay.com/full/'+s+'/'+encodeURIComponent(n)},function(n){return 'https://starlightskins.lunareclipse.studio/render/default/'+encodeURIComponent(n)+'/full'}]};
-function avImg(n,s){var f=faceCache[n];if(f)return '<img class="av px" alt="" decoding="async" src="'+f+'">';return '<img class="av" alt="" decoding="async" data-k="bust" data-s="'+(s||256)+'" data-f="0" data-n="'+esc(n)+'" src="'+AVS.bust[0](n,s||256)+'">'}
+function avImg(n,s){var f=faceCache[n];if(f)return '<span class="avw"><img class="av" alt="" decoding="async" src="'+f+'"></span>';return '<span class="avw">'+avImgRemote(n,s)+'</span>'}
+function avImgRemote(n,s){return '<img class="av" alt="" decoding="async" data-k="bust" data-s="'+(s||256)+'" data-f="0" data-n="'+esc(n)+'" src="'+AVS.bust[0](n,s||256)+'">'}
 function skinImg(n){return '<img class="skin" alt="" decoding="async" data-k="full" data-s="512" data-f="0" data-n="'+esc(n)+'" src="'+AVS.full[0](n,512)+'">'}
 document.addEventListener('error',function(e){var t=e.target;
   if(!t||t.tagName!=='IMG'||!t.hasAttribute('data-k')||t.classList.contains('px'))return;
@@ -677,8 +694,8 @@ function sigOf(p,c){return h53(JSON.stringify([p,c]))}
 CFG=sanitizeCfg(DATA);
 var BASE=JSON.parse(JSON.stringify(PLAYERS)),BASEC=JSON.parse(JSON.stringify(CFG)),BASE_SIG=sigOf(BASE,CFG);
 PLAYERS=sanitize(JSON.parse(JSON.stringify(BASE)))||[];
-function savePlayers(){try{localStorage.setItem('antiers_data',JSON.stringify({sig:BASE_SIG,p:cleanList(),c:CFG}))}catch(e){}}
-function loadSaved(){try{var o=JSON.parse(localStorage.getItem('antiers_data'));if(o&&o.sig===BASE_SIG){var a=sanitize(o.p);if(a){PLAYERS=a;if(o.c)CFG=sanitizeCfg(o.c)}}}catch(e){}}
+function savePlayers(){markDirty()}
+function loadSaved(){}
 function cleanList(){return PLAYERS.map(function(p){var o={n:p.n,r:p.r};if(p.skin)o.skin=p.skin;if(p.color)o.color=p.color;if(p.tag){o.tag=p.tag;o.tagColor=p.tagColor}o.t=p.t;return o})}
 loadSaved();
 var RANKED=[];
@@ -777,6 +794,7 @@ function proceduralSkin(name){
   R(pants,16,48,16,16);R('#222222',16,62,16,2);R(shirt,32,48,16,16);R(skin,32,60,16,4);
   return c}
 function mount3D(stage,name,flatFallback){
+  if(document.documentElement.classList.contains('lite')){flatFallback();return}
   var load=document.createElement('span');load.className='sv-load';load.textContent='3D…';stage.appendChild(load);
   var gone=false;
   function fail(){if(gone)return;gone=true;if(SV.canvas&&SV.canvas.parentNode)SV.canvas.parentNode.removeChild(SV.canvas);if(load.parentNode)load.remove();flatFallback()}
@@ -880,7 +898,7 @@ function attSave(o){MEMATT=o;try{localStorage.setItem('antiers_att',JSON.stringi
 function $(id){return document.getElementById(id)}
 var toastT;function toast(msg){var t=$('toast');t.textContent=msg;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(function(){t.hidden=true},2600)}
 function refresh(){recalc();renderStats();renderPodium();renderView();renderTest()}
-function setDev(v){DEV=v;try{sessionStorage.setItem('antiers_dev',v?'1':'0')}catch(e){}document.body.classList.toggle('dev',v)}
+function setDev(v){DEV=v;if(v&&typeof devSync==='function')devSync();try{sessionStorage.setItem('antiers_dev',v?'1':'0')}catch(e){}document.body.classList.toggle('dev',v)}
 function openCode(){
   var a=attState();
   if(a.t&&Date.now()<a.t){toast(T('dev_locked'));return}
@@ -927,7 +945,7 @@ function openEditor(name){
     return '<label class="edt"><span>'+icon(m.k,24)+esc(m.n)+'</span><select id="ed-t-'+m.k+'">'+o+'</select></label>'}).join('');
   var regs=REGIONS.map(function(r){return '<option'+(d.r===r?' selected':'')+'>'+r+'</option>'}).join('');
   var skinUI='';
-  if(p&&SKINS[p.n])skinUI='<div class="f"><span>'+T('ed_skincur')+'</span><div class="crow">'+(faceCache[p.n]?'<img class="av px" style="width:44px;height:44px" src="'+faceCache[p.n]+'" alt="">':'')+'<label class="chk"><input id="ed-skinrm" type="checkbox">'+T('ed_skinrm')+'</label></div></div>';
+  if(p&&SKINS[p.n])skinUI='<div class="f"><span>'+T('ed_skincur')+'</span><div class="crow">'+(faceCache[p.n]?'<img class="av" style="width:44px;height:44px" src="'+faceCache[p.n]+'" alt="">':'')+'<label class="chk"><input id="ed-skinrm" type="checkbox">'+T('ed_skinrm')+'</label></div></div>';
   skinUI+='<label class="f"><span>'+T('ed_skinfile')+'</span><input type="file" id="ed-skinfile" accept="image/png"></label>';
   $('edbody').innerHTML='<h3>'+T(p?'ed_title':'ed_title_new')+'</h3>'
    +'<div class="edgrid"><label class="f"><span>'+T('ed_name')+'</span><input id="ed-n" maxlength="20" value="'+esc(d.n)+'"></label>'
@@ -981,7 +999,7 @@ $('dv-data').addEventListener('click',openData);
 $('dv-exit').addEventListener('click',function(){setDev(false);closeModal();refresh();toast(T('dev_off'))});
 var rst;$('dv-reset').addEventListener('click',function(){var b=$('dv-reset');
   if(b.getAttribute('data-sure')!=='1'){b.setAttribute('data-sure','1');b.textContent=T('dev_reset2');clearTimeout(rst);rst=setTimeout(function(){b.setAttribute('data-sure','0');b.textContent=T('dev_reset')},3000);return}
-  b.setAttribute('data-sure','0');b.textContent=T('dev_reset');try{localStorage.removeItem('antiers_data')}catch(e){}PLAYERS=sanitize(JSON.parse(JSON.stringify(BASE)))||[];CFG=JSON.parse(JSON.stringify(BASEC));refresh();toast(T('dev_reset_done'))});
+  b.setAttribute('data-sure','0');b.textContent=T('dev_reset');try{localStorage.removeItem('antiers_data')}catch(e){}PLAYERS=sanitize(JSON.parse(JSON.stringify(BASE)))||[];CFG=JSON.parse(JSON.stringify(BASEC));SKINS=Object.assign({},SKINS_BASE);SK_SET={};SK_DEL={};faceCache={};skinUrlCache={};DIRTY=false;updDirty();Promise.all(Object.keys(SKINS).map(cacheSkin)).then(aliasSkins).then(refresh);refresh();toast(T('dev_reset_done'))});
 document.addEventListener('click',function(e){var b=e.target.closest('[data-edit]');if(b)openEditor(b.getAttribute('data-edit'))});
 document.addEventListener('keydown',function(e){if(e.key!=='Escape')return;
   if($('picker')){closePicker();return}
@@ -1016,35 +1034,33 @@ function route(){var tt=location.hash==='#tiertest';document.body.classList.togg
 window.addEventListener('hashchange',route);
 
 var GH_REPO=['SIGMAxoxman1','Antiers'].join('/'),GH_BRANCH='main',TKEY='antiers_gh_tok';
-var TOK_ENC='34001305143a30280e2736565c221c3c1e380030570c131621692a1b2e2a553101302b3e2a0f250b0f6d030924643d34370b342a150d2318041b3535371318303d133838333e2d081e5c060a360a39193f1d5c505e59315a112b201d05';
-function rawTok(){var k='SigmaXoXo';return TOK_ENC.replace(/../g,function(b,o){return String.fromCharCode(parseInt(b,16)^k.charCodeAt((o/2)%k.length))})}
+try{localStorage.removeItem('antiers_data')}catch(e){}   /* edits live in memory only: refreshing returns to what is on GitHub */
+var DIRTY=false,SK_SET={},SK_DEL={},SKINS_BASE={};
+function clone(o){return JSON.parse(JSON.stringify(o))}
 function storedTok(){try{return localStorage.getItem(TKEY)||''}catch(e){return''}}
 function b64(t){var u=new TextEncoder().encode(t),b='';for(var i=0;i<u.length;i++)b+=String.fromCharCode(u[i]);return btoa(b)}
-function pubMode(){$('pubmsg').textContent='';$('pubmsg').style.color='';$('gh-tokrow').hidden=true;$('gh-token').value=''}
-$('dv-pub').addEventListener('click',function(){pubMode();$('pubdlg').hidden=false;setTimeout(function(){$('pub-go').focus()},30)});
-$('pub-x').addEventListener('click',function(){$('pubdlg').hidden=true});
-$('pub-go').addEventListener('click',function(){
-  var msg=$('pubmsg'),btn=$('pub-go'),inp=$('gh-token').value.trim(),tok=inp||storedTok()||rawTok();
-  msg.style.color='';
-  if(!tok){msg.textContent=T('pub_need');return}
-  btn.disabled=true;msg.style.color='var(--muted)';msg.textContent=T('pub_busy');
-  var H={'Authorization':'Bearer '+tok,'Accept':'application/vnd.github+json'},api='https://api.github.com/repos/'+GH_REPO+'/contents/data.js';
-  fetch(api+'?ref='+encodeURIComponent(GH_BRANCH)+'&t='+Date.now(),{headers:H,cache:'no-store'}).then(function(r){if(r.status===404)return null;if(!r.ok)throw r;return r.json()}).then(function(j){
-    var body={message:'Update data (ANtiers dev mode)',content:b64(exportText()),branch:GH_BRANCH};if(j&&j.sha)body.sha=j.sha;
-    return fetch(api,{method:'PUT',headers:Object.assign({'Content-Type':'application/json'},H),body:JSON.stringify(body)})
-  }).then(function(r){if(!r.ok)throw r;
-    if(inp){try{localStorage.setItem(TKEY,tok)}catch(e){}}
-    btn.disabled=false;msg.style.color='var(--accent)';msg.textContent=T('pub_ok');toast(T('pub_ok'));$('gh-tokrow').hidden=true;$('gh-token').value=''
-  }).catch(function(e){btn.disabled=false;msg.style.color='';var st=e&&e.status;
-    if(st===401||st===403){try{localStorage.removeItem(TKEY)}catch(er){}$('gh-tokrow').hidden=false;$('gh-token').value=''}
-    msg.textContent=(st===401||st===403)?T('pub_auth'):st===404?T('pub_404'):T('pub_fail')})});
+function utf8dec(b){var r=atob(b.replace(/\s/g,'')),u=new Uint8Array(r.length);for(var i=0;i<r.length;i++)u[i]=r.charCodeAt(i);return new TextDecoder().decode(u)}
+function updDirty(){var e=$('dv-dirty');if(e)e.hidden=!(DIRTY&&DEV)}
+function markDirty(){DIRTY=true;updDirty()}
+window.addEventListener('beforeunload',function(e){if(DIRTY&&DEV){e.preventDefault();e.returnValue=''}});
 
-/* ---------- custom skins: uploads are stored in skins.json in the repo ---------- */
-function ghApi(path){return 'https://api.github.com/repos/'+GH_REPO+'/contents/'+path}
-function ghHeaders(tok){return {'Authorization':'Bearer '+tok,'Accept':'application/vnd.github+json'}}
-function ghGetJson(tok,path){return fetch(ghApi(path)+'?ref='+encodeURIComponent(GH_BRANCH)+'&t='+Date.now(),{headers:ghHeaders(tok),cache:'no-store'}).then(function(r){if(r.status===404)return null;if(!r.ok)throw r;return r.json()})}
-function ghPut(tok,path,text,msg){return ghGetJson(tok,path).then(function(j){var body={message:msg,content:b64(text),branch:GH_BRANCH};if(j&&j.sha)body.sha=j.sha;
-  return fetch(ghApi(path),{method:'PUT',headers:Object.assign({'Content-Type':'application/json'},ghHeaders(tok)),body:JSON.stringify(body)})}).then(function(r){if(!r.ok)throw r;return r})}
+/* --- talking to GitHub --- */
+function ghH(tok,raw){return {'Authorization':'Bearer '+tok,'Accept':raw?'application/vnd.github.raw+json':'application/vnd.github+json'}}
+function ghRaw(tok,path){return fetch('https://api.github.com/repos/'+GH_REPO+'/contents/'+path+'?ref='+encodeURIComponent(GH_BRANCH)+'&t='+Date.now(),{headers:ghH(tok,1),cache:'no-store'}).then(function(r){if(r.status===404)return null;if(!r.ok)throw r;return r.text()})}
+function ghJson(r){if(!r.ok)throw r;return r.json()}
+function ghPost(url,tok,body,method){return fetch(url,{method:method||'POST',headers:Object.assign({'Content-Type':'application/json'},ghH(tok)),body:JSON.stringify(body)}).then(ghJson)}
+function ghCommit(tok,files,msg){var base='https://api.github.com/repos/'+GH_REPO,br=encodeURIComponent(GH_BRANCH);
+  return fetch(base+'/git/ref/heads/'+br,{headers:ghH(tok),cache:'no-store'}).then(ghJson).then(function(ref){
+    return fetch(base+'/git/commits/'+ref.object.sha,{headers:ghH(tok),cache:'no-store'}).then(ghJson).then(function(c){
+      var tree=Object.keys(files).map(function(p){return {path:p,mode:'100644',type:'blob',content:files[p]}});
+      return ghPost(base+'/git/trees',tok,{base_tree:c.tree.sha,tree:tree}).then(function(t){return ghPost(base+'/git/commits',tok,{message:msg,tree:t.sha,parents:[c.sha]})})})
+    .then(function(nc){return ghPost(base+'/git/refs/heads/'+br,tok,{sha:nc.sha},'PATCH')})})}
+
+/* --- skins.json: a flat {name: base64-png} map (older broken files that wrap it in GitHub metadata are repaired) --- */
+function skinsFromObj(o,out,d){out=out||{};d=d||0;if(!o||typeof o!=='object'||Array.isArray(o)||d>60)return out;
+  if(typeof o.content==='string'&&typeof o.sha==='string'){try{skinsFromObj(JSON.parse(utf8dec(o.content)),out,d+1)}catch(e){}}
+  for(var k in o){if(/^[A-Za-z0-9_]{1,20}$/.test(k)&&typeof o[k]==='string'&&/^iVBOR/.test(o[k]))out[k]=o[k]}
+  return out}
 function readSkinFile(file){return new Promise(function(res,rej){
   if(!file||(!/image\/png/.test(file.type)&&!/\.png$/i.test(file.name))){rej(0);return}
   var fr=new FileReader();
@@ -1052,34 +1068,90 @@ function readSkinFile(file){return new Promise(function(res,rej){
     if(!((im.width===64&&im.height===64)||(im.width===64&&im.height===32))){rej(0);return}
     res(fr.result)};im.onerror=function(){rej(0)};im.src=fr.result};
   fr.onerror=function(){rej(0)};fr.readAsDataURL(file)})}
+/* a small 3D bust drawn from the skin texture, turned like the other avatars (the side of the head is on the left) */
 function faceFrom(url){return new Promise(function(res){
-  var im=new Image();im.onload=function(){try{var c=document.createElement('canvas');c.width=c.height=8;var x=c.getContext('2d');x.imageSmoothingEnabled=false;
-    x.drawImage(im,8,8,8,8,0,0,8,8);x.drawImage(im,40,8,8,8,0,0,8,8);res(c.toDataURL())}catch(e){res(null)}};im.onerror=function(){res(null)};im.src=url})}
+  var im=new Image();im.onload=function(){try{
+    var th=.5,ph=.28,cs=Math.cos(th),sn_=Math.sin(th),cp=Math.cos(ph),sp=Math.sin(ph);
+    /* unit vectors (per skin pixel): ex = along the front, ez = toward the viewer, ey = down */
+    function V(k){return {ex:[cs*k,-sn_*sp*k],ez:[sn_*k,cs*sp*k],ey:[0,cp*k]}}
+    function pts(k,T){var v=V(k),A=function(o,a,n){return [o[0]+a[0]*n,o[1]+a[1]*n]},
+      Tt=A(A(T,v.ex,4),v.ez,2),H=A(A(Tt,v.ez,0),v.ey,-8);return {v:v,Tt:Tt,H:H}}
+    /* fit: measure the bounding box at k=1, then scale */
+    var q=pts(1,[0,0]),minx=Math.min(-4*q.v.ez[0],q.H[0]-8*q.v.ez[0]),maxx=16*q.v.ex[0],miny=Math.min(q.H[1]-8*q.v.ez[1]+8*q.v.ex[1],-4*q.v.ez[1]),maxy=5.5*q.v.ey[1];
+    var k=Math.min(18,296/Math.max(maxx-minx,maxy-miny)),T=[160-k*(minx+maxx)/2,160-k*(miny+maxy)/2];
+    var p=pts(k,T),v=p.v,modern=im.height>=64;
+    function add(o,a,n){return [o[0]+a[0]*n,o[1]+a[1]*n]}
+    var c=document.createElement('canvas');c.width=c.height=320;var x=c.getContext('2d');x.imageSmoothingEnabled=false;
+    function M(sx,sy,sw,sh,o,ux,uy,flip){x.save();x.setTransform(ux[0],ux[1],uy[0],uy[1],o[0],o[1]);if(flip){x.translate(sw,0);x.scale(-1,1)}x.drawImage(im,sx,sy,sw,sh,0,0,sw,sh);x.restore()}
+    function front(sx,sy,sw,sh,TL,flip){M(sx,sy,sw,sh,TL,v.ex,v.ey,flip)}
+    function top(sx,sy,sw,sh,TL,dep,flip){M(sx,sy,sw,sh,add(TL,v.ez,-dep),v.ex,v.ez,flip)}
+    function side(sx,sy,sw,sh,TL,dep){M(sx,sy,sw,sh,add(TL,v.ez,-dep),v.ez,v.ey)}
+    function poly(P,col){x.fillStyle=col;x.beginPath();x.moveTo(P[0][0],P[0][1]);for(var i=1;i<P.length;i++)x.lineTo(P[i][0],P[i][1]);x.fill()}
+    function sideShade(TL,dep,h){var b=add(TL,v.ez,-dep);poly([TL,b,add(b,v.ey,h),add(TL,v.ey,h)],'rgba(0,0,0,.28)')}
+    function topLight(TL,dep,w){var b=add(TL,v.ez,-dep);poly([TL,b,add(b,v.ex,w),add(TL,v.ex,w)],'rgba(255,255,255,.16)')}
+    x.beginPath();x.rect(0,0,320,T[1]+5.5*v.ey[1]);x.clip();
+    var armR=T,torso=add(T,v.ex,4),armL=add(T,v.ex,12),la=modern?[36,52]:[44,20];
+    /* body: far arm, torso, near arm */
+    front(la[0],la[1],4,12,armL,!modern);if(modern)front(52,52,4,12,armL);top(modern?36:44,modern?48:16,4,4,armL,4);
+    front(20,20,8,12,torso);if(modern)front(20,36,8,12,torso);top(20,16,8,4,torso,4);
+    front(44,20,4,12,armR);if(modern)front(44,36,4,12,armR);
+    side(40,20,4,12,armR,4);if(modern)side(40,36,4,12,armR,4);sideShade(armR,4,12);
+    top(44,16,4,4,armR,4);topLight(armR,4,4);
+    /* head */
+    var H=p.H;
+    side(0,8,8,8,H,8);side(32,8,8,8,H,8);top(8,0,8,8,H,8);if(im.height>=32)top(40,0,8,8,H,8);
+    front(8,8,8,8,H);front(40,8,8,8,H);
+    sideShade(H,8,8);topLight(H,8,8);
+    res(c.toDataURL())}catch(e){res(null)}};im.onerror=function(){res(null)};im.src=url})}
 function cacheSkin(name){var b=SKINS[name];if(!b)return Promise.resolve();var url='data:image/png;base64,'+b;skinUrlCache[name]=url;
   return faceFrom(url).then(function(f){if(f)faceCache[name]=f})}
 function aliasSkins(){PLAYERS.forEach(function(p){if(!SKINS[p.n])return;var s=sn(p);if(s!==p.n){skinUrlCache[s]=skinUrlCache[p.n];if(faceCache[p.n])faceCache[s]=faceCache[p.n]}})}
-function commitSkins(set,del){set=set||{};del=del||[];var names=Object.keys(set);
-  if(!names.length&&!del.length)return;
-  names.forEach(function(k){SKINS[k]=set[k]});
-  del.forEach(function(k){delete SKINS[k];delete skinUrlCache[k];delete faceCache[k]});
-  Promise.all(names.map(cacheSkin)).then(aliasSkins).then(function(){refresh()});
-  var tok=storedTok()||rawTok();
-  ghGetJson(tok,'skins.json').then(function(o){var t=(o&&typeof o==='object'&&!Array.isArray(o))?o:{};
-    names.forEach(function(k){t[k]=set[k]});del.forEach(function(k){delete t[k]});
-    return ghPut(tok,'skins.json',JSON.stringify(t),'Update skins (ANtiers dev mode)')
-  }).then(function(){toast(names.length?T('skin_upok'):T('skin_rmok'))
-  }).catch(function(e){var st=e&&e.status;toast((st===401||st===403)?T('pub_auth'):T('skin_upfail'))})}
+/* uploads/removals are held in memory until Save */
+function commitSkins(set,del){set=set||{};del=del||[];var names=Object.keys(set);if(!names.length&&!del.length)return;
+  del.forEach(function(k){delete SKINS[k];delete skinUrlCache[k];delete faceCache[k];delete SK_SET[k];SK_DEL[k]=1});
+  names.forEach(function(k){SKINS[k]=set[k];SK_SET[k]=set[k];delete SK_DEL[k]});
+  markDirty();toast(names.length?T('skin_upok'):T('skin_rmok'));
+  Promise.all(names.map(cacheSkin)).then(aliasSkins).then(function(){refresh()})}
 
-/* fetch the newest data.js so visitors never see a stale cached copy */
-if(/^https?:$/.test(location.protocol)){fetch('data.js?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.text():Promise.reject()}).then(function(txt){
-  var o=parseData(txt);if(!o)return;var c=sanitizeCfg(o),sig=sigOf(o.players,c);if(sig===BASE_SIG)return;
-  BASE=JSON.parse(JSON.stringify(o.players));BASEC=JSON.parse(JSON.stringify(c));BASE_SIG=sig;
-  PLAYERS=sanitize(JSON.parse(JSON.stringify(BASE)))||[];CFG=c;loadSaved();refresh()}).catch(function(){})}
+/* --- final Save: one commit with everything that changed --- */
+function finalSave(tok){
+  return Promise.all([ghRaw(tok,'data.js'),ghRaw(tok,'skins.json')]).then(function(rs){
+    var rd=rs[0]?parseData(rs[0]):null;
+    if(rd&&sigOf(rd.players,sanitizeCfg(rd))!==BASE_SIG)throw {stale:1};
+    var files={'data.js':exportText()};
+    if(Object.keys(SK_SET).length||Object.keys(SK_DEL).length){var cur={};try{cur=skinsFromObj(rs[1]?JSON.parse(rs[1]):{})}catch(e){}
+      Object.keys(SK_DEL).forEach(function(k){delete cur[k]});Object.keys(SK_SET).forEach(function(k){cur[k]=SK_SET[k]});files['skins.json']=JSON.stringify(cur)}
+    return ghCommit(tok,files,'Update ANtiers data (dev mode)')
+  }).then(function(){
+    BASE=clone(cleanList());BASEC=clone(CFG);BASE_SIG=sigOf(BASE,BASEC);SKINS_BASE=Object.assign({},SKINS);SK_SET={};SK_DEL={};DIRTY=false;updDirty()})}
+function say(m,ok){var g=$('pubmsg');if(!$('pubdlg').hidden){g.style.color=ok?'var(--accent)':'';g.textContent=m}toast(m)}
+function openTok(m){$('gh-tokrow').hidden=false;$('gh-token').value='';$('pub-forget').hidden=!storedTok();var g=$('pubmsg');g.style.color='';g.textContent=m||'';$('pubdlg').hidden=false;setTimeout(function(){$('gh-token').focus()},30)}
+function runSave(tok,fromDlg){
+  if(!DIRTY){say(T('nochange'),1);return}
+  var btn=$('pub-go');btn.disabled=true;say(T('pub_busy'),0);
+  finalSave(tok).then(function(){btn.disabled=false;if(fromDlg){try{localStorage.setItem(TKEY,tok)}catch(e){}$('gh-token').value='';setTimeout(function(){$('pubdlg').hidden=true},900)}say(T('pub_ok'),1)},
+  function(e){btn.disabled=false;var st=e&&e.status;
+    if(e&&e.stale){say(T('pub_stale'),0);return}
+    if(st===401||st===403){try{localStorage.removeItem(TKEY)}catch(er){}openTok(T('pub_auth'));return}
+    say(st===404?T('pub_404'):T('pub_fail'),0)})}
+$('dv-pub').addEventListener('click',function(){var t=storedTok();if(!t){openTok();return}runSave(t,false)});
+$('dv-tok').addEventListener('click',function(){openTok()});
+$('pub-x').addEventListener('click',function(){$('pubdlg').hidden=true;$('gh-token').value=''});
+$('pub-forget').addEventListener('click',function(){try{localStorage.removeItem(TKEY)}catch(e){}$('pub-forget').hidden=true;$('pubmsg').style.color='var(--accent)';$('pubmsg').textContent=T('pub_forgot')});
+$('pub-go').addEventListener('click',function(){var t=$('gh-token').value.trim()||storedTok();if(!t){say(T('pub_need'),0);return}runSave(t,true)});
 
-/* load custom skins saved in the repo (skins.json) */
-if(/^https?:$/.test(location.protocol)){fetch('skins.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(o){
-  if(!o||typeof o!=='object'||Array.isArray(o))return;for(var k in o)if(typeof o[k]==='string')SKINS[k]=o[k];
-  Promise.all(Object.keys(SKINS).map(cacheSkin)).then(aliasSkins).then(function(){refresh()})}).catch(function(){})}
+/* --- load the latest data: visitors read the site files, the developer reads GitHub directly (never a stale cached copy) --- */
+function pagesGet(path){return fetch(path+'?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.text():null})}
+function syncRemote(get){return Promise.all([get('data.js'),get('skins.json')]).then(function(rs){
+  if(DIRTY)return;
+  var o=rs[0]?parseData(rs[0]):null;
+  if(o){var c=sanitizeCfg(o);BASE=clone(o.players);BASEC=clone(c);BASE_SIG=sigOf(BASE,BASEC);PLAYERS=sanitize(clone(BASE))||[];CFG=clone(BASEC)}
+  var sk=null;try{sk=rs[1]?skinsFromObj(JSON.parse(rs[1])):null}catch(e){}
+  if(sk){SKINS=sk;SKINS_BASE=Object.assign({},sk);faceCache={};skinUrlCache={}}
+  return Promise.all(Object.keys(SKINS).map(cacheSkin)).then(aliasSkins)}).then(function(){refresh()})}
+function devSync(){var t=storedTok();if(t&&/^https?:$/.test(location.protocol)&&!DIRTY)syncRemote(function(p){return ghRaw(t,p)}).catch(function(){})}
+if(/^https?:$/.test(location.protocol)){var t0=DEV?storedTok():'';
+  syncRemote(t0?function(p){return ghRaw(t0,p)}:pagesGet).catch(function(){if(t0)return syncRemote(pagesGet)}).catch(function(){})}
 
 /* ---------- theme toggle (dark by default) ---------- */
 var SUN='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>',
@@ -1092,7 +1164,7 @@ $('theme').addEventListener('click',function(){setTheme(curTheme()==='light'?'da
 
 /* ---------- hero ambient: drifting ender-pixels ---------- */
 (function(){
-  var cv=document.getElementById('fx'),ctx=cv.getContext('2d'),P=[],W=0,H=0,still=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var cv=document.getElementById('fx'),ctx=cv.getContext('2d'),P=[],W=0,H=0,still=window.matchMedia('(prefers-reduced-motion: reduce)').matches||document.documentElement.classList.contains('lite');
   function cols(){var s=getComputedStyle(document.documentElement);return ['--accent','--t1','--t3','--t4'].map(function(k){return s.getPropertyValue(k).trim()||'#3ee6c4'})}
   var C=cols();
   function size(){var r=cv.getBoundingClientRect(),d=Math.min(window.devicePixelRatio||1,2);W=r.width;H=r.height;cv.width=W*d;cv.height=H*d;ctx.setTransform(d,0,0,d,0,0);C=cols();
