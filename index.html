@@ -789,7 +789,7 @@ function bust3d(url){
     return v.loadSkin(url,{makeVisible:true}).then(function(){
       var P=v.playerObject.skin;
       v.playerObject.rotation.y=.35;P.head.rotation.y=.05;P.head.rotation.x=0;
-      P.rightArm.rotation.z=-.5;P.leftArm.rotation.z=-.3;
+      P.rightArm.rotation.z=-.2;P.leftArm.rotation.z=-.1;
       v.camera.position.set(0,18.3,41);v.controls.target.set(0,7.8,0);v.controls.update();
       v.render();
       return v.canvas.toDataURL('image/png')})
