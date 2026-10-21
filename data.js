@@ -6,6 +6,7 @@ window.ANTIERS_DATA={
   {"n":"antube_","r":"ME","t":{"sword":"LT5","spear":"LT5"}},
   {"n":"anplayer_","r":"ME","tag":"COMBAT MASTER","tagColor":"#ffc233","t":{"sword":"HT3","pot":"HT3","npot":"HT3","uhc":"LT3","axe":"MT3","mace":"HT3","smp":"HT3","op":"LT3","tntcart":"LT3","spearmace":"HT5"}},
   {"n":"Flix__sp","r":"ME","skin":"Sami_sp","t":{"mace":"HT4"}},
-  {"n":"mouhibmejd","r":"ME","t":{"crystal":"MT4"}}
+  {"n":"mouhibmejd","r":"ME","t":{"crystal":"MT4"}},
+  {"n":"Hassn_GOlp","r":"ME","t":{"sword":"LT3","mace":"HT5"}}
 ]
 };
