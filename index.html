@@ -542,7 +542,9 @@ body.pg-test .ttpage{display:flex}
 <script>
 (function(){
 /* ---------- DATA: players, Discord link and servers live in data.js ---------- */
-var PTS={HT1:60,MT1:50,LT1:40,HT2:30,MT2:25,LT2:20,HT3:15,MT3:10,LT3:5,HT4:6,MT4:4,LT4:2,HT5:3,MT5:2,LT5:1};
+var PTS={HT1:60,MT1:52,LT1:45,HT2:30,MT2:25,LT2:20,HT3:10,MT3:8,LT3:6,HT4:4,MT4:3.5,LT4:3,HT5:2,MT5:1.5,LT5:1};
+/* tiebreak so HT>MT>LT even when they share the same points */
+function tv(t){return (PTS[t]||0)+(t&&t.charAt(0)==='H'?.2:t&&t.charAt(0)==='M'?.1:0)}
 var MODES=[
   {k:'sword',n:'Sword',a:'SW',kit:{en:'Netherite sword, shield, golden apples',ar:'سيف نثيريت + درع + تفاح ذهبي'}},
   {k:'crystal',n:'Crystal',a:'CR',kit:{en:'Obsidian, end crystals, totems, golden apples',ar:'أوبسيديان + كريستالات + طُمُوس + تفاح ذهبي'}},
@@ -664,8 +666,8 @@ function isMT(t){return t.charAt(0)==='M'}
 function tipName(t){return T(isHT(t)?'high':isMT(t)?'mid':'low')+' '+T('tier')+' '+tierNum(t)}
 function mname(k){return MODES.filter(function(m){return m.k===k})[0]}
 function pts(p){var s=0;for(var k in p.t)s+=PTS[p.t[k]]||0;return s}
-function best(p){var b=null;for(var k in p.t){if(b===null||PTS[p.t[k]]>PTS[b])b=p.t[k]}return b}
-function bestK(p){var b=null,bv=-1;for(var k in p.t){var v=PTS[p.t[k]]||0;if(b===null||v>bv){b=k;bv=v}}return b}
+function best(p){var b=null;for(var k in p.t){if(b===null||tv(p.t[k])>tv(b))b=p.t[k]}return b}
+function bestK(p){var b=null,bv=-1;for(var k in p.t){var v=tv(p.t[k]);if(b===null||v>bv){b=k;bv=v}}return b}
 function emptySlot(k,pn){return '<span class="tb un" data-tip="'+esc(mname(k).n+' · '+T('unranked'))+'"'+(pn?' data-pk="'+esc(pn)+'" data-mk="'+k+'"':'')+'>'+icon(k,40)+'<span>--</span></span>'}
 function chip(k,t,pn){return '<span class="tb t'+tierNum(t)+(isHT(t)?' ht':isMT(t)?' mid':'')+'" data-tip="'+esc(mname(k).n+' · '+tipName(t))+'"'+(pn?' data-pk="'+esc(pn)+'" data-mk="'+k+'"':'')+'>'+icon(k,40)+'<span>'+t+'</span></span>'}
 function unChip(){return '<span class="chip un" data-tip="'+esc(T('unranked'))+'">--</span>'}
@@ -738,7 +740,7 @@ function renderView(){
     if(!L.length){v.innerHTML='<div class="empty">'+T(PLAYERS.length?'noresult':'none')+'</div>';return}
     h='<div class="listhead"><span>#</span><span>'+T('th_player')+'</span><span class="chips hd">'+MODES.map(function(m){return '<span class="hi" data-tip="'+esc(m.n)+'">'+icon(m.k,22)+'</span>'}).join('')+'</span><span style="text-align:end">'+T('th_points')+'</span></div><div class="list">';
     L.forEach(function(p,i){
-      var ks=Object.keys(p.t).sort(function(a,b){return PTS[p.t[b]]-PTS[p.t[a]]});
+      var ks=Object.keys(p.t).sort(function(a,b){return tv(p.t[b])-tv(p.t[a])});
       h+='<button class="row'+(p.rank<=3?' r'+p.rank:'')+'" data-p="'+esc(p.n)+'" type="button" style="animation-delay:'+Math.min(i,12)*25+'ms">'+rankBadge(p.rank)+''
         +'<span class="who">'+avImg(sn(p))+'<span class="meta"><span class="nrow"><span class="nm"'+ncs(p)+'>'+esc(p.n)+'</span>'+tagH(p)+'</span>'+reg(p.r)+'</span></span>'
         +'<span class="chips">'+MODES.map(function(m){var t=p.t[m.k];return t?chip(m.k,t,p.n):emptySlot(m.k,p.n)}).join('')+'</span>'
@@ -749,7 +751,7 @@ function renderView(){
     h='<div class="cols">';
     for(var n=1;n<=5;n++){
       var L2=PLAYERS.filter(function(p){return p.t[mode]&&tierNum(p.t[mode])==String(n)&&match(p)}).sort(function(a,b){
-        return PTS[b.t[mode]]-PTS[a.t[mode]]||a.rank-b.rank});
+        return tv(b.t[mode])-tv(a.t[mode])||a.rank-b.rank});
       h+='<div class="col t'+n+'"><h3><span class="htitle">'+icon(mode,18)+T('tier')+' '+n+'</span><small>'+L2.length+'</small></h3>';
       if(!L2.length)h+='<div class="none">'+T('none')+'</div>';
       else{h+='<ul>';L2.forEach(function(p){var t=p.t[mode];
@@ -865,7 +867,7 @@ function countUp(el,to){var t0=null,d=900;if(window.matchMedia('(prefers-reduced
 var CUR=null;
 function cardInfo(p,first){
   var bt=best(p),bk=bestK(p),n=bt?tierNum(bt):'5';
-  var ks=MODES.map(function(m){return m.k}).sort(function(a,b){return (p.t[b]?PTS[p.t[b]]:-1)-(p.t[a]?PTS[p.t[a]]:-1)});
+  var ks=MODES.map(function(m){return m.k}).sort(function(a,b){return (p.t[b]?tv(p.t[b]):-1)-(p.t[a]?tv(p.t[a]):-1)});
   var cards=ks.map(function(k){var t=p.t[k],m=mname(k),pk=' data-pk="'+esc(p.n)+'" data-mk="'+k+'"';
     if(!t)return '<div class="mc un" data-tip="'+esc(T('unranked'))+'"'+pk+'>'+icon(k,42)+'<div><small>'+esc(m.n)+'</small><b>--</b></div></div>';
     return '<div class="mc t'+tierNum(t)+'" data-tip="'+esc(m.n+' · '+tipName(t))+'"'+pk+'>'+icon(k,42)+'<div><small>'+esc(m.n)+'</small><b>'+t+'</b></div><i style="width:'+Math.max(6,Math.round(PTS[t]/60*100))+'%"></i></div>'}).join('');
