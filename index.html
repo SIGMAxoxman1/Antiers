@@ -575,10 +575,14 @@ var CUSTOM={
  spear:'<g transform="translate(540 540) rotate(45) scale(1.12) translate(-540 -540)"><path d="M540 60 C590 150 650 250 650 330 L540 290 L430 330 C430 250 490 150 540 60 Z" fill="#d5dde8"/><path d="M540 60 C590 150 650 250 650 330 L540 290 Z" fill="#aab6c6"/><rect x="460" y="300" width="160" height="70" rx="28" fill="#6e7686"/><rect x="505" y="360" width="70" height="610" rx="30" fill="#8b5a2b"/><rect x="505" y="360" width="26" height="610" fill="#a8733f" opacity=".7"/><rect x="485" y="930" width="110" height="70" rx="30" fill="#6e4a24"/></g>',
  spearmace:'<g transform="translate(540 540) rotate(45) scale(1.0) translate(-540 -540)"><path d="M540 60 C590 150 650 250 650 330 L540 290 L430 330 C430 250 490 150 540 60 Z" fill="#d5dde8"/><path d="M540 60 C590 150 650 250 650 330 L540 290 Z" fill="#aab6c6"/><rect x="460" y="300" width="160" height="70" rx="28" fill="#6e7686"/><rect x="505" y="360" width="70" height="610" rx="30" fill="#8b5a2b"/><rect x="505" y="360" width="26" height="610" fill="#a8733f" opacity=".7"/><rect x="485" y="930" width="110" height="70" rx="30" fill="#6e4a24"/></g><g transform="translate(540 540) rotate(-45) scale(1.0) translate(-540 -540)"><polygon points="540,60 600,210 480,210" fill="#98a1b1"/><polygon points="300,150 430,250 340,340" fill="#98a1b1"/><polygon points="780,150 650,250 740,340" fill="#98a1b1"/><polygon points="240,360 400,300 400,420" fill="#7d8696"/><polygon points="840,360 680,300 680,420" fill="#7d8696"/><circle cx="540" cy="370" r="195" fill="#6e7686"/><circle cx="468" cy="300" r="62" fill="#9aa3b2"/><rect x="468" y="520" width="144" height="72" rx="28" fill="#565e6c"/><rect x="505" y="580" width="70" height="400" rx="28" fill="#8b5a2b"/><rect x="505" y="580" width="24" height="400" fill="#a8733f" opacity=".65"/><rect x="483" y="915" width="114" height="72" rx="28" fill="#6e4a24"/></g>'
 };
+/* icons are served from this site (icons/ folder) first; if a file is missing the old remote copy / built-in drawing is used */
+var LOCALPNG={tntcart:'icons/tntcart.png'};
+function svgIcon(k,s){return '<svg class="mi" width="'+s+'" height="'+s+'" viewBox="0 0 1080 1080" aria-hidden="true">'+(CUSTOM[k]||'')+'</svg>'}
 function icon(k,size){
   var s=size||16,u=TIERIMG[k];
-  if(u)return '<img class="mi" width="'+s+'" height="'+s+'" src="https://tiercore.vercel.app/images/'+u+'.svg" alt="" loading="lazy">';
-  return '<svg class="mi" width="'+s+'" height="'+s+'" viewBox="0 0 1080 1080" aria-hidden="true">'+(CUSTOM[k]||'')+'</svg>';
+  if(LOCALPNG[k])return '<img class="mi" width="'+s+'" height="'+s+'" src="'+LOCALPNG[k]+'" alt="" decoding="async" data-fb="svg:'+k+':'+s+'">';
+  if(u)return '<img class="mi" width="'+s+'" height="'+s+'" src="icons/'+u+'.svg" alt="" decoding="async" data-fb="https://tiercore.vercel.app/images/'+u+'.svg">';
+  return svgIcon(k,s);
 }
 
 /* ---------- i18n ---------- */
@@ -640,6 +644,8 @@ function avImg(n,s){var f=faceCache[n];if(f)return '<span class="avw"><img class
 function avImgRemote(n,s){return '<img class="av" alt="" decoding="async" data-k="bust" data-s="'+(s||256)+'" data-f="0" data-n="'+esc(n)+'" src="'+AVS.bust[0](n,s||256)+'">'}
 function skinImg(n){return '<img class="skin" alt="" decoding="async" data-k="full" data-s="512" data-f="0" data-n="'+esc(n)+'" src="'+AVS.full[0](n,512)+'">'}
 document.addEventListener('error',function(e){var t=e.target;
+  if(t&&t.tagName==='IMG'&&t.hasAttribute('data-fb')){var fb=t.getAttribute('data-fb');t.removeAttribute('data-fb');
+    if(fb.indexOf('svg:')===0){var a=fb.split(':'),w=document.createElement('span');w.innerHTML=svgIcon(a[1],+a[2]||16);if(t.parentNode&&w.firstChild)t.parentNode.replaceChild(w.firstChild,t)}else t.src=fb;return}
   if(!t||t.tagName!=='IMG'||!t.hasAttribute('data-k')||t.classList.contains('px'))return;
   var k=t.getAttribute('data-k'),f=+t.getAttribute('data-f')+1,L=AVS[k],n=t.getAttribute('data-n');
   if(f<L.length){t.setAttribute('data-f',f);t.src=L[f](n,+t.getAttribute('data-s'))}
@@ -693,7 +699,7 @@ function sanitizeCfg(o){o=o||{};var c={discord:'',servers:[]};
   if(typeof o.discord==='string'&&/^https:\/\/(www\.)?(discord\.gg|discord\.com\/invite|discordapp\.com\/invite)\/[\w-]{2,}\/?$/i.test(o.discord.trim()))c.discord=o.discord.trim();
   (Array.isArray(o.servers)?o.servers:[]).slice(0,12).forEach(function(v){if(!v||typeof v.n!=='string')return;var n=v.n.trim().slice(0,40);if(!n)return;
     var d=typeof v.d==='string'?v.d.trim().toLowerCase().slice(0,80):'',x={n:n};if(d&&/^[a-z0-9.-]+$/.test(d))x.d=d;
-    if(typeof v.i==='string'&&/^https:\/\/[^\s"'<>]+$/.test(v.i.trim()))x.i=v.i.trim();c.servers.push(x)});
+    if(typeof v.i==='string'&&/^(https:\/\/|icons\/)[^\s"'<>]+$/.test(v.i.trim()))x.i=v.i.trim();c.servers.push(x)});
   return c}
 function sigOf(p,c){return h53(JSON.stringify([p,c]))}
 CFG=sanitizeCfg(DATA);
