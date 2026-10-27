@@ -542,9 +542,7 @@ body.pg-test .ttpage{display:flex}
 <script>
 (function(){
 /* ---------- DATA: players, Discord link and servers live in data.js ---------- */
-var PTS={HT1:60,MT1:52,LT1:45,HT2:30,MT2:25,LT2:20,HT3:10,MT3:8,LT3:6,HT4:4,MT4:3.5,LT4:3,HT5:2,MT5:1.5,LT5:1};
-/* tiebreak so HT>MT>LT even when they share the same points */
-function tv(t){return (PTS[t]||0)+(t&&t.charAt(0)==='H'?.2:t&&t.charAt(0)==='M'?.1:0)}
+var PTS={HT1:60,MT1:50,LT1:40,HT2:30,MT2:25,LT2:20,HT3:15,MT3:10,LT3:5,HT4:6,MT4:4,LT4:2,HT5:3,MT5:2,LT5:1};
 var MODES=[
   {k:'sword',n:'Sword',a:'SW',kit:{en:'Netherite sword, shield, golden apples',ar:'سيف نثيريت + درع + تفاح ذهبي'}},
   {k:'crystal',n:'Crystal',a:'CR',kit:{en:'Obsidian, end crystals, totems, golden apples',ar:'أوبسيديان + كريستالات + طُمُوس + تفاح ذهبي'}},
@@ -571,18 +569,14 @@ var CUSTOM={
  crystal:'<path d="M667.91 1000.52 549.18 558.88M536.97 546.67 91.62 424.23M549.18 546.67l329.67-333.38" fill="none" stroke="#c0bdf7" stroke-width="112.67" stroke-miterlimit="10"/><path d="m711.29 957.14 245.97-245.97c26.84-26.84 37.32-65.96 27.5-102.63l-90.03-336c-9.82-36.67-38.46-65.3-75.13-75.13l-336-90.03c-36.67-9.82-75.79.66-102.63 27.5L135 380.85c-26.84 26.84-37.32 65.96-27.5 102.63l90.03 336c9.82 36.67 38.46 65.3 75.13 75.13l336 90.03c36.66 9.83 75.79-.65 102.63-27.5z" fill="none" stroke="#fff" stroke-width="112.67" stroke-miterlimit="10"/><path d="M805.48 629.12v-171c0-39.75-21.21-76.48-55.63-96.35l-148.09-85.5c-34.42-19.87-76.84-19.87-111.26 0l-148.09 85.5c-34.42 19.87-55.63 56.6-55.63 96.35v171c0 39.75 21.21 76.48 55.63 96.35l148.09 85.5c34.42 19.87 76.84 19.87 111.26 0l148.09-85.5c34.42-19.87 55.63-56.6 55.63-96.35" fill="#c889e6"/>',
  op:'<path d="M540 330 C440 250 220 290 200 560 C185 820 360 990 540 950 C720 990 895 820 880 560 C860 290 640 250 540 330 Z" fill="#f7c637"/><path d="M540 330 C640 250 860 290 880 560 C895 820 720 990 540 950 C710 850 770 560 540 330 Z" fill="#d99a1e"/><ellipse cx="360" cy="540" rx="62" ry="120" transform="rotate(18 360 540)" fill="#fff3b0" opacity=".9"/><path d="M525 345 C525 250 545 185 610 120 L665 165 C615 220 600 270 600 350 Z" fill="#7a4a1e"/><path d="M610 120 L665 165 L640 190 L595 150 Z" fill="#9a6130"/>',
  tntcart:'<rect x="505" y="90" width="70" height="120" rx="24" fill="#5d4326"/><rect x="320" y="200" width="440" height="290" rx="30" fill="#d44e50"/><rect x="320" y="310" width="440" height="70" fill="#f4efe3"/><path d="M230 540 L850 540 L790 810 L290 810 Z" fill="#a7b0bf"/><path d="M230 540 L850 540 L835 610 L245 610 Z" fill="#c3cbd8"/><rect x="260" y="810" width="560" height="64" rx="26" fill="#7d8697"/><circle cx="390" cy="910" r="62" fill="#333842"/><circle cx="390" cy="910" r="26" fill="#98a1b1"/><circle cx="690" cy="910" r="62" fill="#333842"/><circle cx="690" cy="910" r="26" fill="#98a1b1"/>',
- tntfish:'<g data-fit="1" transform="translate(540 540) scale(1.266) translate(-565.0 -569.5)"><path d="M790 255 C 900 330 930 470 835 640" fill="none" stroke="#f1ece0" stroke-width="12" stroke-linecap="round"/><path d="M170 910 L780 300" stroke="#6f4520" stroke-width="76" stroke-linecap="round"/><path d="M170 910 L780 300" stroke="#8b5a2b" stroke-width="54" stroke-linecap="round"/><path d="M195 885 L755 325" stroke="#a8733f" stroke-width="16" stroke-linecap="round"/><circle cx="330" cy="750" r="60" fill="#6e7686"/><circle cx="330" cy="750" r="32" fill="#9aa3b3"/><circle cx="790" cy="255" r="26" fill="#cfd6e2"/><rect x="710" y="630" width="250" height="250" rx="29.545454545454547" fill="#d0453f"/><rect x="710" y="785.0" width="250" height="95.0" rx="29.545454545454547" fill="#b23832"/><rect x="710" y="785.0" width="250" height="29.545454545454547" fill="#b23832"/><rect x="710" y="715.2272727272727" width="250" height="79.54545454545455" fill="#f1ece0"/><rect x="721.3636363636364" y="641.3636363636364" width="227.27272727272728" height="18.181818181818183" rx="9.090909090909092" fill="#e2635c" opacity=".7"/></g>',
- spear:'<g data-fit="1" transform="translate(540 540) scale(1.230) translate(-557.7 -522.3)"><g transform="translate(540 540) rotate(45) scale(1.0) translate(-540 -540)"><rect x="514" y="250" width="52" height="750" rx="18" fill="#8b5a2b"/><rect x="514" y="250" width="20" height="750" rx="10" fill="#a8733f"/><path d="M540 30 L630 330 L540 262 L450 330 Z" fill="#cfd6e2" stroke="#cfd6e2" stroke-width="14" stroke-linejoin="round"/><path d="M540 30 L630 330 L540 262 Z" fill="#a4aebf" stroke="#a4aebf" stroke-width="14" stroke-linejoin="round"/></g></g>',
- spearmace:'<g data-fit="1" transform="translate(540 540) scale(1.154) translate(-521.2 -521.2)"><g style="fill-rule:evenodd;clip-rule:evenodd" transform="scale(1.44)"><g transform="translate(375 375) rotate(-45) scale(.74) translate(-540 -540)"><rect x="514" y="250" width="52" height="750" rx="18" fill="#8b5a2b"/><rect x="514" y="250" width="20" height="750" rx="10" fill="#a8733f"/><path d="M540 30 L630 330 L540 262 L450 330 Z" fill="#cfd6e2" stroke="#cfd6e2" stroke-width="14" stroke-linejoin="round"/><path d="M540 30 L630 330 L540 262 Z" fill="#a4aebf" stroke="#a4aebf" stroke-width="14" stroke-linejoin="round"/></g><g transform="translate(375 375) scale(.8) translate(-375 -375)"><path fill="#60606b" d="M574.5 131.5a50 50 0 0 1 2.5 7 373 373 0 0 1 15.5 17q-.69 7.764-4.5 15a820 820 0 0 1-42.5 41 108 108 0 0 0-8 9.5 23 23 0 0 1-5 2l-56 56a7463 7463 0 0 0-14 12l-61 61q-3.822 3.663-9 5-8.923.306-17.5-2.5l-1.5.5q1.129 1.006 1 2.5-10.083-13.843-23-25.5a28 28 0 0 1-4-1.5 9331 9331 0 0 0-83-101q-5.832-15.26 7-25.5a20587 20587 0 0 1 179-166q9-5 18 0a11266 11266 0 0 0 106 93.5" style="opacity:.988"/><path fill="#5b5b6d" d="M618.5 176.5a147 147 0 0 1-8-2.5 157.7 157.7 0 0 0-18-18.5 373 373 0 0 0-15.5-17 50 50 0 0 0-2.5-7q-.25-30.005.5-60 2.913-9.414 12.5-11.5a2209 2209 0 0 1 94 0q7.75 1.75 9.5 9.5l.5 47q.207 25.575-1.5 51-3.333 5.832-9.5 8.5-30.996.75-62 .5" style="opacity:.973"/><path fill="#444451" d="M459.5 109.5q13.206-.54 15 12.5a495 495 0 0 1-6.5 33.5 409.5 409.5 0 0 1-10.5 61 103 103 0 0 0-7 6.5 1746 1746 0 0 0-98 20q-9.29 2.567-15.5-4.5a25.2 25.2 0 0 1 0-10q6.556-9.711 16.5-16.5a15647 15647 0 0 0 106-102.5" style="opacity:1"/><path fill="#4d4d5c" d="M592.5 155.5a157.7 157.7 0 0 1 18 18.5q4.126 1.414 8 2.5 30.047 33.787 65.5 64a796 796 0 0 1 32 35q7.39 10.42-1 20A20370 20370 0 0 1 548.5 467a59.5 59.5 0 0 1-13.5 4.5 38.5 38.5 0 0 1-14.5-5.5 454 454 0 0 1-41-28 2997 2997 0 0 0-58-39.5q-1.977-5.748-7-9.5a259 259 0 0 1-40-31.5q.129-1.494-1-2.5l1.5-.5q8.577 2.806 17.5 2.5 5.178-1.337 9-5l61-61a7463 7463 0 0 1 14-12l56-56a23 23 0 0 0 5-2 108 108 0 0 1 8-9.5 820 820 0 0 0 42.5-41q3.81-7.236 4.5-15" style="opacity:.993"/><path fill="#444451" d="M632.5 274.5q13.521-3.004 17 10a41.8 41.8 0 0 1-3.5 8Q588.33 348.168 530.5 404q-14.645 8.784-18-8 6.668-41.755 13.5-83.5-.579-16.673 15.5-19.5a3134 3134 0 0 0 91-18.5" style="opacity:1"/><path fill="#9191b7" d="M347.5 330.5q1.899.885 4 1.5 12.917 11.657 23 25.5a259 259 0 0 0 40 31.5q5.023 3.752 7 9.5a2385 2385 0 0 1-59 57q-5.56 2.784-10 7.5.834.574 1 1.5-5 6-11 11-1.22-1.73-3 0-1.393 1.783-1 4l-6 5h-3v3a148891 148891 0 0 1-37 36q-.595-1.538-2-.5-6.405 5.642-11 12.5a55 55 0 0 1-7 7q.197-1.314-1-2a32.5 32.5 0 0 1-5 4.5l1 1a4.93 4.93 0 0 1-3 .5v4q-6.961 6.458-14 13a127 127 0 0 0-11 8.5q.834.575 1 1.5-8.5 7.5-16 16a2.43 2.43 0 0 0-2 .5q-1.857 1.035 0 1.5a335 335 0 0 0-27.5 26 939 939 0 0 0-2 59q-5.44 13.435-19.5 17.5-52.545.678-105-2-9.639-5.032-12.5-15.5-1-33 0-66 .11-20.582 2-41 4.788-8.787 13.5-13.5a778 778 0 0 1 52-2 3432 3432 0 0 0 98.5-98.5 7390 7390 0 0 0 125.5-125" style="opacity:.961"/><path fill="#efefef" d="M362.5 455.5a57.5 57.5 0 0 1-9 9q-.166-.926-1-1.5 4.44-4.716 10-7.5" style="opacity:.006"/><path fill="#3526be" d="M342.5 475.5q-1.5 2.5-4 4-.393-2.217 1-4 1.78-1.73 3 0" style="opacity:.008"/><path fill="#6051f7" d="M332.5 484.5a6.55 6.55 0 0 1-3 3v-3z" style="opacity:.008"/><path fill="#fefffe" d="m292.5 523.5-13 12q4.595-6.858 11-12.5 1.405-1.038 2 .5" style="opacity:.006"/><path fill="#7467de" d="M272.5 542.5q-3.5 4.5-8 8v-4a4.93 4.93 0 0 0 3-.5l-1-1a32.5 32.5 0 0 0 5-4.5q1.197.686 1 2" style="opacity:.021"/><path fill="#fbfbfb" d="M250.5 563.5q-4.5 5.5-10 10-.166-.925-1-1.5a127 127 0 0 1 11-8.5" style="opacity:.006"/><path fill="#00f" d="M224.5 589.5q-.5 1.5-2 2-1.857-.465 0-1.5a2.43 2.43 0 0 1 2-.5" style="opacity:.004"/></g></g></g>'
+ tntfish:'<path d="M860 150 L540 510" stroke="#8b5a2b" stroke-width="76" stroke-linecap="round"/><path d="M880 135 L800 195" stroke="#a8733f" stroke-width="80" stroke-linecap="round"/><path d="M540 510 L540 690" stroke="#d9dde5" stroke-width="20"/><rect x="420" y="690" width="240" height="210" rx="22" fill="#d44e50"/><rect x="420" y="762" width="240" height="52" fill="#f4efe3"/>',
+ spear:'<g transform="translate(540 540) rotate(45) scale(1.12) translate(-540 -540)"><path d="M540 60 C590 150 650 250 650 330 L540 290 L430 330 C430 250 490 150 540 60 Z" fill="#d5dde8"/><path d="M540 60 C590 150 650 250 650 330 L540 290 Z" fill="#aab6c6"/><rect x="460" y="300" width="160" height="70" rx="28" fill="#6e7686"/><rect x="505" y="360" width="70" height="610" rx="30" fill="#8b5a2b"/><rect x="505" y="360" width="26" height="610" fill="#a8733f" opacity=".7"/><rect x="485" y="930" width="110" height="70" rx="30" fill="#6e4a24"/></g>',
+ spearmace:'<g transform="translate(540 540) rotate(45) scale(1.0) translate(-540 -540)"><path d="M540 60 C590 150 650 250 650 330 L540 290 L430 330 C430 250 490 150 540 60 Z" fill="#d5dde8"/><path d="M540 60 C590 150 650 250 650 330 L540 290 Z" fill="#aab6c6"/><rect x="460" y="300" width="160" height="70" rx="28" fill="#6e7686"/><rect x="505" y="360" width="70" height="610" rx="30" fill="#8b5a2b"/><rect x="505" y="360" width="26" height="610" fill="#a8733f" opacity=".7"/><rect x="485" y="930" width="110" height="70" rx="30" fill="#6e4a24"/></g><g transform="translate(540 540) rotate(-45) scale(1.0) translate(-540 -540)"><polygon points="540,60 600,210 480,210" fill="#98a1b1"/><polygon points="300,150 430,250 340,340" fill="#98a1b1"/><polygon points="780,150 650,250 740,340" fill="#98a1b1"/><polygon points="240,360 400,300 400,420" fill="#7d8696"/><polygon points="840,360 680,300 680,420" fill="#7d8696"/><circle cx="540" cy="370" r="195" fill="#6e7686"/><circle cx="468" cy="300" r="62" fill="#9aa3b2"/><rect x="468" y="520" width="144" height="72" rx="28" fill="#565e6c"/><rect x="505" y="580" width="70" height="400" rx="28" fill="#8b5a2b"/><rect x="505" y="580" width="24" height="400" fill="#a8733f" opacity=".65"/><rect x="483" y="915" width="114" height="72" rx="28" fill="#6e4a24"/></g>'
 };
-/* icons are served from this site (icons/ folder) first; if a file is missing the old remote copy / built-in drawing is used */
-var LOCALPNG={tntcart:'icons/tntcart.png'};
-function svgIcon(k,s){return '<svg class="mi" width="'+s+'" height="'+s+'" viewBox="0 0 1080 1080" aria-hidden="true">'+(CUSTOM[k]||'')+'</svg>'}
 function icon(k,size){
   var s=size||16,u=TIERIMG[k];
-  if(LOCALPNG[k])return '<img class="mi" width="'+s+'" height="'+s+'" src="'+LOCALPNG[k]+'" alt="" decoding="async" data-fb="svg:'+k+':'+s+'">';
-  if(u)return '<img class="mi" width="'+s+'" height="'+s+'" src="icons/'+u+'.svg" alt="" decoding="async" data-fb="https://tiercore.vercel.app/images/'+u+'.svg">';
-  return svgIcon(k,s);
+  if(u)return '<img class="mi" width="'+s+'" height="'+s+'" src="https://tiercore.vercel.app/images/'+u+'.svg" alt="" loading="lazy">';
+  return '<svg class="mi" width="'+s+'" height="'+s+'" viewBox="0 0 1080 1080" aria-hidden="true">'+(CUSTOM[k]||'')+'</svg>';
 }
 
 /* ---------- i18n ---------- */
@@ -644,8 +638,6 @@ function avImg(n,s){var f=faceCache[n];if(f)return '<span class="avw"><img class
 function avImgRemote(n,s){return '<img class="av" alt="" decoding="async" data-k="bust" data-s="'+(s||256)+'" data-f="0" data-n="'+esc(n)+'" src="'+AVS.bust[0](n,s||256)+'">'}
 function skinImg(n){return '<img class="skin" alt="" decoding="async" data-k="full" data-s="512" data-f="0" data-n="'+esc(n)+'" src="'+AVS.full[0](n,512)+'">'}
 document.addEventListener('error',function(e){var t=e.target;
-  if(t&&t.tagName==='IMG'&&t.hasAttribute('data-fb')){var fb=t.getAttribute('data-fb');t.removeAttribute('data-fb');
-    if(fb.indexOf('svg:')===0){var a=fb.split(':'),w=document.createElement('span');w.innerHTML=svgIcon(a[1],+a[2]||16);if(t.parentNode&&w.firstChild)t.parentNode.replaceChild(w.firstChild,t)}else t.src=fb;return}
   if(!t||t.tagName!=='IMG'||!t.hasAttribute('data-k')||t.classList.contains('px'))return;
   var k=t.getAttribute('data-k'),f=+t.getAttribute('data-f')+1,L=AVS[k],n=t.getAttribute('data-n');
   if(f<L.length){t.setAttribute('data-f',f);t.src=L[f](n,+t.getAttribute('data-s'))}
@@ -672,8 +664,8 @@ function isMT(t){return t.charAt(0)==='M'}
 function tipName(t){return T(isHT(t)?'high':isMT(t)?'mid':'low')+' '+T('tier')+' '+tierNum(t)}
 function mname(k){return MODES.filter(function(m){return m.k===k})[0]}
 function pts(p){var s=0;for(var k in p.t)s+=PTS[p.t[k]]||0;return s}
-function best(p){var b=null;for(var k in p.t){if(b===null||tv(p.t[k])>tv(b))b=p.t[k]}return b}
-function bestK(p){var b=null,bv=-1;for(var k in p.t){var v=tv(p.t[k]);if(b===null||v>bv){b=k;bv=v}}return b}
+function best(p){var b=null;for(var k in p.t){if(b===null||PTS[p.t[k]]>PTS[b])b=p.t[k]}return b}
+function bestK(p){var b=null,bv=-1;for(var k in p.t){var v=PTS[p.t[k]]||0;if(b===null||v>bv){b=k;bv=v}}return b}
 function emptySlot(k,pn){return '<span class="tb un" data-tip="'+esc(mname(k).n+' · '+T('unranked'))+'"'+(pn?' data-pk="'+esc(pn)+'" data-mk="'+k+'"':'')+'>'+icon(k,40)+'<span>--</span></span>'}
 function chip(k,t,pn){return '<span class="tb t'+tierNum(t)+(isHT(t)?' ht':isMT(t)?' mid':'')+'" data-tip="'+esc(mname(k).n+' · '+tipName(t))+'"'+(pn?' data-pk="'+esc(pn)+'" data-mk="'+k+'"':'')+'>'+icon(k,40)+'<span>'+t+'</span></span>'}
 function unChip(){return '<span class="chip un" data-tip="'+esc(T('unranked'))+'">--</span>'}
@@ -699,7 +691,7 @@ function sanitizeCfg(o){o=o||{};var c={discord:'',servers:[]};
   if(typeof o.discord==='string'&&/^https:\/\/(www\.)?(discord\.gg|discord\.com\/invite|discordapp\.com\/invite)\/[\w-]{2,}\/?$/i.test(o.discord.trim()))c.discord=o.discord.trim();
   (Array.isArray(o.servers)?o.servers:[]).slice(0,12).forEach(function(v){if(!v||typeof v.n!=='string')return;var n=v.n.trim().slice(0,40);if(!n)return;
     var d=typeof v.d==='string'?v.d.trim().toLowerCase().slice(0,80):'',x={n:n};if(d&&/^[a-z0-9.-]+$/.test(d))x.d=d;
-    if(typeof v.i==='string'&&/^(https:\/\/|icons\/)[^\s"'<>]+$/.test(v.i.trim()))x.i=v.i.trim();c.servers.push(x)});
+    if(typeof v.i==='string'&&/^https:\/\/[^\s"'<>]+$/.test(v.i.trim()))x.i=v.i.trim();c.servers.push(x)});
   return c}
 function sigOf(p,c){return h53(JSON.stringify([p,c]))}
 CFG=sanitizeCfg(DATA);
@@ -746,7 +738,7 @@ function renderView(){
     if(!L.length){v.innerHTML='<div class="empty">'+T(PLAYERS.length?'noresult':'none')+'</div>';return}
     h='<div class="listhead"><span>#</span><span>'+T('th_player')+'</span><span class="chips hd">'+MODES.map(function(m){return '<span class="hi" data-tip="'+esc(m.n)+'">'+icon(m.k,22)+'</span>'}).join('')+'</span><span style="text-align:end">'+T('th_points')+'</span></div><div class="list">';
     L.forEach(function(p,i){
-      var ks=Object.keys(p.t).sort(function(a,b){return tv(p.t[b])-tv(p.t[a])});
+      var ks=Object.keys(p.t).sort(function(a,b){return PTS[p.t[b]]-PTS[p.t[a]]});
       h+='<button class="row'+(p.rank<=3?' r'+p.rank:'')+'" data-p="'+esc(p.n)+'" type="button" style="animation-delay:'+Math.min(i,12)*25+'ms">'+rankBadge(p.rank)+''
         +'<span class="who">'+avImg(sn(p))+'<span class="meta"><span class="nrow"><span class="nm"'+ncs(p)+'>'+esc(p.n)+'</span>'+tagH(p)+'</span>'+reg(p.r)+'</span></span>'
         +'<span class="chips">'+MODES.map(function(m){var t=p.t[m.k];return t?chip(m.k,t,p.n):emptySlot(m.k,p.n)}).join('')+'</span>'
@@ -757,7 +749,7 @@ function renderView(){
     h='<div class="cols">';
     for(var n=1;n<=5;n++){
       var L2=PLAYERS.filter(function(p){return p.t[mode]&&tierNum(p.t[mode])==String(n)&&match(p)}).sort(function(a,b){
-        return tv(b.t[mode])-tv(a.t[mode])||a.rank-b.rank});
+        return PTS[b.t[mode]]-PTS[a.t[mode]]||a.rank-b.rank});
       h+='<div class="col t'+n+'"><h3><span class="htitle">'+icon(mode,18)+T('tier')+' '+n+'</span><small>'+L2.length+'</small></h3>';
       if(!L2.length)h+='<div class="none">'+T('none')+'</div>';
       else{h+='<ul>';L2.forEach(function(p){var t=p.t[mode];
@@ -873,7 +865,7 @@ function countUp(el,to){var t0=null,d=900;if(window.matchMedia('(prefers-reduced
 var CUR=null;
 function cardInfo(p,first){
   var bt=best(p),bk=bestK(p),n=bt?tierNum(bt):'5';
-  var ks=MODES.map(function(m){return m.k}).sort(function(a,b){return (p.t[b]?tv(p.t[b]):-1)-(p.t[a]?tv(p.t[a]):-1)});
+  var ks=MODES.map(function(m){return m.k}).sort(function(a,b){return (p.t[b]?PTS[p.t[b]]:-1)-(p.t[a]?PTS[p.t[a]]:-1)});
   var cards=ks.map(function(k){var t=p.t[k],m=mname(k),pk=' data-pk="'+esc(p.n)+'" data-mk="'+k+'"';
     if(!t)return '<div class="mc un" data-tip="'+esc(T('unranked'))+'"'+pk+'>'+icon(k,42)+'<div><small>'+esc(m.n)+'</small><b>--</b></div></div>';
     return '<div class="mc t'+tierNum(t)+'" data-tip="'+esc(m.n+' · '+tipName(t))+'"'+pk+'>'+icon(k,42)+'<div><small>'+esc(m.n)+'</small><b>'+t+'</b></div><i style="width:'+Math.max(6,Math.round(PTS[t]/60*100))+'%"></i></div>'}).join('');
