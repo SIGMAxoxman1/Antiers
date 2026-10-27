@@ -2,9 +2,9 @@ window.ANTIERS_DATA={
 "discord":"",
 "servers":[{"n":"minemen.club","d":"minemen.club","i":"https://minemen.club/img/mmc_logo.png"},{"n":"META MC","d":"metamc.net","i":"https://a.top4top.io/p_3941ewmue9.png"}],
 "players":[
-  {"n":"Sigma_mc","r":"ME","tag":"Owner","tagColor":"#ffc233","t":{"sword":"LT3","axe":"LT4","mace":"HT5","pot":"MT4","npot":"HT4","op":"HT3"}},
+  {"n":"Sigma_mc","r":"ME","tag":"Owner","tagColor":"#ffc233","t":{"sword":"LT3","axe":"LT4","mace":"HT5","pot":"MT4","npot":"HT4","op":"LT4"}},
   {"n":"antube_","r":"ME","t":{"sword":"LT5","spear":"LT5"}},
-  {"n":"anplayer_","r":"ME","tag":"COMBAT MASTER","tagColor":"#ffc233","t":{"sword":"HT3","pot":"HT3","npot":"HT3","uhc":"LT3","axe":"MT3","mace":"HT3","smp":"HT3","op":"LT3","tntcart":"LT3","tntfish":"HT3","spear":"HT4","spearmace":"HT5"}},
+  {"n":"anplayer_","r":"ME","tag":"COMBAT MASTER","tagColor":"#ffc233","t":{"sword":"HT3","pot":"HT3","npot":"HT3","uhc":"LT3","axe":"MT3","mace":"HT3","smp":"HT3","tntcart":"LT3","tntfish":"HT3","spear":"HT4","spearmace":"HT5"}},
   {"n":"Flix__sp","r":"ME","skin":"Sami_sp","t":{"sword":"LT4","axe":"LT4","mace":"MT4","spearmace":"HT4"}},
   {"n":"mouhibmejd","r":"ME","t":{"sword":"LT4","crystal":"HT3","axe":"HT5","spear":"HT5","spearmace":"HT4"}},
   {"n":"Hassn_GOlp","r":"ME","t":{"sword":"LT3","mace":"HT5","crystal":"LT4"}}
